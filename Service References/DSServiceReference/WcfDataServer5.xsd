@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd2" namespace="http://schemas.microsoft.com/Message" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System.IO" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" />
+  <xs:element name="RunCMD">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="numksdu" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="numvtu" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagguid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="arr" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunCMDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RunCMDResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSGUID">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSGUIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDSGUIDResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSINFO">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSINFOResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDSINFOResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSConfigFile">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSConfigFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/Message" name="GetDSConfigFileResult" type="q1:StreamBody" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSourceGUIDs">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSourceGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSourceGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSourceName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SrcGuid" type="xs:unsignedShort" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSourceNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSourceNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetECUGUIDs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SrcGuid" type="xs:unsignedShort" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetECUGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetECUGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetECUName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SrcGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="EcuGuid" type="xs:unsignedShort" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetECUNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetECUNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSrcEcuRTUGUIDs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SrcGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="EcuGuid" type="xs:unsignedShort" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSrcEcuRTUGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSrcEcuRTUGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUGUIDs">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTypeName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTypeNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUTypeNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUDescription">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUDescriptionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUDescriptionResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsRTUEnable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsRTUEnableResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsRTUEnableResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetGroupGUIDs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetGroupGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetGroupGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSubGroupGUIDsInGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="GroupGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSubGroupGUIDsInGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetSubGroupGUIDsInGroupResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUGroupName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="GroupGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUGroupNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUGroupNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsGroupEnable">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="GroupGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsGroupEnableResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsGroupEnableResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRtuTagGUIDs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRtuTagGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRtuTagGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRtuGroupTagGUIDs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="GroupGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRtuGroupTagGUIDsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRtuGroupTagGUIDsResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTagName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="TagGUID" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTagNameResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUTagNameResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTagsValue">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="RtuGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="request" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRTUTagsValueResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetRTUTagsValueResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTagsValue">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="request" nillable="true" type="q2:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTagsValueResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetTagsValueResult" nillable="true" type="q3:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeRTUTags">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="request" nillable="true" type="q4:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeRTUTagsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UnscribeRTUTags">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="request" nillable="true" type="q5:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSValueAsPartialByteBuffer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="arr" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="currentNumberPacket" type="xs:int" />
+        <xs:element minOccurs="0" name="packetCount" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSValueAsPartialByteBufferResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/System.IO" minOccurs="0" name="GetDSValueAsPartialByteBufferResult" nillable="true" type="q6:MemoryStream" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSValueAsByteBuffer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="arr" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSValueAsByteBufferResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/System.IO" minOccurs="0" name="GetDSValueAsByteBufferResult" nillable="true" type="q7:MemoryStream" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSOscByIdInBD">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="pq" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSOscByIdInBDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/System.IO" minOccurs="0" name="GetDSOscByIdInBDResult" nillable="true" type="q8:MemoryStream" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReq2ArhivInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="pq" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReq2ArhivInfoResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunCMDMOA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="pq" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RunCMDMOAResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/System.IO" minOccurs="0" name="RunCMDMOAResult" nillable="true" type="q9:MemoryStream" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSLastErrorsGUID">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSLastErrorsGUIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="GetDSLastErrorsGUIDResult" nillable="true" type="q10:LstError" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSLastErrorGUID">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSLastErrorGUIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDSLastErrorGUIDResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSErrorTextByErrorGUID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="errorGUID" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDSErrorTextByErrorGUIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetDSErrorTextByErrorGUIDResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AcknowledgementOfErrors">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterForErrorEvent">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="keyticker" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Ping">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTagValueFromHMI">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTag" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="valinobject" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReSetTagValueFromHMI">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTag" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Authorization">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userPassword" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AuthorizationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="AuthorizationResult" nillable="true" type="q11:DSUser" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUsersList">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUsersListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUsersListResult" nillable="true" type="q12:ArrayOfDSUser" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUserGroupsList">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetUserGroupsListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUserGroupsListResult" nillable="true" type="q13:ArrayOfDSUserGroup" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUserGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="groupName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="groupComment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="groupRight" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUserGroupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateUserGroupResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userPassword" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userComment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="userGroupID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CreateUserResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEvents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dateTimeFrom" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="dateTimeTo" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="needSystemEvents" type="xs:boolean" />
+        <xs:element minOccurs="0" name="needUserEvents" type="xs:boolean" />
+        <xs:element minOccurs="0" name="needTerminalEvents" type="xs:boolean" />
+        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="devicesList" nillable="true" type="q14:ArrayOfunsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetEventsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetEventsResult" nillable="true" type="q15:ArrayOfDSEventValue" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOscillogramByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="eventDataID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetOscillogramByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetOscillogramByIDResult" nillable="true" type="q16:DSOscillogram" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistoricalDataByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dataID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetHistoricalDataByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHistoricalDataByIDResult" nillable="true" type="q17:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsNotReceiptedEventsExist">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsNotReceiptedEventsExistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsNotReceiptedEventsExistResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNotReceiptedEvents">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNotReceiptedEventsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetNotReceiptedEventsResult" nillable="true" type="q18:ArrayOfDSEventValue" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiptEvents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q19="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="eventValuesId" nillable="true" type="q19:ArrayOfint" />
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="receiptComment" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiptEventsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiptAllEvents">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="receiptComment" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiptAllEventsResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSettingsSetsList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSettingsSetsListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetSettingsSetsListResult" nillable="true" type="q20:ArrayOfDSSettingsSet" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetValuesFromSettingsSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="settingsSetID" type="xs:int" />
+        <xs:element xmlns:q21="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsList" nillable="true" type="q21:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetValuesFromSettingsSetResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q22="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetValuesFromSettingsSetResult" nillable="true" type="q22:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveSettingsToDevice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element xmlns:q23="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsValues" nillable="true" type="q23:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveSettingsToDeviceResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CommandRun">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="commandID" nillable="true" type="xs:string" />
+        <xs:element xmlns:q24="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q24:ArrayOfanyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CommandRunResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentsList">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="devGuid" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentsListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentsListResult" nillable="true" type="q25:ArrayOfDSDocumentDataValue" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentByID">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="documentId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDocumentByIDResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentByIDResult" nillable="true" type="q26:DSDataFile" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFileChunk">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="fileChunk" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UploadFileChunkResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UploadFileChunkResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveUploadedFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="devGuid" type="xs:int" />
+        <xs:element minOccurs="0" name="userId" type="xs:int" />
+        <xs:element minOccurs="0" name="fileName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fileComment" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaveUploadedFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SaveUploadedFileResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminateUploadFileSession">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TerminateUploadFileSessionResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewErrorEvent">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="codeDataTimeEvent" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Pong">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyChangedTags">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstChangedTags" nillable="true" type="q27:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyCMDExecuted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cmdarray" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
