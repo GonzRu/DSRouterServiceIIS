@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.ServiceModel;
 using System.Text;
-using System.Timers;
 using System.Xml.Linq;
+using DSFakeService.DataSources;
 using DSFakeService.DSServiceReference;
 using DSFakeService.Helpers;
+using HMI_MT_Settings;
 
 namespace DSRouterService
 {
@@ -39,6 +39,8 @@ namespace DSRouterService
         private static object lockKey = new object();
 
         private static string _lockFileUploadSessionId = null;
+
+        private static IDataSource _dataSource;
 
         #endregion
 
@@ -128,6 +130,8 @@ namespace DSRouterService
 
         static DSRouterService()
         {
+            InitRouterService();
+
             TraceSourceLib.TraceSourceDiagMes.StartTrace("AppDiagnosticLog", 30000);
 
             DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Share");
@@ -138,8 +142,10 @@ namespace DSRouterService
         {
             try
             {
-                CurrentСontext.Channel.Closed += ClientDisconnected;
-                CurrentСontext.Channel.Faulted += ClientDisconnected;                
+                dWCFClientsList = (_dataSource as DataServersCollector).dWCFClientsList;
+
+                OperationContext.Current.Channel.Closed += ClientDisconnected;
+                OperationContext.Current.Channel.Faulted += ClientDisconnected;
 
                 Utilities.LogTrace("DSRouterService: Создан объект DSRouterService");
                 Debug.WriteLine("DSRouterService: Создан объект DSRouterService");
@@ -2375,10 +2381,6 @@ namespace DSRouterService
         private void ClientDisconnected(object sender, EventArgs e)
         {
             CloseFileUploadSession();
-
-            //UnsubscribeTagsFromDs();
-
-            
         }
 
         #endregion
