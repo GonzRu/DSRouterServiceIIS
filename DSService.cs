@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.Timers;
@@ -17,7 +18,7 @@ namespace DSRouterService
     {
         #region Events
 
-        public event DSSessionCancelled OnDSSessionCancelled;
+        public event Action<Dictionary<string, DSRouterTagValue>> TagsValueUpdated;
 
         #endregion
 
@@ -101,6 +102,31 @@ namespace DSRouterService
 
         #endregion
 
+        #region Public-metods
+
+        /// <summary>
+        /// Запросить теги 
+        /// </summary>
+        public Dictionary<string, DSRouterTagValue> GetTagsValue(List<string> tagsRequestList)
+        {
+            try
+            {
+                lock (wcfDataServer)
+                {
+                    return ConvertDsTagsDictionaryToDsRouterTagsDictionary(wcfDataServer.GetTagsValue(tagsRequestList.ToArray()));
+                }
+            }
+            catch (Exception ex)
+            {
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1743, ex.Message);
+                Utilities.LogTrace("DSRouterService.CreateWCFCL() : Исключение : " + ex.Message);
+            }
+
+            return null;
+        }
+
+        #endregion
+
         #region Private-metods
 
         #region Методы для создания канала связи с DS
@@ -126,10 +152,30 @@ namespace DSRouterService
             EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", _ipAddress, _port));
 
             DSServiceCallback dsServiceCallback = new DSServiceCallback();            
+            dsServiceCallback.OnNewTagValues += TagValuesUpdated;
 
             wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
             (wcfDataServer as WcfDataServerClient).ChannelFactory.Closed += DsDisconnected;
             (wcfDataServer as WcfDataServerClient).ChannelFactory.Faulted += DsDisconnected;
+        }
+
+        #endregion
+
+        #region Вспомогательные методы для работы с данными
+
+        /// <summary>
+        /// Преобразоввывает словарь значений тегов из формата DS в формат ротуера
+        /// </summary>
+        /// <param name="dsTagsDictionary"></param>
+        /// <returns></returns>
+        private Dictionary<string, DSRouterTagValue> ConvertDsTagsDictionaryToDsRouterTagsDictionary(Dictionary<string, DSTagValue> dsTagsDictionary)
+        {
+            var result = new Dictionary<string, DSRouterTagValue>();
+
+            foreach (var tagIdAsStr in dsTagsDictionary.Keys)
+                result[tagIdAsStr] = new DSRouterTagValue(dsTagsDictionary[tagIdAsStr]);
+
+            return result;
         }
 
         #endregion
@@ -189,6 +235,16 @@ namespace DSRouterService
         }
 
         #endregion
+
+        /// <summary>
+        /// Обработчик события появления обновлений тегов
+        /// </summary>
+        /// <param name="tv"></param>
+        private void TagValuesUpdated(System.Collections.Generic.Dictionary<string, DSTagValue> tv)
+        {
+            if (TagsValueUpdated != null)
+                TagsValueUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
+        }
 
         #endregion
     }
