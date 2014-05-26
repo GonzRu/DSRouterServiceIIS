@@ -39,6 +39,20 @@ namespace DSRouterService
 
         #endregion
 
+        #region Private-Readonly
+
+        /// <summary>
+        /// Адрес DS
+        /// </summary>
+        private readonly string _ipAddress;
+
+        /// <summary>
+        /// Порт WCF службы DS
+        /// </summary>
+        private readonly string _port;
+
+        #endregion
+
         #region Private-Fields
 
         /// <summary>
@@ -56,33 +70,26 @@ namespace DSRouterService
 
         #region Constructor
 
-        public DSService(UInt16 uid, IWcfDataServer wcfds)
+        public DSService(UInt16 dsGuid, string ipAddress, string port)
         {
-            try
-            {
-                dsUID = uid;
-                wcfDataServer = wcfds;
-                ConnectionState = false;
+            dsUID = dsGuid;
+            _ipAddress = ipAddress;
+            _port = port;
 
-                #region иницализация таймера связи
-                tmrpingpong.Interval = 5000;
 
-                tmrpingpong.Elapsed += new System.Timers.ElapsedEventHandler(tmrpingpong_Elapsed);
-                tmrpingpong.Start();
-                #endregion
+            #region иницализация таймера связи
+            tmrpingpong.Interval = 5000;
 
-                #region иницализация таймера ошибки для пинг-понга
-                tmrpingpongFault.Interval = 5000;
+            tmrpingpong.Elapsed += tmrpingpong_Elapsed;
+            tmrpingpong.Start();
+            #endregion
 
-                tmrpingpongFault.Elapsed += new ElapsedEventHandler(tmrpingpongFault_Elapsed);
-                tmrpingpongFault.Stop();
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1949, ex.Message);
-                Utilities.LogTrace("DSRouterService.DSService() : Исключение : " + ex.Message);
-            }
+            #region иницализация таймера ошибки для пинг-понга
+            tmrpingpongFault.Interval = 5000;
+
+            tmrpingpongFault.Elapsed += tmrpingpongFault_Elapsed;
+            tmrpingpongFault.Stop();
+            #endregion
         }
 
         #endregion
