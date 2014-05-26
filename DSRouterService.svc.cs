@@ -855,64 +855,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValue(List<string> ATagIDsList)
         {
-            Dictionary<string, DSRouterTagValue> dlist = new Dictionary<string, DSRouterTagValue>();
-
-            Utilities.LogTrace("DSRouterService : GetTagsValue()");
-
-            try
-            {
-                if (currClient == null)
-                {
-                    lock (lockKey)
-                    {
-                        currClient = CurrentСontext.GetCallbackChannel<IDSRouterCallback>();
-                    }
-                }
-
-                // запоминаем теги из запроса для подписки
-                foreach (string tag in ATagIDsList)
-                {
-                    if (!tag.Equals("", StringComparison.InvariantCultureIgnoreCase))
-                        dlist[tag] = new DSRouterTagValue();//(1, 3);
-                }
-
-                /*
-                 * для ускорения процесса разработки
-                 * считаем что DS один и все затачиваем под него
-                 */
-                IWcfDataServer iwds = null;
-                if (dWCFClientsList.ContainsKey(0))
-                {
-                    iwds = dWCFClientsList.ElementAt(0).Value.wcfDataServer;
-
-                    // формируем, запоминаем список и подписываемся на обновление
-                    this.ATagIDsList = ATagIDsList;
-                    iwds.SubscribeRTUTags(ATagIDsList.ToArray());
-                    AddTags(ATagIDsList);
-
-                    // получение тегов от DS
-                    Dictionary<string, DSTagValue> dlistDS = iwds.GetTagsValue(this.ATagIDsList.ToArray());
-
-                    foreach (KeyValuePair<string, DSTagValue> kvp in dlistDS)
-                    {
-                        DSRouterTagValue dsdstv = new DSRouterTagValue();
-                        dsdstv.VarQuality = kvp.Value.VarQuality;
-                        dsdstv.VarValueAsObject = kvp.Value.VarValueAsObject;
-
-                        if (dlist.ContainsKey(kvp.Key))
-                            dlist[kvp.Key] = dsdstv;
-                        else
-                            dlist.Add(kvp.Key, dsdstv);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
-            }
-
-            return dlist;
+            return _dataSource.GetTagsValue(OperationContext.Current.SessionId, ATagIDsList);
         }
 
         /// <summary>
@@ -920,30 +863,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValuesUpdated()
         {
-            Dictionary<string, DSRouterTagValue> tagsDataUpdated = new Dictionary<string, DSRouterTagValue>();
-
-            try
-            {
-                lock (lockKey)
-                {
-                    for (int i = 0; i < GetSubscribeTags().Count; i++)
-                    {
-                        KeyValuePair<string, Tuple<DSRouterTagValue, bool>> kvp = GetSubscribeTags().ElementAt(i);
-                        if (kvp.Value.Item2)
-                        {
-                            tagsDataUpdated.Add(kvp.Key, GetDSTagValue(kvp.Key));
-                            ResetReNewFlag(kvp.Key);
-                        }
-
-                    }
-                }
-            }
-            catch (Exception exx)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(exx);
-            }
-
-            return tagsDataUpdated;
+            return _dataSource.GetTagsValuesUpdated(OperationContext.Current.SessionId);
         }
 
         /// <summary>
