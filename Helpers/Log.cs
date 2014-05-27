@@ -3,7 +3,7 @@
 namespace DSRouterService
 {
 
-    public static class Utilities
+    public static class Log
     {
         #region CONSTS
 
@@ -17,7 +17,7 @@ namespace DSRouterService
 
         #region Constructor
 
-        static Utilities()
+        static Log()
         {
             Source.Switch = new SourceSwitch(SOURCE_SWITCH_NAME);
         }
