@@ -131,13 +131,22 @@ namespace DSFakeService.DataSources
         /// </summary>
         void IDataSource.UnsubscribeTags(string sessionId)
         {
+            bool isNeedDoFuulRequest = false;
+
             if (_tagsToSubscribe.ContainsKey(sessionId))
+            {
                 _tagsToSubscribe.Remove(sessionId);
+                isNeedDoFuulRequest = true;
+            }
 
             ConcurrentDictionary<string, bool> tmp;
             _subscribedUsersTagsState.TryRemove(sessionId, out tmp);
 
-            DoFullRequest();
+            if (tmp != null)
+                isNeedDoFuulRequest = true;
+
+            if (isNeedDoFuulRequest)
+                DoFullRequest();
         }
 
         /// <summary>
