@@ -115,7 +115,10 @@ namespace DSFakeService.DataSources
             foreach (var tagAsStr in usersSubscribedTagsValueState.Keys)
             {
                 if (usersSubscribedTagsValueState[tagAsStr])
+                {
                     result.Add(tagAsStr, _subscribedTagsValue[tagAsStr]);
+                    usersSubscribedTagsValueState[tagAsStr] = false;
+                }
             }
 
             return result;
