@@ -1,40 +1,69 @@
-﻿using System;
-using System.Collections;
-using System.Data;
-using System.Diagnostics;
-using MySql.Data.MySqlClient;
+﻿using System.Diagnostics;
 
 namespace DSRouterService
 {
 
-    /// <summary>
-    /// Набор утилит для работы с БД.
-    /// </summary>
-    public class Utilities
+    public static class Utilities
     {
-        public static TraceSource source1 = new TraceSource("MyProgram.Source1");
+        #region CONSTS
+
+        private const string TRACE_SOURCE_NAME = "DSRouterService.DSRouterSource";
+
+        private const string SOURCE_SWITCH_NAME = "DSRouterService.Switch";
+
+        #endregion
+
+        public static TraceSource Source = new TraceSource(TRACE_SOURCE_NAME);
+
+        #region Constructor
+
+        static Utilities()
+        {
+            Source.Switch = new SourceSwitch(SOURCE_SWITCH_NAME);
+        }
+
+        #endregion        
 
         public static void LogTrace(string Message)
         {
-            #region Лог 
-            try
-            {
-                // Пишем в trace (system.diagnistic)
-                source1.Switch = new SourceSwitch("MyProgram.Switch1");
-                source1.TraceInformation(Message);
+            Source.Switch = new SourceSwitch(SOURCE_SWITCH_NAME);
+            Source.TraceInformation(Message);
+        }
 
-                // И в консоль
-                Console.Write(String.Format(DateTime.Now.ToString() + " - {0} \r\n ", Message));
+        /// <summary>
+        /// Вывести отладочное сообщение
+        /// </summary>
+        public static void WriteDebugMessage(string message)
+        {
+            #if (DEBUG)
+            {              
+                Source.TraceEvent(TraceEventType.Verbose, 0, message);
             }
-            catch (Exception ex)
-            {
-                Console.Write("Exception !!!!!" + ex.Message);                
-            }
-            finally
-            {
-                //writer.Close();
-            }
-            #endregion Лог 
+            #endif
+        }
+
+        /// <summary>
+        /// Вывести предупреждающее сообщение
+        /// </summary>
+        public static void WriteErrorMessage(string message)
+        {
+            Source.TraceEvent(TraceEventType.Error, 0, message);
+        }
+
+        /// <summary>
+        /// Вывести сообщение об ошибке
+        /// </summary>
+        public static void WriteWarningMessage(string message)
+        {
+            Source.TraceEvent(TraceEventType.Warning, 0, message);
+        }
+
+        /// <summary>
+        /// Вывести сообщение о критической ошибке
+        /// </summary>
+        public static void WriteCriticalMessage(string message)
+        {
+            Source.TraceEvent(TraceEventType.Critical, 0, message);
         }
     }
 }
