@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceModel;
 using System.Timers;
 using DSFakeService.DSServiceReference;
 
 namespace DSRouterService
 {
-    public delegate void DSSessionCancelled(UInt16 numds);
-
     /// <summary>
     /// класс представляющий DataServer в списке 
     /// DataServer'ов с которыми работает данный
@@ -18,7 +17,7 @@ namespace DSRouterService
     {
         #region Events
 
-        public event Action<Dictionary<string, DSRouterTagValue>> TagsValueUpdated;
+        public event Action<Dictionary<string, DSRouterTagValue>> TagValuesUpdated;
 
         #endregion
 
@@ -97,7 +96,7 @@ namespace DSRouterService
 
             #endregion
 
-            TryToCreateConnection();
+            CreateConnectionWithDs();
         }
 
         #endregion
@@ -132,9 +131,28 @@ namespace DSRouterService
         #region Методы для создания канала связи с DS
 
         /// <summary>
+        /// 
+        /// </summary>
+        private void CreateConnectionWithDs()
+        {
+            try
+            {
+                createDsConnectionTimer.Stop();
+
+                CreateDsProxy();
+
+                pingPongWithDsTimer.Start();
+            }
+            catch (Exception)
+            {
+                createDsConnectionTimer.Start();
+            }
+        }
+
+        /// <summary>
         /// Запускает таймер для установления связи с DS
         /// </summary>
-        private void TryToCreateConnection()
+        private void StartTimerToRecreateDsConnection()
         {
             createDsConnectionTimer.Start();
         }
@@ -142,7 +160,7 @@ namespace DSRouterService
         /// <summary>
         /// Создает соединение с DS
         /// </summary>
-        private void CreateConnectionWithDs()
+        private void CreateDsProxy()
         {
             NetTcpBinding tcpBinding = new NetTcpBinding();
             tcpBinding.ReceiveTimeout = new TimeSpan(0, 1, 0);
@@ -166,8 +184,6 @@ namespace DSRouterService
         /// <summary>
         /// Преобразоввывает словарь значений тегов из формата DS в формат ротуера
         /// </summary>
-        /// <param name="dsTagsDictionary"></param>
-        /// <returns></returns>
         private Dictionary<string, DSRouterTagValue> ConvertDsTagsDictionaryToDsRouterTagsDictionary(Dictionary<string, DSTagValue> dsTagsDictionary)
         {
             var result = new Dictionary<string, DSRouterTagValue>();
@@ -211,16 +227,18 @@ namespace DSRouterService
         private void CreateDsConnectionTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             pingPongWithDsTimer.Stop();
+            createDsConnectionTimer.Stop();
 
             try
             {
-                CreateConnectionWithDs();
+                CreateDsProxy();
 
                 createDsConnectionTimer.Stop();
                 pingPongWithDsTimer.Start();
             }
             catch (Exception ex)
             {
+                createDsConnectionTimer.Start();
             }
         }
 
@@ -231,7 +249,7 @@ namespace DSRouterService
         {
             pingPongWithDsTimer.Stop();
 
-            TryToCreateConnection();
+            StartTimerToRecreateDsConnection();
         }
 
         #endregion
