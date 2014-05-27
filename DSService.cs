@@ -129,7 +129,7 @@ namespace DSRouterService
                 Log.LogTrace("DSService.GetTagsValue() : Исключение : " + ex.Message);
             }
 
-            return null;
+            return CreateLostConnectionResponse();
         }
 
         /// <summary>
@@ -199,10 +199,22 @@ namespace DSRouterService
 
             wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
             (wcfDataServer as WcfDataServerClient).Open();
-            (wcfDataServer as WcfDataServerClient).ChannelFactory.Closed += DsDisconnected;
-            (wcfDataServer as WcfDataServerClient).ChannelFactory.Faulted += DsDisconnected;
+            (wcfDataServer as WcfDataServerClient).InnerChannel.Closed += DsDisconnected;
+            (wcfDataServer as WcfDataServerClient).InnerChannel.Faulted += DsDisconnected;
 
             wcfDataServer.RegisterForErrorEvent(dsUID.ToString());
+        }
+
+        #endregion
+
+        #region Вспомогательные методы для работы класса
+
+        /// <summary>
+        /// Посылает обновления тегов, с качеством потери связи с DS
+        /// </summary>
+        private void SendLostConnectionTagsValue()
+        {
+            OnTagsValuesUpdated(CreateLostConnectionResponse());
         }
 
         #endregion
@@ -220,6 +232,18 @@ namespace DSRouterService
                 result[tagIdAsStr] = new DSRouterTagValue(dsTagsDictionary[tagIdAsStr]);
 
             return result;
+        }
+
+        /// <summary>
+        /// Создает словарь значений запрошенных тегов с качеством потери связи с DS
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, DSRouterTagValue> CreateLostConnectionResponse()
+        {
+            return _requestedTagsList.ToDictionary(
+                s => s,
+                s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
+                );
         }
 
         #endregion
@@ -261,6 +285,12 @@ namespace DSRouterService
 
                 createDsConnectionTimer.Stop();
                 pingPongWithDsTimer.Start();
+
+                // При восстановлении связи - запрашиваем все теги, на которые мы подписаны и возвращаем их значения
+                // с помощью механизма обновлений
+                if (_requestedTagsList != null && _requestedTagsList.Count != 0)
+                    OnTagsValuesUpdated(GetTagsValue(_requestedTagsList));
+
                 Log.WriteDebugMessage(String.Format("DSService: с DS-{0} установлена связь", dsUID));
             }
             catch (Exception ex)
@@ -279,19 +309,6 @@ namespace DSRouterService
             StartTimerToRecreateDsConnection();
 
             SendLostConnectionTagsValue();
-        }
-
-        /// <summary>
-        /// Посылает обновления тегов, с качеством потери связи с DS
-        /// </summary>
-        private void SendLostConnectionTagsValue()
-        {
-            OnTagsValuesUpdated(
-                _requestedTagsList.ToDictionary(
-                    s => s,
-                    s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
-                    )
-                );
         }
 
         /// <summary>
