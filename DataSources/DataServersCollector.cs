@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 using DSFakeService.DSServiceReference;
 using DSRouterService;
@@ -40,12 +42,12 @@ namespace DSFakeService.DataSources
         /// <summary>
         /// Словарь актуальных значений тегов, на которые подписаны
         /// </summary>
-        private Dictionary<string, DSRouterTagValue> _subscribedTagsValue = null;
+        private ConcurrentDictionary<string, DSRouterTagValue> _subscribedTagsValue = null;
 
         /// <summary>
         /// Словарь по пользователям, показывающий обновлено ли значение тега или нет, на который он подписан
         /// </summary>
-        private Dictionary<string, Dictionary<string, bool>> _subscribedUsersTagsState = null;
+        private ConcurrentDictionary<string, ConcurrentDictionary<string, bool>> _subscribedUsersTagsState = null;
 
         #endregion
 
@@ -56,8 +58,8 @@ namespace DSFakeService.DataSources
             InitDataServers();
 
             _tagsToSubscribe = new Dictionary<string, Dictionary<ushort, List<string>>>();
-            _subscribedTagsValue = new Dictionary<string, DSRouterTagValue>();
-            _subscribedUsersTagsState = new Dictionary<string, Dictionary<string, bool>>();
+            _subscribedTagsValue = new ConcurrentDictionary<string, DSRouterTagValue>();
+            _subscribedUsersTagsState = new ConcurrentDictionary<string, ConcurrentDictionary<string, bool>>();
         }
 
         #endregion
@@ -83,7 +85,7 @@ namespace DSFakeService.DataSources
 
             // Создаем словарь состояний тегов для этого пользователя
             if (!_subscribedUsersTagsState.ContainsKey(sessionId))
-                _subscribedUsersTagsState.Add(sessionId, null);
+                _subscribedUsersTagsState.TryAdd(sessionId, null);
             _subscribedUsersTagsState[sessionId] = CreateTagsStateDictionary(tagsList);
 
             // Делаем полный запрос ко всем DS (плохой вариант)
@@ -244,9 +246,9 @@ namespace DSFakeService.DataSources
         /// <summary>
         /// Создает словарь состояний запрошенных тегов
         /// </summary>
-        private Dictionary<string, bool> CreateTagsStateDictionary(List<string> tagsList)
+        private ConcurrentDictionary<string, bool> CreateTagsStateDictionary(List<string> tagsList)
         {
-            return tagsList.ToDictionary(s => s, s => false);
+            return new ConcurrentDictionary<string, bool>(tagsList.ToDictionary(s => s, s => false));
         }
 
         #endregion
