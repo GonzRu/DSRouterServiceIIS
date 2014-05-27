@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.ServiceModel;
 using System.Timers;
 using DSFakeService.DSServiceReference;
 
 namespace DSRouterService
 {
-    public delegate void DSSessionCancelled(UInt16 numds);
-
     /// <summary>
     /// класс представляющий DataServer в списке 
     /// DataServer'ов с которыми работает данный
@@ -16,7 +17,7 @@ namespace DSRouterService
     {
         #region Events
 
-        public event DSSessionCancelled OnDSSessionCancelled;
+        public event Action<Dictionary<string, DSRouterTagValue>> TagsValuesUpdated;
 
         #endregion
 
@@ -39,115 +40,274 @@ namespace DSRouterService
 
         #endregion
 
-        #region Private-Fields
+        #region Private-Readonly
+
+        /// <summary>
+        /// Адрес DS
+        /// </summary>
+        private readonly string _ipAddress;
+
+        /// <summary>
+        /// Порт WCF службы DS
+        /// </summary>
+        private readonly string _port;
 
         /// <summary>
         /// таймер связи
         /// </summary>
-        System.Timers.Timer tmrpingpong = new System.Timers.Timer();
+        private readonly Timer pingPongWithDsTimer = new Timer();
 
         /// <summary>
-        /// таймер для обнаружения ошибки при 
-        /// пинг-понге
+        /// Таймер для переодических попыток создания соединения с DS
         /// </summary>
-        System.Timers.Timer tmrpingpongFault = new System.Timers.Timer();
+        private readonly Timer createDsConnectionTimer = new Timer();
+
+        #endregion
+
+        #region Private-Fields
+
+        /// <summary>
+        /// Список тегов, запрошенных у данного DS
+        /// </summary>
+        private List<string> _requestedTagsList;
 
         #endregion
 
         #region Constructor
 
-        public DSService(UInt16 uid, IWcfDataServer wcfds)
+        public DSService(UInt16 dsGuid, string ipAddress, string port)
         {
+            dsUID = dsGuid;
+            _ipAddress = ipAddress;
+            _port = port;            
+
+            #region иницализация таймера связи
+
+            pingPongWithDsTimer.Interval = 5000;
+
+            pingPongWithDsTimer.Elapsed += PingPongWithDsTimerElapsed;
+            pingPongWithDsTimer.Stop();
+
+            #endregion
+
+            #region Таймер для установления связи с DS
+
+            createDsConnectionTimer.Interval = 3000;
+
+            createDsConnectionTimer.Elapsed += CreateDsConnectionTimerOnElapsed;
+            createDsConnectionTimer.Stop();
+
+            #endregion
+
+            CreateConnectionWithDs();
+        }
+
+        #endregion
+
+        #region Public-metods
+
+        /// <summary>
+        /// Запросить теги 
+        /// </summary>
+        public Dictionary<string, DSRouterTagValue> GetTagsValue(List<string> tagsRequestList)
+        {
+            _requestedTagsList = new List<string>(tagsRequestList);
+
             try
             {
-                dsUID = uid;
-                wcfDataServer = wcfds;
-                ConnectionState = false;
+                lock (wcfDataServer)
+                {
+                    wcfDataServer.SubscribeRTUTags(tagsRequestList.ToArray());
 
-                #region иницализация таймера связи
-                tmrpingpong.Interval = 5000;
-
-                tmrpingpong.Elapsed += new System.Timers.ElapsedEventHandler(tmrpingpong_Elapsed);
-                tmrpingpong.Start();
-                #endregion
-
-                #region иницализация таймера ошибки для пинг-понга
-                tmrpingpongFault.Interval = 5000;
-
-                tmrpingpongFault.Elapsed += new ElapsedEventHandler(tmrpingpongFault_Elapsed);
-                tmrpingpongFault.Stop();
-                #endregion
+                    return ConvertDsTagsDictionaryToDsRouterTagsDictionary(wcfDataServer.GetTagsValue(tagsRequestList.ToArray()));
+                }
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1949, ex.Message);
-                Utilities.LogTrace("DSRouterService.DSService() : Исключение : " + ex.Message);
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1743, ex.Message);
+                Utilities.LogTrace("DSRouterService.CreateWCFCL() : Исключение : " + ex.Message);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Отписываемся от обновлений прошлого запроса
+        /// </summary>
+        public void UnsubscribeFromLastRequest()
+        {
+            if (_requestedTagsList != null && _requestedTagsList.Count != 0)
+                wcfDataServer.UnscribeRTUTags(_requestedTagsList.ToArray());
+        }
+
+        #endregion
+
+        #region Private-metods
+
+        #region Методы для создания канала связи с DS
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CreateConnectionWithDs()
+        {
+            try
+            {
+                createDsConnectionTimer.Stop();
+
+                CreateDsProxy();
+
+                pingPongWithDsTimer.Start();
+            }
+            catch (Exception)
+            {
+                createDsConnectionTimer.Start();
             }
         }
+
+        /// <summary>
+        /// Запускает таймер для установления связи с DS
+        /// </summary>
+        private void StartTimerToRecreateDsConnection()
+        {
+            createDsConnectionTimer.Start();
+        }
+
+        /// <summary>
+        /// Создает соединение с DS
+        /// </summary>
+        private void CreateDsProxy()
+        {
+            NetTcpBinding tcpBinding = new NetTcpBinding();
+            tcpBinding.ReceiveTimeout = new TimeSpan(0, 1, 0);
+            tcpBinding.SendTimeout = new TimeSpan(0, 1, 0);
+            tcpBinding.MaxReceivedMessageSize = Int32.MaxValue;
+
+            EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", _ipAddress, _port));
+
+            DSServiceCallback dsServiceCallback = new DSServiceCallback();
+            dsServiceCallback.OnNewTagValues += TagsValuesUpdatedHandler;
+
+            wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
+            (wcfDataServer as WcfDataServerClient).Open();
+            (wcfDataServer as WcfDataServerClient).ChannelFactory.Closed += DsDisconnected;
+            (wcfDataServer as WcfDataServerClient).ChannelFactory.Faulted += DsDisconnected;
+
+            wcfDataServer.RegisterForErrorEvent(dsUID.ToString());
+        }
+
+        #endregion
+
+        #region Вспомогательные методы для работы с данными
+
+        /// <summary>
+        /// Преобразоввывает словарь значений тегов из формата DS в формат ротуера
+        /// </summary>
+        private Dictionary<string, DSRouterTagValue> ConvertDsTagsDictionaryToDsRouterTagsDictionary(Dictionary<string, DSTagValue> dsTagsDictionary)
+        {
+            var result = new Dictionary<string, DSRouterTagValue>();
+
+            foreach (var tagIdAsStr in dsTagsDictionary.Keys)
+                result[tagIdAsStr] = new DSRouterTagValue(dsTagsDictionary[tagIdAsStr]);
+
+            return result;
+        }
+
+        #endregion
 
         #endregion
 
         #region Handlers
 
-        void tmrpingpong_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        #region Обработчики событий таймеров для поддержания связи с DS
+
+        void PingPongWithDsTimerElapsed(object sender, ElapsedEventArgs e)
         {
             Utilities.LogTrace("DSRouterService : tmrpingpong_Elapsed()");
+            pingPongWithDsTimer.Stop();
+
             try
             {
-                tmrpingpong.Stop();
-                tmrpingpongFault.Start();
-
-                wcfDataServer.BeginPing(OnPingCompletion, null);
+                wcfDataServer.Ping();
+                
             }
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1965, ex.Message);
                 Utilities.LogTrace("DSRouterService.tmrpingpong_Elapsed() : Исключение : " + ex.Message);
             }
+
+            pingPongWithDsTimer.Start();
         }
 
-        void tmrpingpongFault_Elapsed(object sender, ElapsedEventArgs e)
+        /// <summary>
+        /// Обработчик таймера для установления соединения с DS
+        /// </summary>
+        private void CreateDsConnectionTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            Utilities.LogTrace("DSRouterService : tmrpingpongFault_Elapsed()");
+            pingPongWithDsTimer.Stop();
+            createDsConnectionTimer.Stop();
+
             try
             {
-                tmrpingpong.Stop();
-                tmrpingpongFault.Stop();
+                CreateDsProxy();
 
-                /*
-                 *  извещаем DSRouter о том что DS 
-                 *  не отвечает и соединение с ним 
-                 *  нужно перезапустить
-                 */
-                if (OnDSSessionCancelled != null)
-                {
-                    Utilities.LogTrace("DSRouterService : tmrpingpongFault_Elapsed() : OnDSSessionCancelled != null");
-                    OnDSSessionCancelled(dsUID);
-                }
+                createDsConnectionTimer.Stop();
+                pingPongWithDsTimer.Start();
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1987, ex.Message);
-                Utilities.LogTrace("DSRouterService.tmrpingpongFault_Elapsed() : Исключение : " + ex.Message);
+                createDsConnectionTimer.Start();
             }
         }
 
-        void OnPingCompletion(IAsyncResult result)
+        /// <summary>
+        /// Обработчик события потери соединения с DS
+        /// </summary>
+        private void DsDisconnected(object sender, EventArgs eventArgs)
         {
-            Utilities.LogTrace("DSRouterService : OnPingCompletion()");
-            try
-            {
-                wcfDataServer.EndPing(result);
+            pingPongWithDsTimer.Stop();
 
-                tmrpingpongFault.Stop();
-                tmrpingpong.Start();
-            }
-            catch (Exception ex)
-            {
-                Utilities.LogTrace("DSRouterService.OnPingCompletion() : Исключение : " + ex.Message);
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 2002, ex.Message);
-            }
+            StartTimerToRecreateDsConnection();
+
+            SendLostConnectionTagsValue();
         }
+
+        /// <summary>
+        /// Посылает обновления тегов, с качеством потери связи с DS
+        /// </summary>
+        private void SendLostConnectionTagsValue()
+        {
+            OnTagsValuesUpdated(
+                _requestedTagsList.ToDictionary(
+                    s => s,
+                    s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
+                    )
+                );
+        }
+
+        /// <summary>
+        /// Вызвать событие TagsValuesUpdated
+        /// </summary>
+        private void OnTagsValuesUpdated(Dictionary<string, DSRouterTagValue> tagsValues)
+        {
+            if (TagsValuesUpdated != null)
+                TagsValuesUpdated(tagsValues);
+        }
+
+        #endregion
+
+        #region Обработчики событий wcf сервиса DS
+
+        /// <summary>
+        /// Обработчик события появления обновлений тегов
+        /// </summary>
+        private void TagsValuesUpdatedHandler(Dictionary<string, DSTagValue> tv)
+        {
+            OnTagsValuesUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
+        }
+
+        #endregion
 
         #endregion
     }

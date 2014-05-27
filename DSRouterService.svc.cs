@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.ServiceModel;
 using System.Text;
-using System.Timers;
 using System.Xml.Linq;
+using DSFakeService.DataSources;
 using DSFakeService.DSServiceReference;
 using DSFakeService.Helpers;
+using HMI_MT_Settings;
 
 namespace DSRouterService
 {
@@ -40,6 +40,8 @@ namespace DSRouterService
 
         private static string _lockFileUploadSessionId = null;
 
+        private static IDataSource _dataSource;
+
         #endregion
 
         #region private-поля класса
@@ -55,27 +57,9 @@ namespace DSRouterService
         private Dictionary<UInt16, DSService> dWCFClientsList = new Dictionary<ushort, DSService>();
 
         /// <summary>
-        /// таймер перезапуска соединенения 
-        /// с отвалившимися DS
-        /// </summary>
-        private System.Timers.Timer tmrDSRestart;
-
-        /// <summary>
         /// Текущий контекст
         /// </summary>
         private OperationContext CurrentСontext;
-
-        /// <summary>
-        /// список текущих тегов
-        /// для подписки
-        /// </summary>
-        private List<string> ATagIDsList = new List<string>();
-
-        /// <summary>
-        /// список подписанных тегов
-        /// </summary>
-        /// bool - факт изменения значения
-        private SortedDictionary<string, Tuple<DSRouterTagValue, bool>> lstSubscribeTagsInHMIContext = new SortedDictionary<string, Tuple<DSRouterTagValue, bool>>();
 
         /// <summary>
         /// признак активной команды
@@ -93,6 +77,11 @@ namespace DSRouterService
         /// Класс пользователя, который обслуживается текущей сессией
         /// </summary>
         private DSRouterUser _currentUser;
+
+        /// <summary>
+        /// Идентификатор сессии
+        /// </summary>
+        private string _sessionId;
 
         #region Поля, нужные для записи файла
 
@@ -128,6 +117,8 @@ namespace DSRouterService
 
         static DSRouterService()
         {
+            InitRouterService();
+
             TraceSourceLib.TraceSourceDiagMes.StartTrace("AppDiagnosticLog", 30000);
 
             DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Share");
@@ -138,10 +129,12 @@ namespace DSRouterService
         {
             try
             {
-                InitDSRouter();
+                dWCFClientsList = (_dataSource as DataServersCollector).dWCFClientsList;
 
-                CurrentСontext.Channel.Closed += ClientDisconnected;
-                CurrentСontext.Channel.Faulted += ClientDisconnected;                
+                OperationContext.Current.Channel.Closed += ClientDisconnected;
+                OperationContext.Current.Channel.Faulted += ClientDisconnected;
+
+                _sessionId = OperationContext.Current.SessionId;
 
                 Utilities.LogTrace("DSRouterService: Создан объект DSRouterService");
                 Debug.WriteLine("DSRouterService: Создан объект DSRouterService");
@@ -851,64 +844,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValue(List<string> ATagIDsList)
         {
-            Dictionary<string, DSRouterTagValue> dlist = new Dictionary<string, DSRouterTagValue>();
-
-            Utilities.LogTrace("DSRouterService : GetTagsValue()");
-
-            try
-            {
-                if (currClient == null)
-                {
-                    lock (lockKey)
-                    {
-                        currClient = CurrentСontext.GetCallbackChannel<IDSRouterCallback>();
-                    }
-                }
-
-                // запоминаем теги из запроса для подписки
-                foreach (string tag in ATagIDsList)
-                {
-                    if (!tag.Equals("", StringComparison.InvariantCultureIgnoreCase))
-                        dlist[tag] = new DSRouterTagValue();//(1, 3);
-                }
-
-                /*
-                 * для ускорения процесса разработки
-                 * считаем что DS один и все затачиваем под него
-                 */
-                IWcfDataServer iwds = null;
-                if (dWCFClientsList.ContainsKey(0))
-                {
-                    iwds = dWCFClientsList.ElementAt(0).Value.wcfDataServer;
-
-                    // формируем, запоминаем список и подписываемся на обновление
-                    this.ATagIDsList = ATagIDsList;
-                    iwds.SubscribeRTUTags(ATagIDsList.ToArray());
-                    AddTags(ATagIDsList);
-
-                    // получение тегов от DS
-                    Dictionary<string, DSTagValue> dlistDS = iwds.GetTagsValue(this.ATagIDsList.ToArray());
-
-                    foreach (KeyValuePair<string, DSTagValue> kvp in dlistDS)
-                    {
-                        DSRouterTagValue dsdstv = new DSRouterTagValue();
-                        dsdstv.VarQuality = kvp.Value.VarQuality;
-                        dsdstv.VarValueAsObject = kvp.Value.VarValueAsObject;
-
-                        if (dlist.ContainsKey(kvp.Key))
-                            dlist[kvp.Key] = dsdstv;
-                        else
-                            dlist.Add(kvp.Key, dsdstv);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
-            }
-
-            return dlist;
+            return _dataSource.GetTagsValue(_sessionId, ATagIDsList);
         }
 
         /// <summary>
@@ -916,97 +852,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValuesUpdated()
         {
-            Dictionary<string, DSRouterTagValue> tagsDataUpdated = new Dictionary<string, DSRouterTagValue>();
-
-            try
-            {
-                lock (lockKey)
-                {
-                    for (int i = 0; i < GetSubscribeTags().Count; i++)
-                    {
-                        KeyValuePair<string, Tuple<DSRouterTagValue, bool>> kvp = GetSubscribeTags().ElementAt(i);
-                        if (kvp.Value.Item2)
-                        {
-                            tagsDataUpdated.Add(kvp.Key, GetDSTagValue(kvp.Key));
-                            ResetReNewFlag(kvp.Key);
-                        }
-
-                    }
-                }
-            }
-            catch (Exception exx)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(exx);
-            }
-
-            return tagsDataUpdated;
-        }
-
-        /// <summary>
-        /// подписаться на теги
-        /// </summary>
-        /// <param name="request"></param>
-        void IDSRouter.SubscribeRTUTags(List<string> request)
-        {
-            Utilities.LogTrace("DSRouterService : SubscribeRTUTags()");
-
-            try
-            {
-                lock (lockKey)
-                {
-                    Utilities.LogTrace("DSRouterService.SubscribeRTUTags() : lock");
-
-                    AddTags(request);
-
-                    /*
-                     * для ускорения процесса разработки
-                     * считаем что DS один и все затачиваем под него
-                     * если ds несколько, то перебираем запрос и формируем списки
-                     * поотдельности для каждого ds
-                     */
-                    if (dWCFClientsList.Count() == 0)
-                        return;
-
-                    IWcfDataServer iwds = dWCFClientsList.ElementAt(0).Value.wcfDataServer;
-
-                    iwds.SubscribeRTUTags(request.ToArray());
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.SubscribeRTUTags() : Исключение : " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// отписаться от обновления тегов
-        /// </summary>
-        void IDSRouter.UnscribeRTUTags(List<string> request)
-        {
-            Utilities.LogTrace("DSRouterService : UnscribeRTUTags()");
-
-            try
-            {
-                RemoveTags(request);
-
-                /*
-                 * для ускорения процесса разработки
-                 * считаем что DS один и все затачиваем под него
-                 * если ds несколько, то перебираем запрос и формируем списки
-                 * поотдельности для каждого ds
-                */
-                IWcfDataServer iwds = dWCFClientsList.ElementAt(0).Value.wcfDataServer;
-                lock (lockKey)
-                {
-                    iwds.UnscribeRTUTags(request.ToArray());
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.UnscribeRTUTags() : Исключение : " + ex.Message);
-            }
+            return _dataSource.GetTagsValuesUpdated(_sessionId);
         }
 
         #endregion
@@ -1939,593 +1785,21 @@ namespace DSRouterService
         #region Вспомогательные методы для иницилизации роутера
 
         /// <summary>
-        /// инициализация экземпляра 
-        /// службы маршрутизатора запросов
+        /// Иницилизирует класс для последющей работы
         /// </summary>
-        private void InitDSRouter()
+        private static void InitRouterService()
         {
-            Utilities.LogTrace("DSRouterService : InitDSRouter()");
-            try
-            {
-                // Сформировать имена конфигурац файлов
-                SetNamesCfgPrgFiles();
+            InitProjectSettings();
 
-                #region фиксирование сессии (код ПР)
-                CurrentСontext = OperationContext.Current;
-                //currClient = CurrentСontext.GetCallbackChannel<IDSRouterCallback>();
-                CurrentСontext.Channel.Faulted += Disconnect;
-                CurrentСontext.Channel.Closed += Disconnect;
-                #endregion
-
-                lockKey = new object();
-
-                ///*
-                // * прочитать файл с конфигурацией DataServer'ов текущего проекта
-                // * запустить клиентов для работы с каждым из DS по его guid
-                // * инициализировать мультисессионный сервис для приема запроса клиентов                 * 
-                // */
-
-                #region иницализация таймера для перезапуска отвалившихся DS
-                tmrDSRestart = new System.Timers.Timer();
-                tmrDSRestart.Interval = 5000;
-                tmrDSRestart.Elapsed += new ElapsedEventHandler(tmrDSRestart_Elapsed);
-                tmrDSRestart.Stop();
-                #endregion
-
-                CreateDSList();
-                CreateDSClientsList();
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.InitDSRouter() : Исключение : " + ex.Message);
-            }
+            _dataSource = new DataServersCollector();
         }
 
         /// <summary>
-        /// Сформировать имена конфигурац файлов проекта
+        /// Иницилизирует настройки проекта
         /// </summary>
-        public static void SetNamesCfgPrgFiles()
+        private static void InitProjectSettings()
         {
-            Utilities.LogTrace("DSRouterService : SetNamesCfgPrgFiles()");
-
-            bool isPathFound = false;
-            string path2cfgfiles = string.Empty;
-
-            try
-            {
-                #region информацию о папке с конфиг параметрами извлекаем из реестра
-                //// проверить существование ключа реестра
-                //RegistryKey key = Registry.LocalMachine;
-                //RegistryKey keysw = key.OpenSubKey("Software", true);
-                //RegistryKey mtrakey = keysw.OpenSubKey("mtra");
-                //RegistryKey mtrakeyds = null;
-
-                //if (mtrakey == null)
-                //{
-                //    isPathFound = false;
-                //}
-                //else
-                //    mtrakeyds = mtrakey.OpenSubKey("DSRouterService");
-
-                //// путь к папке с ранее установленным ПО
-                //string strmtrakeydskeypath = string.Empty;
-
-                //if (mtrakeyds != null)
-                //{
-                //    isPathFound = true;
-
-                //    /*
-                //     * приложение DataServer уже ранее устанавливалось
-                //     * поэтому читаем путь к его файлу запуска
-                //     */
-                //    //RegistryKey mtrakeydspartkey = mtrakey.OpenSubKey(idPTK);
-                //    path2cfgfiles = (string)mtrakeyds.GetValue("mtraPathDSRouterServiceConfig");
-
-                //    if (!Directory.Exists(path2cfgfiles))
-                //    {
-                //        //System.Windows.Forms.MessageBox.Show(string.Format("(83)Путь к файлу приложения недействителен : {0}.", path2dsexe), @"Запуск сервиса DataServer", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error); ;
-                //        isPathFound = false;
-                //    }
-                //}
-                //else
-                //    isPathFound = false;                
-
-                //if (!isPathFound)
-                //    return;
-                #endregion
-
-                path2cfgfiles = AppDomain.CurrentDomain.BaseDirectory + "Project";
-
-                // проверяем существование файла конфигурации  проекта Project.cfg и файла конфигурации устройств проекта
-                string PathToPrjFile = Path.Combine(path2cfgfiles, "Project.cfg");// AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "Project" + Path.DirectorySeparatorChar + "Project.cfg";
-
-                if (!File.Exists(PathToPrjFile))
-                {
-                    //System.Windows.Forms.MessageBox.Show(string.Format("Нет доступа к конфигурации какого либо проекта, путь : {0} не существует. \nРабота программы будет прекрацена.", PathToPrjFile), @"(256)...\DataServerWPF\MainWindow.xaml.cs : CreateDescribeDeviceAsXDocument", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                    Process.GetCurrentProcess().Kill();
-                }
-
-                HMI_MT_Settings.HMI_Settings.PathToPrjFile = PathToPrjFile;
-                HMI_MT_Settings.HMI_Settings.XDoc4PathToPrjFile = XDocument.Load(HMI_MT_Settings.HMI_Settings.PathToPrjFile);
-
-                // проверяем существование файла конфигурации устройств проекта Configuration.cfg 
-                string PathToConfigurationFile = Path.Combine(path2cfgfiles, "Configuration.cfg"); //AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "Project" + Path.DirectorySeparatorChar + "Configuration.cfg";
-
-                if (!File.Exists(PathToConfigurationFile))
-                    throw new Exception(string.Format(@"(391) : ...\WCFDSService\WCFDSService\WcfDataServer.cs : SetNamesCfgPrgFiles() : Несуществующий файл = {0}", PathToConfigurationFile));
-
-                HMI_MT_Settings.HMI_Settings.PathToConfigurationFile = PathToConfigurationFile;
-                HMI_MT_Settings.HMI_Settings.XDoc4PathToConfigurationFile = XDocument.Load(HMI_MT_Settings.HMI_Settings.PathToConfigurationFile);
-
-                // загрузить информацию об ошибках из файла ErrorList.xml
-                // проверяем существование файла 
-                string PathToErrorListFile = Path.Combine(path2cfgfiles, "ErrorList.xml");// AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "Project" + Path.DirectorySeparatorChar + "ErrorList.xml";
-
-                if (!File.Exists(PathToErrorListFile))
-                    throw new Exception(string.Format(@"(204) : ...\WCFDSService\WCFDSService\WcfDataServer.cs  : SetNamesCfgPrgFiles() : Несуществующий файл описания ошибок = {0}", PathToErrorListFile));
-
-                // если файл есть - заполняем список
-                XDocument xdocError = XDocument.Load(PathToErrorListFile);
-                foreach (XElement kvp in xdocError.Element("ErrorList").Descendants("Error"))
-                    if (!HMI_MT_Settings.HMI_Settings.SlListError.ContainsKey(kvp.Attribute("code").Value))
-                        HMI_MT_Settings.HMI_Settings.SlListError.Add(kvp.Attribute("code").Value, kvp.Attribute("name").Value);
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.SetNamesCfgPrgFiles() : Исключение : " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// создать список DS из конфигурации проекта
-        /// </summary>
-        private void CreateDSList()
-        {
-            Utilities.LogTrace("DSRouterService : CreateDSList()");
-
-            // список DS и описывающих их секций
-            dsList = new Dictionary<UInt16, XElement>();
-            try
-            {
-                // проверяем существование файла конфигурации  проекта Project.cfg и файла конфигурации устройств проекта
-                string PathToPrjFile = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "Project" + Path.DirectorySeparatorChar + "Project.cfg";
-
-                if (!File.Exists(PathToPrjFile))
-                    throw new Exception(string.Format(@"(152) : ...\DSRouterSolution\DSRouter\DSRouter.svc.cs : CreateDSList() : Несуществующий файл = {0}", PathToPrjFile));
-
-                // проверяем существование файла конфигурации устройств проекта Configuration.cfg 
-                string PathToConfigurationFile = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "Project" + Path.DirectorySeparatorChar + "Configuration.cfg";
-
-                if (!File.Exists(PathToConfigurationFile))
-                    throw new Exception(string.Format("(391) : MainForm.cs : SetNamesCfgPrgFiles() : Несуществующий файл = {0}", PathToConfigurationFile));
-
-                XDocument XDoc4PathToConfigurationFile = XDocument.Load(PathToConfigurationFile);
-
-                if (XDoc4PathToConfigurationFile.Element("Project").Element("Configuration").Elements("Object").Count() > 0)
-                    foreach (XElement xe in XDoc4PathToConfigurationFile.Element("Project").Element("Configuration").Elements("Object"))
-                        dsList.Add(UInt16.Parse(xe.Attribute("UniDS_GUID").Value), xe);
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.CreateDSList() : Исключение : " + ex.Message);
-                Process.GetCurrentProcess().Kill();
-            }
-        }
-
-        /// <summary>
-        /// заполнить словарь соединений с DS
-        /// при инициализации DSRouter
-        /// </summary>
-        private void CreateDSClientsList()
-        {
-            Utilities.LogTrace("DSRouterService : CreateDSClientsList()");
-            try
-            {
-                foreach (KeyValuePair<UInt16, XElement> kvp in dsList)
-                {
-                    CreateWCFCL(kvp);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.CreateDSClientsList() : Исключение : " + ex.Message);
-            }
-        }
-
-        private void CreateWCFCL(KeyValuePair<UInt16, XElement> kvp)
-        {
-            Utilities.LogTrace("DSRouterService : CreateWCFCL()");
-
-            try
-            {
-                IWcfDataServer dsr = CreateWCFClient(kvp.Value);
-
-                if (dsr != null)
-                {
-                    DSService dss = new DSService(kvp.Key, dsr);
-                    if (!dWCFClientsList.ContainsKey(kvp.Key))
-                        dWCFClientsList.Add(kvp.Key, dss);
-                    else
-                        dWCFClientsList[kvp.Key] = dss;
-
-                    dss.OnDSSessionCancelled += new DSSessionCancelled(dss_OnDSSessionCancelled);
-                    dWCFClientsList[kvp.Key].ConnectionState = true;
-                }
-                else
-                {
-                    /*
-                     *  пытаемся соединиться через определенные периоды
-                     *  когда служба будет доступна
-                     */
-                    // пытаемся перезапустить DS                       
-
-                    if (dWCFClientsList.ContainsKey(kvp.Key))
-                        dWCFClientsList[kvp.Key].ConnectionState = false;
-
-                    tmrDSRestart.Start();
-                    /*
-                     * запускаем таймер на перезапуск 
-                     * соединения с отвалившимися службами
-                     */
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1743, ex.Message);
-                Utilities.LogTrace("DSRouterService.CreateWCFCL() : Исключение : " + ex.Message);
-            }
-            Utilities.LogTrace("DSRouterService : CreateWCFCL()");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private IWcfDataServer CreateWCFClient(XElement kvpValue)
-        {
-            Utilities.LogTrace("DSRouterService : CreateWCFClient()");
-
-            string ipds = string.Empty;
-            string port = string.Empty;
-            WcfDataServerClient wcfDataServer = null;
-
-            try
-            {
-                if (kvpValue.Element("DSAccessInfo").Element("binding").Element("IPAddress").Attributes("value").Count() != 0)
-                    ipds = kvpValue.Element("DSAccessInfo").Element("binding").Element("IPAddress").Attribute("value").Value;
-                else
-                    ipds = "127.0.0.1";
-
-                if (kvpValue.Element("DSAccessInfo").Element("binding").Element("Port").Attributes("value").Count() != 0)
-                    port = kvpValue.Element("DSAccessInfo").Element("binding").Element("Port").Attribute("value").Value;
-                else
-                    port = "8732";
-
-                #region инициализация wcf
-                IPAddress ipa;
-                string endPointAddr = "";
-
-                if (!IPAddress.TryParse(ipds, out ipa))
-                    throw new Exception(string.Format("Некорректный ip-адрес - {0}", ipds));
-
-                endPointAddr = string.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", ipds, port);
-
-                NetTcpBinding tcpBinding = new NetTcpBinding();
-                //tcpBinding.MaxReceivedMessageSize = int.MaxValue;//150000000;
-                //tcpBinding.MaxBufferSize = int.MaxValue;//1500000;
-                //tcpBinding.MaxBufferPoolSize = int.MaxValue;
-                //tcpBinding.ReaderQuotas.MaxArrayLength = int.MaxValue;// 1500000;
-                tcpBinding.ReceiveTimeout = new TimeSpan(0, 1, 0);
-                tcpBinding.SendTimeout = new TimeSpan(0, 1, 0);
-                //tcpBinding.Security.Mode = SecurityMode.None;
-                tcpBinding.MaxReceivedMessageSize = Int32.MaxValue;                
-
-                //tcpBinding.TransactionFlow = false;
-                //tcpBinding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign;
-                //tcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-                //tcpBinding.Security.Mode = SecurityMode.None;
-
-                EndpointAddress endpointAddress = new EndpointAddress(endPointAddr);
-
-                DSServiceCallback cbh = new DSServiceCallback();
-                cbh.OnNewError += new NewError(cbh_OnNewError);
-                cbh.OnNewTagValues += new NewTagValues(cbh_OnNewTagValues);
-                cbh.OnCMDExecuted += new CMDExecuted(cbh_OnCMDExecuted);
-
-                InstanceContext ic = new InstanceContext(cbh);
-
-                wcfDataServer = new WcfDataServerClient(ic, tcpBinding, endpointAddress);
-
-                wcfDataServer.RegisterForErrorEvent(kvpValue.Attribute("UniDS_GUID").Value);
-                #endregion
-
-                #region восстанавливаем подписку если соединение прерывалось только между dsr и ds
-                // общий список подписанных тегов по клиентам
-                SortedDictionary<string, Tuple<DSRouterTagValue, bool>> lstfull = new SortedDictionary<string, Tuple<DSRouterTagValue, bool>>();
-
-                foreach (KeyValuePair<string, Tuple<DSRouterTagValue, bool>> tag in GetSubscribeTags())
-                    if (!lstfull.ContainsKey(tag.Key))
-                        lstfull.Add(tag.Key, new Tuple<DSRouterTagValue, bool>(tag.Value.Item1, tag.Value.Item2));
-
-                if (lstfull.Count > 0)
-                {
-                    /*
-                         * для ускорения процесса разработки
-                         * считаем что DS один и все затачиваем под него
-                         * если ds несколько, то перебираем запрос и формируем списки
-                         * поотдельности для каждого ds
-                         */
-                    wcfDataServer.SubscribeRTUTags(lstfull.Keys.ToArray());
-                }
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1857, ex.Message);
-                Utilities.LogTrace("DSRouterService.CreateWCFClient() : Исключение : " + ex.Message);
-
-                wcfDataServer = null;
-            }
-
-            Utilities.LogTrace("DSRouterService : CreateWCFClient()");
-
-            return wcfDataServer;
-        }
-
-        #endregion
-
-        #region Работа с DS
-
-        /// <summary>
-        /// Пересоздание соединения с конкретным DS
-        /// </summary>
-        private void CreateDSConnection(UInt16 numds)
-        {
-            Utilities.LogTrace("DSRouterService : CreateDSConnection()");
-            try
-            {
-                // пытаемся перезапустить конкретный DS
-                foreach (KeyValuePair<UInt16, XElement> kvp in dsList)
-                {
-                    if (kvp.Key == numds)
-                        CreateWCFCL(kvp);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.CreateDSConnection() : Исключение : " + ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region Вспомогательные методы для работы роутера
-
-        /// <summary>
-        /// удаление тегов из списка
-        /// запрашиваемых тегов
-        /// </summary>
-        /// <param name="lstTags"></param>
-        public void RemoveTags(List<string> lstTags)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    foreach (string strid in lstTags)
-                        if (lstSubscribeTagsInHMIContext.ContainsKey(strid))
-                            lstSubscribeTagsInHMIContext.Remove(strid);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-
-        /// <summary>
-        /// получить список подписанных тегов
-        /// </summary>
-        /// <returns></returns>
-        public SortedDictionary<string, Tuple<DSRouterTagValue, bool>> GetSubscribeTags()
-        {
-            return lstSubscribeTagsInHMIContext;
-        }
-
-        /// <summary>
-        /// получить значение тега
-        /// </summary>
-        /// <returns></returns>
-        public DSRouterTagValue GetDSTagValue(string tagid)
-        {
-            DSRouterTagValue rez = null;
-            try
-            {
-                lock (lockKey)
-                {
-                    if (lstSubscribeTagsInHMIContext.ContainsKey(tagid))
-                    {
-                        rez = lstSubscribeTagsInHMIContext[tagid].Item1;
-                        // сбрасываем признак новизны
-                        lstSubscribeTagsInHMIContext[tagid] = new Tuple<DSRouterTagValue, bool>(lstSubscribeTagsInHMIContext[tagid].Item1, false);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-            return rez;
-        }
-
-        /// <summary>
-        /// сбросить флог обновления
-        /// </summary>
-        /// <param name="tgkey"></param>
-        public void ResetReNewFlag(string tgkey)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    if (lstSubscribeTagsInHMIContext.ContainsKey(tgkey))
-                        lstSubscribeTagsInHMIContext[tgkey] = new Tuple<DSRouterTagValue, bool>(lstSubscribeTagsInHMIContext[tgkey].Item1, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsContainsTag(string idtag)
-        {
-            bool rez = false;
-
-            try
-            {
-                if (lstSubscribeTagsInHMIContext.ContainsKey(idtag))
-                    rez = true;
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-            return rez;
-        }
-
-        /// <summary>
-        /// установить значение тега
-        /// </summary>
-        /// <returns></returns>
-        public void SetDSTagValue(string tagid, DSRouterTagValue dst)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    if (lstSubscribeTagsInHMIContext.ContainsKey(tagid))
-                        lstSubscribeTagsInHMIContext[tagid] = new Tuple<DSRouterTagValue, bool>(dst, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-        public void AddTags(List<string> lstTags)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    foreach (string strid in lstTags)
-                        if (!lstSubscribeTagsInHMIContext.ContainsKey(strid))
-                            lstSubscribeTagsInHMIContext.Add(strid, new Tuple<DSRouterTagValue, bool>(new DSRouterTagValue(), false));
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-
-        /// <summary>
-        /// Установить флаг обновления
-        /// </summary>
-        /// <param name="tgkey"></param>
-        public void SetReNewFlag(string tgkey)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    if (lstSubscribeTagsInHMIContext.ContainsKey(tgkey))
-                        lstSubscribeTagsInHMIContext[tgkey] = new Tuple<DSRouterTagValue, bool>(lstSubscribeTagsInHMIContext[tgkey].Item1, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-
-        /// <summary>
-        /// Установить плохое качество тега
-        /// </summary>
-        /// <param name="tgkey"></param>
-        public void SetBadQuality(string tgkey)
-        {
-            try
-            {
-                lock (lockKey)
-                {
-                    if (lstSubscribeTagsInHMIContext.ContainsKey(tgkey))
-                    {
-                        lstSubscribeTagsInHMIContext[tgkey].Item1.VarQuality = 0;
-                        lstSubscribeTagsInHMIContext[tgkey] = new Tuple<DSRouterTagValue, bool>(lstSubscribeTagsInHMIContext[tgkey].Item1, true);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
-        }
-
-        /// <summary>
-        /// установить плохое качество тегам
-        /// определенного DS по причине того, что 
-        /// он перестал пинговаться
-        /// </summary>
-        /// <param name="numds"></param>
-        private void SetBadQulity4DSTags(ushort numds)
-        {
-            /*
-             * для всех тегов отвалившегося DS
-             * нужно поставить плохое качество 
-             * и установить признак обновления
-             */
-            Dictionary<string, DSRouterTagValue> tagsDataUpdated = new Dictionary<string, DSRouterTagValue>();
-
-            try
-            {
-                var sessionID = CurrentСontext.SessionId;
-
-                try
-                {
-                    lock (lockKey)
-                    {
-                        for (int i = 0; i < GetSubscribeTags().Count; i++)
-                        {
-                            KeyValuePair<string, Tuple<DSRouterTagValue, bool>> kvp = GetSubscribeTags().ElementAt(i);
-                            // выделим номер DS
-                            if (ushort.Parse(kvp.Key.Split(new char[] { '.' })[0]) == numds)
-                            {
-                                SetReNewFlag(kvp.Key);
-                                SetBadQuality(kvp.Key);
-                                tagsDataUpdated.Add(kvp.Key, GetDSTagValue(kvp.Key));
-
-                            }
-                        }
-                    }
-                }
-                catch (Exception exx)
-                {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(exx);
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-            }
+            HMI_Settings.PathToConfigurationFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Project", "Configuration.cfg");
         }
 
         #endregion
@@ -2680,155 +1954,6 @@ namespace DSRouterService
 
         #region Обработчики событий, связанные с DataServer'ом
 
-        #region Обработчики событий потери связи и ошибок
-
-        /// <summary>
-        /// событие пропадания связи с DS
-        /// </summary>
-        /// <param name="numds"></param>
-        void dss_OnDSSessionCancelled(ushort numds)
-        {
-            Utilities.LogTrace("DSRouterService : dss_OnDSSessionCancelled() - событие пропадания связи с DS");
-
-            try
-            {
-                // пытаемся перезапустить DS
-                dWCFClientsList[numds].ConnectionState = false;
-                /*
-                 * установить плохое качество тегам
-                 * определенного DS по причине того, что 
-                 * он перестал пинговаться
-                 */
-                SetBadQulity4DSTags(numds);
-
-                CreateDSConnection(numds);
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.dss_OnDSSessionCancelled() : Исключение : " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// вызывается когда от DS приходит ошибка
-        /// </summary>
-        /// <param name="strerror"></param>
-        void cbh_OnNewError(string strerror)
-        {
-            Utilities.LogTrace("DSRouterService : cbh_OnNewError() - вызывается когда от DS приходит ошибка");
-
-            try
-            {
-                currClient.NewErrorEvent(strerror);
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.cbh_OnNewError() : Исключение : " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Разъединение c DataServer'ом
-        /// </summary>
-        public void Disconnect(object sender, EventArgs e)
-        {
-            Utilities.LogTrace("DSRouterService : Disconnect()");
-
-            lock (lockKey)
-            {
-                try
-                {
-                    #region отписаться от тегов
-                    // список подписанных тегов
-                    List<string> lstSubscrTags = new List<string>();
-
-                    for (int i = 0; i < GetSubscribeTags().Count; i++)
-                    {
-                        KeyValuePair<string, Tuple<DSRouterTagValue, bool>> kvp = GetSubscribeTags().ElementAt(i);
-                        lstSubscrTags.Add(kvp.Key);
-                    }
-
-                    // удалим теги запроса
-                    RemoveTags(lstSubscrTags);
-
-                    /*
-                     * для ускорения процесса разработки
-                     * считаем что DS один и все затачиваем под него
-                     * если ds несколько, то перебираем запрос и формируем списки
-                     * поотдельности для каждого ds
-                    */
-                    IWcfDataServer iwds = dWCFClientsList.ElementAt(0).Value.wcfDataServer;
-                    lock (lockKey)
-                    {
-                        iwds.UnscribeRTUTags(lstSubscrTags.ToArray());
-                    }
-                    #endregion отписаться от тегов
-
-                    if (CurrentСontext != null)
-                    {
-                        Utilities.LogTrace("DSRouterService.Disconnect() : Клиент отсоединился");
-                        TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 93, string.Format("{0} : {1} : {2} : Клиент отсоединился.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer\WCFDSService\WCFDSService\WcfDataServer.cs", "Disconnect()()"));
-                    }
-                    else
-                    {
-                        //Utilities.LogTrace(" - OperationContext.Current=null Видимо уже убили...");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 184, string.Format("{0} : {1} : {2} : ОШИБКА: {3}", DateTime.Now.ToString(), @"X:\Projects\00_DataServer\WCFDSService\WCFDSService\WcfDataServer.cs", "Disconnect()()", ex.Message));
-                    Utilities.LogTrace("DSRouterService.Disconnect() : Исключение : " + ex.Message);
-                }
-            }
-        }
-
-        /// <summary>
-        /// таймер для перезапуска отвалившихся DS
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void tmrDSRestart_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            try
-            {
-                tmrDSRestart.Stop();
-
-                Utilities.LogTrace("DSRouterService : tmrDSRestart_Elapsed()");
-
-                /*
-                 * здесь неточность:
-                 * пока DS один - все нормально, 
-                 * когда DS будет несколько, нужно будет добавить механизм
-                 * выборочного перезапуска
-                 */
-
-                #region создание dsList при запуске DSR
-                if (dWCFClientsList.Count == 0)
-                    CreateDSClientsList();
-                #endregion
-
-                List<DSService> lstDS4Restart = new List<DSService>();
-
-                foreach (KeyValuePair<UInt16, DSService> kvp in dWCFClientsList)
-                    if (kvp.Value.ConnectionState == false)
-                    {
-                        lstDS4Restart.Add(kvp.Value);
-                    }
-
-                foreach (DSService dss in lstDS4Restart)
-                    CreateDSConnection(dss.dsUID);//kvp.Key
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.tmrDSRestart_Elapsed() : Исключение : " + ex.Message);
-            }
-        }
-
-        #endregion
-
         #region Результат выполнения команд
 
         /// <summary>
@@ -2859,58 +1984,6 @@ namespace DSRouterService
             }
         }
 
-        /// <summary>
-        /// вызывается по приходу обновленных 
-        /// тегов от DS
-        /// </summary>
-        /// <param name="strerror"></param>
-        void cbh_OnNewTagValues(Dictionary<string, DSTagValue> lstrenewtags)
-        {
-            Utilities.LogTrace("DSRouterService : cbh_OnNewTagValues()");
-
-            try
-            {
-                /*
-                 * обновление работает на два механизма подписки - старый и новый:
-                 * для старого механизма:
-                 *      анализируем какие клиенты подписаны 
-                 *      на эти теги, формируем списки и отправлем
-                 *      обновленные теги клиентам
-                 * для нового механизма:
-                 *      в контексте сессии запоминаем значение тега и
-                 *      выставляем признак того, что он был обновлен
-                 */
-                Dictionary<string, DSRouterTagValue> lsttags4Subscr = new Dictionary<string, DSRouterTagValue>();
-
-                foreach (KeyValuePair<string, DSTagValue> kvptv in lstrenewtags)
-                    if (IsContainsTag(kvptv.Key))
-                    {
-                        DSRouterTagValue dstv = new DSRouterTagValue();
-                        dstv.VarQuality = kvptv.Value.VarQuality;
-                        dstv.VarValueAsObject = kvptv.Value.VarValueAsObject;
-
-                        lsttags4Subscr.Add(kvptv.Key, dstv);
-
-                        // для нового механизма
-                        lock (lockKey)
-                        {
-                            SetDSTagValue(kvptv.Key, dstv);
-                        }
-                    }
-
-                lock (lockKey)
-                {
-                    currClient.NotifyChangedTags(lsttags4Subscr);
-                    Utilities.LogTrace("DSRouterService.cbh_OnNewTagValues() : 2 :" + CurrentСontext.Channel.State.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.cbh_OnNewTagValues() : Исключение : " + ex.Message);
-            }
-        }
-
         #endregion
 
         #endregion
@@ -2924,9 +1997,7 @@ namespace DSRouterService
         {
             CloseFileUploadSession();
 
-            //UnsubscribeTagsFromDs();
-
-            
+            _dataSource.UnsubscribeTags(_sessionId);
         }
 
         #endregion

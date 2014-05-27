@@ -104,6 +104,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSources\DataServersCollector.cs" />
+    <Compile Include="DataSources\IDataSource.cs" />
     <Compile Include="DSService.cs" />
     <Compile Include="DSServiceCallback.cs" />
     <Compile Include="Helpers\FileSaver.cs" />

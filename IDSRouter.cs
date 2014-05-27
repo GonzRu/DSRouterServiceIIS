@@ -234,20 +234,6 @@ namespace DSRouterService
         [OperationContract]
         Dictionary<string, DSRouterTagValue> GetTagsValuesUpdated();
 
-        /// <summary>
-        /// подписаться на теги
-        /// </summary>
-        /// <param name="request"></param>
-        [OperationContract(IsOneWay = true, IsInitiating = false)]
-        void SubscribeRTUTags(List<string> request);
-
-        /// <summary>
-        /// отписаться от обновления тегов
-        /// </summary>
-        /// <param name="request"></param>
-        [OperationContract(IsOneWay = true, IsInitiating = false)]
-        void UnscribeRTUTags(List<string> request);
-
         #endregion
 
         #region Работа с пользователем
