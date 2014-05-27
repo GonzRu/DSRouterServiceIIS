@@ -66,7 +66,10 @@ namespace DSRouterService
 
         #region Private-Fields
 
-
+        /// <summary>
+        /// Список тегов, запрошенных у данного DS
+        /// </summary>
+        private List<string> _requestedTagsList;
 
         #endregion
 
@@ -108,6 +111,8 @@ namespace DSRouterService
         /// </summary>
         public Dictionary<string, DSRouterTagValue> GetTagsValue(List<string> tagsRequestList)
         {
+            _requestedTagsList = new List<string>(tagsRequestList);
+
             try
             {
                 lock (wcfDataServer)
@@ -255,6 +260,22 @@ namespace DSRouterService
             pingPongWithDsTimer.Stop();
 
             StartTimerToRecreateDsConnection();
+
+            SendLostConnectionTagsValue();
+        }
+
+        /// <summary>
+        /// Посылает обновления тегов, с качеством потери связи с DS
+        /// </summary>
+        private void SendLostConnectionTagsValue()
+        {
+            if (TagValuesUpdated != null)
+                TagValuesUpdated(
+                    _requestedTagsList.ToDictionary(
+                        s => s,
+                        s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
+                    )
+                );
         }
 
         #endregion
