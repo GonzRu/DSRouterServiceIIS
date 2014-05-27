@@ -269,13 +269,21 @@ namespace DSRouterService
         /// </summary>
         private void SendLostConnectionTagsValue()
         {
-            if (TagValuesUpdated != null)
-                TagValuesUpdated(
-                    _requestedTagsList.ToDictionary(
-                        s => s,
-                        s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
+            OnTagsValuesUpdated(
+                _requestedTagsList.ToDictionary(
+                    s => s,
+                    s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
                     )
                 );
+        }
+
+        /// <summary>
+        /// Вызвать событие TagsValuesUpdated
+        /// </summary>
+        private void OnTagsValuesUpdated(Dictionary<string, DSRouterTagValue> tagsValues)
+        {
+            if (TagsValuesUpdated != null)
+                TagsValuesUpdated(tagsValues);
         }
 
         #endregion
@@ -287,8 +295,7 @@ namespace DSRouterService
         /// </summary>
         private void TagsValuesUpdatedHandler(Dictionary<string, DSTagValue> tv)
         {
-            if (TagValuesUpdated != null)
-                TagValuesUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
+            OnTagsValuesUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
         }
 
         #endregion
