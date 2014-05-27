@@ -236,7 +236,7 @@ namespace DSFakeService.DataSources
                     if (!result.ContainsKey(dsGuid))
                         result.Add(dsGuid, new List<string>());
 
-                    result[dsGuid].AddRange(userTagsRequestDictionary[dsGuid]);
+                    result[dsGuid] = result[dsGuid].Union(userTagsRequestDictionary[dsGuid]).ToList();
                 }
             }
 
