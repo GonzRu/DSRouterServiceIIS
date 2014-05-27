@@ -2063,6 +2063,8 @@ namespace DSRouterService
         private void ClientDisconnected(object sender, EventArgs e)
         {
             CloseFileUploadSession();
+
+            _dataSource.UnsubscribeTags(_sessionId);
         }
 
         #endregion

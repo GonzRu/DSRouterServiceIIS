@@ -131,7 +131,13 @@ namespace DSFakeService.DataSources
         /// </summary>
         void IDataSource.UnsubscribeTags(string sessionId)
         {
-            throw new NotImplementedException();
+            if (_tagsToSubscribe.ContainsKey(sessionId))
+                _tagsToSubscribe.Remove(sessionId);
+
+            ConcurrentDictionary<string, bool> tmp;
+            _subscribedUsersTagsState.TryRemove(sessionId, out tmp);
+
+            DoFullRequest();
         }
 
         /// <summary>
