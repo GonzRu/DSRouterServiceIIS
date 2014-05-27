@@ -1899,7 +1899,7 @@ namespace DSRouterService
         /// </summary>
         void CloseFileUploadSession()
         {
-            if (_lockFileUploadSessionId != null)
+            if (_lockFileUploadSessionId == _sessionId)
             {
                 if (dWCFClientsList.ContainsKey(_dsGuidFileTransfer))
                 {
