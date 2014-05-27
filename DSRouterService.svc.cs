@@ -78,6 +78,11 @@ namespace DSRouterService
         /// </summary>
         private DSRouterUser _currentUser;
 
+        /// <summary>
+        /// Идентификатор сессии
+        /// </summary>
+        private string _sessionId;
+
         #region Поля, нужные для записи файла
 
         #warning Неплохо бы вынести это в отдельный класс.
@@ -128,6 +133,8 @@ namespace DSRouterService
 
                 OperationContext.Current.Channel.Closed += ClientDisconnected;
                 OperationContext.Current.Channel.Faulted += ClientDisconnected;
+
+                _sessionId = OperationContext.Current.SessionId;
 
                 Utilities.LogTrace("DSRouterService: Создан объект DSRouterService");
                 Debug.WriteLine("DSRouterService: Создан объект DSRouterService");
@@ -837,7 +844,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValue(List<string> ATagIDsList)
         {
-            return _dataSource.GetTagsValue(OperationContext.Current.SessionId, ATagIDsList);
+            return _dataSource.GetTagsValue(_sessionId, ATagIDsList);
         }
 
         /// <summary>
@@ -845,7 +852,7 @@ namespace DSRouterService
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetTagsValuesUpdated()
         {
-            return _dataSource.GetTagsValuesUpdated(OperationContext.Current.SessionId);
+            return _dataSource.GetTagsValuesUpdated(_sessionId);
         }
 
         /// <summary>
