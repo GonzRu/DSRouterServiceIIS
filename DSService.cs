@@ -111,6 +111,8 @@ namespace DSRouterService
         /// </summary>
         public Dictionary<string, DSRouterTagValue> GetTagsValue(List<string> tagsRequestList)
         {
+            Log.WriteDebugMessage(String.Format("DSService:GetTagsValue() : к DS-{0} отправлен запрос на {1} тегов", dsUID, tagsRequestList.Count));
+
             _requestedTagsList = new List<string>(tagsRequestList);
 
             try
@@ -124,8 +126,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1743, ex.Message);
-                Utilities.LogTrace("DSRouterService.CreateWCFCL() : Исключение : " + ex.Message);
+                Log.LogTrace("DSService.GetTagsValue() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -147,7 +148,8 @@ namespace DSRouterService
         #region Методы для создания канала связи с DS
 
         /// <summary>
-        /// 
+        /// Производит первоначальное подключение к DS
+        /// Если подключиться не удалось, то запускает таймер подключения
         /// </summary>
         private void CreateConnectionWithDs()
         {
@@ -158,6 +160,8 @@ namespace DSRouterService
                 CreateDsProxy();
 
                 pingPongWithDsTimer.Start();
+
+                Log.WriteDebugMessage(String.Format("DSService: с DS-{0} установлена связь", dsUID));
             }
             catch (Exception)
             {
@@ -170,7 +174,12 @@ namespace DSRouterService
         /// </summary>
         private void StartTimerToRecreateDsConnection()
         {
-            createDsConnectionTimer.Start();
+            if (!createDsConnectionTimer.Enabled)
+            {
+                Log.WriteDebugMessage(String.Format("DSService: с DS-{0} не удалось установить связь", dsUID));
+
+                createDsConnectionTimer.Start();
+            }
         }
 
         /// <summary>
@@ -223,7 +232,6 @@ namespace DSRouterService
 
         void PingPongWithDsTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            Utilities.LogTrace("DSRouterService : tmrpingpong_Elapsed()");
             pingPongWithDsTimer.Stop();
 
             try
@@ -233,8 +241,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1965, ex.Message);
-                Utilities.LogTrace("DSRouterService.tmrpingpong_Elapsed() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.PingPongWithDsTimerElapsed() : Исключение : " + ex.Message);
             }
 
             pingPongWithDsTimer.Start();
@@ -254,6 +261,7 @@ namespace DSRouterService
 
                 createDsConnectionTimer.Stop();
                 pingPongWithDsTimer.Start();
+                Log.WriteDebugMessage(String.Format("DSService: с DS-{0} установлена связь", dsUID));
             }
             catch (Exception ex)
             {

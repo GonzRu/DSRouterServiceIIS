@@ -136,20 +136,17 @@ namespace DSRouterService
 
                 _sessionId = OperationContext.Current.SessionId;
 
-                Utilities.LogTrace("DSRouterService: Создан объект DSRouterService");
-                Debug.WriteLine("DSRouterService: Создан объект DSRouterService");
+                Log.WriteDebugMessage("DSRouterService: Создан объект DSRouterService");
             }
             catch (Exception ex)
             {
-                Utilities.LogTrace("DSRouterService.DSRouterService() : Исключение : " + ex.Message);
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+                Log.WriteCriticalMessage("DSRouterService.DSRouterService() : Исключение : " + ex.Message);
             }
         }
 
         ~DSRouterService()
         {
-            Utilities.LogTrace("DSRouterService: Объект DSRouterService уничтожен");
-            Debug.WriteLine("DSRouterService: Объект DSRouterService уничтожен");
+            Log.WriteDebugMessage("DSRouterService: Объект DSRouterService уничтожен");
         }
 
         #endregion
@@ -223,7 +220,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSValueAsByteBuffer() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSValueAsByteBuffer() : Исключение : " + ex.Message);
             }
             rez.Position = 0;
             return rez.ToArray();
@@ -252,7 +249,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSOscByIdInBD() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSOscByIdInBD() : Исключение : " + ex.Message);
             }
             rez.Position = 0;
             return rez.ToArray();
@@ -280,7 +277,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.SetReq2ArhivInfo() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.SetReq2ArhivInfo() : Исключение : " + ex.Message);
             }
         }
 
@@ -303,7 +300,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.RunCMDMOA() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.RunCMDMOA() : Исключение : " + ex.Message);
             }
             rez.Position = 0;
             return rez.ToArray();// as Stream;
@@ -369,7 +366,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSConfigFile() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSConfigFile() : Исключение : " + ex.Message);
             }
             return fstr;
         }
@@ -389,7 +386,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSGUIDs() : Исключение : " + ex.Message);
             }
             return strb.ToString().Remove(strb.Length - 1);
         }
@@ -409,7 +406,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSINFO() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSINFO() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -430,7 +427,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetSourceGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetSourceGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -451,7 +448,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetSourceName() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetSourceName() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -473,7 +470,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetECUGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetECUGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -494,7 +491,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetECUName() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetECUName() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -516,7 +513,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetSrcEcuRTUGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetSrcEcuRTUGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -537,7 +534,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetRTUGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetRTUGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -557,7 +554,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.IsRTUEnable() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.IsRTUEnable() : Исключение : " + ex.Message);
             }
             return rez;
         }
@@ -577,7 +574,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetRTUDescription() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetRTUDescription() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -598,7 +595,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetGroupGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetGroupGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -618,7 +615,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.IsGroupEnable() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.IsGroupEnable() : Исключение : " + ex.Message);
             }
             return rez;
         }
@@ -639,7 +636,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetRTUGroupName() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetRTUGroupName() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -661,7 +658,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetSubGroupGUIDsInGroup() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetSubGroupGUIDsInGroup() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -683,7 +680,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetRtuGroupTagGUIDs() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetRtuGroupTagGUIDs() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -704,7 +701,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetRTUTagName() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetRTUTagName() : Исключение : " + ex.Message);
             }
             return str;
         }
@@ -731,7 +728,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSLastErrorsGUID() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSLastErrorsGUID() : Исключение : " + ex.Message);
             }
             return rez;
         }
@@ -751,7 +748,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSLastErrorGUID() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSLastErrorGUID() : Исключение : " + ex.Message);
             }
             return rez;
         }
@@ -771,7 +768,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetDSErrorTextByErrorGUID() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.GetDSErrorTextByErrorGUID() : Исключение : " + ex.Message);
             }
             return rez;
         }
@@ -789,7 +786,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.AcknowledgementOfErrors() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.AcknowledgementOfErrors() : Исключение : " + ex.Message);
             }
         }
 
@@ -806,7 +803,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.RegisterForErrorEvent() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.RegisterForErrorEvent() : Исключение : " + ex.Message);
             }
         }
 
@@ -817,19 +814,19 @@ namespace DSRouterService
         /// </summary>
         void IDSRouter.Ping()
         {
-            Utilities.LogTrace("DSRouterService : Ping() от клиента HMI");
+            Log.LogTrace("DSRouterService : Ping() от клиента HMI");
             try
             {
                 lock (lockKey)
                 {
                     currClient.Pong();
-                    Utilities.LogTrace("DSRouterService : Pong() клиенту HMI");
+                    Log.LogTrace("DSRouterService : Pong() клиенту HMI");
                 }
             }
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 127, string.Format("{0} : {1} : {2} : ОШИБКА: {3}", DateTime.Now.ToString(), @"X:\Projects\00_DataServer\DSRouterService\DSRouterService\DSRouterService.svc.cs", "Ping()()", ex.Message));
-                Utilities.LogTrace("DSRouterService.Ping() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.Ping() : Исключение : " + ex.Message);
             }
         }
 
@@ -887,8 +884,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.Authorization() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -925,8 +921,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetUsersList() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -966,8 +961,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetUserGroupsList() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -997,8 +991,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.CreateUserGroup() : Исключение : " + ex.Message);
             }
 
             return false;
@@ -1028,8 +1021,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.CreateUser() : Исключение : " + ex.Message);
             }
 
             return false;
@@ -1102,7 +1094,7 @@ namespace DSRouterService
                     catch (Exception ex)
                     {
                         TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                        Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                        Log.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
                     }
                 }
 
@@ -1110,8 +1102,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetEvents() : Исключение : " + ex.Message);
             }
 
             // Если список сообщений пуст, то добавляем сообщение о том, что список пуст
@@ -1156,8 +1147,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetOscillogramAsUrlByID() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -1185,8 +1175,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetHistoricalDataByID() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -1216,8 +1205,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSRouterService.GetHistoricalDataByEvent() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -1343,8 +1331,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.IsNotReceiptedEventsExist() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1378,8 +1365,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.GetNotReceiptedEvents() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1410,8 +1396,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.ReceiptAllEvents() : Исключение : " + ex.Message);
                 }
             }
         }
@@ -1454,8 +1439,7 @@ namespace DSRouterService
                     }
                     catch (Exception ex)
                     {
-                        TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                        Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                        Log.WriteErrorMessage("DSRouterService.ReceiptEvents() : Исключение : " + ex.Message);
                     }
                 }
             }
@@ -1538,8 +1522,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.GetDocumentsList() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1578,8 +1561,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.GetDocumentByID() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1633,8 +1615,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.UploadFileChunk() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1668,8 +1649,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.SaveUploadedFile() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1699,8 +1679,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.TerminateUploadFileSession() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1745,8 +1724,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.SetTagValueFromHMI() : Исключение : " + ex.Message);
                 }
             }
         }
@@ -1770,8 +1748,7 @@ namespace DSRouterService
                 }
                 catch (Exception ex)
                 {
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                    Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                    Log.WriteErrorMessage("DSRouterService.ReSetTagValueFromHMI() : Исключение : " + ex.Message);
                 }
             }
         }
@@ -1938,7 +1915,7 @@ namespace DSRouterService
                     catch (Exception ex)
                     {
                         TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                        Utilities.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                        Log.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
                     }
                 }
 
@@ -1980,7 +1957,7 @@ namespace DSRouterService
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                Utilities.LogTrace("DSRouterService.cbh_OnCMDExecuted() : Исключение : " + ex.Message);
+                Log.LogTrace("DSRouterService.cbh_OnCMDExecuted() : Исключение : " + ex.Message);
             }
         }
 
