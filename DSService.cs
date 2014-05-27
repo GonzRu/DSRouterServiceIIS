@@ -112,6 +112,8 @@ namespace DSRouterService
             {
                 lock (wcfDataServer)
                 {
+                    wcfDataServer.SubscribeRTUTags(tagsRequestList.ToArray());
+
                     return ConvertDsTagsDictionaryToDsRouterTagsDictionary(wcfDataServer.GetTagsValue(tagsRequestList.ToArray()));
                 }
             }
@@ -169,12 +171,15 @@ namespace DSRouterService
 
             EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", _ipAddress, _port));
 
-            DSServiceCallback dsServiceCallback = new DSServiceCallback();            
-            dsServiceCallback.OnNewTagValues += TagValuesUpdated;
+            DSServiceCallback dsServiceCallback = new DSServiceCallback();
+            dsServiceCallback.OnNewTagValues += TagValuesUpdatedHandler;
 
             wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
+            (wcfDataServer as WcfDataServerClient).Open();
             (wcfDataServer as WcfDataServerClient).ChannelFactory.Closed += DsDisconnected;
             (wcfDataServer as WcfDataServerClient).ChannelFactory.Faulted += DsDisconnected;
+
+            wcfDataServer.RegisterForErrorEvent(dsUID.ToString());
         }
 
         #endregion
@@ -257,11 +262,10 @@ namespace DSRouterService
         /// <summary>
         /// Обработчик события появления обновлений тегов
         /// </summary>
-        /// <param name="tv"></param>
-        private void TagValuesUpdated(System.Collections.Generic.Dictionary<string, DSTagValue> tv)
+        private void TagValuesUpdatedHandler(Dictionary<string, DSTagValue> tv)
         {
-            if (TagsValueUpdated != null)
-                TagsValueUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
+            if (TagValuesUpdated != null)
+                TagValuesUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
         }
 
         #endregion

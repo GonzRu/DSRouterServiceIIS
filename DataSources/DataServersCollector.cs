@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using DSFakeService.DSServiceReference;
 using DSRouterService;
@@ -80,6 +81,10 @@ namespace DSFakeService.DataSources
              * (так как по остальным ds список запрашиваемых тегов не изменился)
              */
 
+            // Создаем словарь состояний тегов для этого пользователя
+            if (!_subscribedUsersTagsState.ContainsKey(sessionId))
+                _subscribedUsersTagsState.Add(sessionId, null);
+            _subscribedUsersTagsState[sessionId] = CreateTagsStateDictionary(tagsList);
 
             // Делаем полный запрос ко всем DS (плохой вариант)
             if (!_tagsToSubscribe.ContainsKey(sessionId))
@@ -91,7 +96,7 @@ namespace DSFakeService.DataSources
             // Подготавливаем ответ на основе словаря актуальных значений тегов
             var result = new Dictionary<string, DSRouterTagValue>();
             foreach (var tagIdAsStr in tagsList)
-                result[tagIdAsStr] = _subscribedTagsValue[tagIdAsStr];
+                result.Add(tagIdAsStr, _subscribedTagsValue[tagIdAsStr]);
 
             return result;
         }
@@ -129,10 +134,7 @@ namespace DSFakeService.DataSources
         /// </summary>
         IWcfDataServer IDataSource.GetDsProxy(UInt16 dsGuid)
         {
-            if (_dsServiceDictionary.ContainsKey(dsGuid))
-                return _dsServiceDictionary[dsGuid].wcfDataServer;
-
-            return null;
+            return _dsServiceDictionary.ContainsKey(dsGuid) ? _dsServiceDictionary[dsGuid].wcfDataServer : null;
         }
 
         #endregion
@@ -161,7 +163,7 @@ namespace DSFakeService.DataSources
                     string port = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("Port").Value;
 
                     var dsService = new DSService(dsGuid, "127.0.0.1", "8732");
-                    dsService.TagsValueUpdated += TagValuesUpdated;
+                    dsService.TagValuesUpdated += TagValuesUpdated;
                     _dsServiceDictionary.Add(dsGuid, dsService);
                 }
                 catch (Exception)
@@ -236,6 +238,14 @@ namespace DSFakeService.DataSources
             return result;
         }
 
+        /// <summary>
+        /// Создает словарь состояний запрошенных тегов
+        /// </summary>
+        private Dictionary<string, bool> CreateTagsStateDictionary(List<string> tagsList)
+        {
+            return tagsList.ToDictionary(s => s, s => false);
+        }
+
         #endregion
 
         #endregion
@@ -252,7 +262,7 @@ namespace DSFakeService.DataSources
                 if (_subscribedTagsValue.ContainsKey(dsTagAsStr))
                 {
                     // Обновляем значение тега в списке актуальных значений тегов
-                    //_subscribedTagsValue[dsTagAsStr] = new DSRouterTagValue(tv[dsTagAsStr]);
+                    _subscribedTagsValue[dsTagAsStr] = tv[dsTagAsStr];
 
                     // Проходимся по списку подписанных тегов каждого пользователя и
                     // если этот тег там есть, отмечаем его как обновленный
