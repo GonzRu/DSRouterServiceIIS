@@ -168,7 +168,7 @@ namespace DSFakeService.DataSources
                     string port = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("Port").Value;
 
                     var dsService = new DSService(dsGuid, "127.0.0.1", "8732");
-                    dsService.TagValuesUpdated += TagValuesUpdated;
+                    dsService.TagsValuesUpdated += TagsValuesUpdated;
                     _dsServiceDictionary.Add(dsGuid, dsService);
                 }
                 catch (Exception)
@@ -260,7 +260,7 @@ namespace DSFakeService.DataSources
         /// <summary>
         /// Обработчик события пришедших обновлений от DS
         /// </summary>
-        private void TagValuesUpdated(Dictionary<string, DSRouterTagValue> tv)
+        private void TagsValuesUpdated(Dictionary<string, DSRouterTagValue> tv)
         {
             foreach (var dsTagAsStr in tv.Keys)
             {

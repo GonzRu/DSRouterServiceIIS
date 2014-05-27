@@ -17,7 +17,7 @@ namespace DSRouterService
     {
         #region Events
 
-        public event Action<Dictionary<string, DSRouterTagValue>> TagValuesUpdated;
+        public event Action<Dictionary<string, DSRouterTagValue>> TagsValuesUpdated;
 
         #endregion
 
@@ -177,7 +177,7 @@ namespace DSRouterService
             EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", _ipAddress, _port));
 
             DSServiceCallback dsServiceCallback = new DSServiceCallback();
-            dsServiceCallback.OnNewTagValues += TagValuesUpdatedHandler;
+            dsServiceCallback.OnNewTagValues += TagsValuesUpdatedHandler;
 
             wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
             (wcfDataServer as WcfDataServerClient).Open();
@@ -280,14 +280,18 @@ namespace DSRouterService
 
         #endregion
 
+        #region Обработчики событий wcf сервиса DS
+
         /// <summary>
         /// Обработчик события появления обновлений тегов
         /// </summary>
-        private void TagValuesUpdatedHandler(Dictionary<string, DSTagValue> tv)
+        private void TagsValuesUpdatedHandler(Dictionary<string, DSTagValue> tv)
         {
             if (TagValuesUpdated != null)
                 TagValuesUpdated(ConvertDsTagsDictionaryToDsRouterTagsDictionary(tv));
         }
+
+        #endregion
 
         #endregion
     }
