@@ -1914,8 +1914,7 @@ namespace DSRouterService
                     }
                     catch (Exception ex)
                     {
-                        TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                        Log.LogTrace("DSRouterService.GetTagsValue() : Исключение : " + ex.Message);
+                        Log.WriteErrorMessage("DSRouterService.CloseFileUploadSession() : Исключение : " + ex.Message);
                     }
                 }
 
@@ -1978,7 +1977,6 @@ namespace DSRouterService
         }
 
         #endregion
-
 
         #endregion
     }
