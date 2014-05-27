@@ -131,6 +131,15 @@ namespace DSRouterService
             return null;
         }
 
+        /// <summary>
+        /// Отписываемся от обновлений прошлого запроса
+        /// </summary>
+        public void UnsubscribeFromLastRequest()
+        {
+            if (_requestedTagsList != null && _requestedTagsList.Count != 0)
+                wcfDataServer.UnscribeRTUTags(_requestedTagsList.ToArray());
+        }
+
         #endregion
 
         #region Private-metods

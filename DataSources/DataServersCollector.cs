@@ -218,13 +218,19 @@ namespace DSFakeService.DataSources
 
             foreach (var dsGuid in tagsForRequest.Keys)
             {
-                var resultFromDs = _dsServiceDictionary[dsGuid].GetTagsValue(tagsForRequest[dsGuid]);
-
-                // Конвертируем пришедший результат в общий список значений
-                foreach (var tagAsStr in resultFromDs.Keys)
+                if (tagsForRequest[dsGuid].Count != 0)
                 {
-                    _subscribedTagsValue[tagAsStr] = resultFromDs[tagAsStr];
+                    var resultFromDs = _dsServiceDictionary[dsGuid].GetTagsValue(tagsForRequest[dsGuid]);
+
+                    // Конвертируем пришедший результат в общий список значений
+                    foreach (var tagAsStr in resultFromDs.Keys)
+                    {
+                        _subscribedTagsValue[tagAsStr] = resultFromDs[tagAsStr];
+                    }
                 }
+                else
+                    // Если сейчас нечего запрашивать, то отписываемся от обновлений прошлого запроса
+                    _dsServiceDictionary[dsGuid].UnsubscribeFromLastRequest();
             }
         }
 
