@@ -861,7 +861,7 @@ namespace DSRouterService
                     if (dsUser == null)       
                         return null;
 
-                    Log.WriteDebugMessage("Присоединился пользователь " + _currentUser.UserName);
+                    Log.WriteDebugMessage("Присоединился пользователь " + dsUser.UserName);
 
                     _currentUser = new DSRouterUser(dsUser);
                     return _currentUser;
