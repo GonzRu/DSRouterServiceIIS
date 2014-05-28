@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using DSFakeService.DataSources;
 using DSFakeService.DSServiceReference;
 using DSFakeService.Helpers;
+using DSRouterService.Helpers;
 using HMI_MT_Settings;
 
 namespace DSRouterService
@@ -40,7 +41,15 @@ namespace DSRouterService
 
         private static string _lockFileUploadSessionId = null;
 
+        /// <summary>
+        /// Содержит всю логику получения текущих данных ото всех DS
+        /// </summary>
         private static IDataSource _dataSource;
+
+        /// <summary>
+        /// Помошник загрузки файлов на DS
+        /// </summary>
+        private static FileUploadHelper _fileUploadHelper;
 
         #endregion
 
@@ -82,32 +91,6 @@ namespace DSRouterService
         /// Идентификатор сессии
         /// </summary>
         private string _sessionId;
-
-        #region Поля, нужные для записи файла
-
-        #warning Неплохо бы вынести это в отдельный класс.
-
-        /// <summary>
-        /// Номер DS, куда будет записан файл
-        /// </summary>
-        private UInt16 _dsGuidFileTransfer;
-
-        /// <summary>
-        /// Номер устройства, которому будет приложен записываемый файл
-        /// </summary>
-        private Int32 _devGuidFileTransfer;
-
-        /// <summary>
-        /// Имя записываемого файла
-        /// </summary>
-        private string _fileNameFileTransfer;
-
-        /// <summary>
-        /// Комментарий к записываемому файлу
-        /// </summary>
-        private string _fileCommentFileTransfer;
-
-        #endregion
 
         #endregion
 
@@ -1582,18 +1565,7 @@ namespace DSRouterService
             if (_currentUser == null)
                 return false;
 
-            #warning Если вызывает этот метод один и тот же клиент без вызова Terminate.., то по хорошому бы разрешить ему передачу файла
-            if (_lockFileUploadSessionId != null)
-                return false;
-
-            _dsGuidFileTransfer = dsGuid;
-            _devGuidFileTransfer = devGuid;
-            _fileNameFileTransfer = fileName;
-            _fileCommentFileTransfer = comment;
-
-            _lockFileUploadSessionId = CurrentСontext.SessionId;
-
-            return true;
+            return _fileUploadHelper.TryInitFileUploadSession(dsGuid, devGuid, fileName, comment, _sessionId);
         }
 
         /// <summary>
@@ -1601,27 +1573,10 @@ namespace DSRouterService
         /// </summary>
         bool IDSRouter.UploadFileChunk(byte[] fileChunkBytes)
         {
-            if (_currentUser == null || _lockFileUploadSessionId != CurrentСontext.SessionId)
+            if (_currentUser == null)
                 return false;
 
-            if (dWCFClientsList.ContainsKey(_dsGuidFileTransfer))
-            {
-                var dsProxy = dWCFClientsList[_dsGuidFileTransfer].wcfDataServer;
-
-                try
-                {
-                    lock (dsProxy)
-                    {
-                        return dsProxy.UploadFileChunk(fileChunkBytes);
-                    }                    
-                }
-                catch (Exception ex)
-                {
-                    Log.WriteErrorMessage("DSRouterService.UploadFileChunk() : Исключение : " + ex.Message);
-                }
-            }
-
-            return false;
+            return _fileUploadHelper.UploadFileChunk(fileChunkBytes, _sessionId);
         }
 
         /// <summary>
@@ -1632,35 +1587,7 @@ namespace DSRouterService
             if (_currentUser == null)
                 return null;
 
-            if (_lockFileUploadSessionId != CurrentСontext.SessionId)
-                return "Сервер данных занят.";
-
-            bool result = false;
-
-            if (dWCFClientsList.ContainsKey(_dsGuidFileTransfer))
-            {
-                var dsProxy = dWCFClientsList[_dsGuidFileTransfer].wcfDataServer;
-
-                try
-                {
-                    lock (dsProxy)
-                    {
-                        result = dsProxy.SaveUploadedFile(_devGuidFileTransfer, _currentUser.UserID, _fileNameFileTransfer,
-                            _fileCommentFileTransfer);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.WriteErrorMessage("DSRouterService.SaveUploadedFile() : Исключение : " + ex.Message);
-                }
-            }
-
-            _lockFileUploadSessionId = null;
-
-            if (result)
-                return "Файл успешно записан в БД.";
-
-            return "Во время записи произошла какая-то ошибка.";
+            return _fileUploadHelper.SaveUploadedFile(_sessionId, _currentUser.UserID);
         }
 
         /// <summary>
@@ -1668,24 +1595,7 @@ namespace DSRouterService
         /// </summary>
         void IDSRouter.TerminateUploadFileSession()
         {
-            if (dWCFClientsList.ContainsKey(_dsGuidFileTransfer))
-            {
-                var dsProxy = dWCFClientsList[_dsGuidFileTransfer].wcfDataServer;
-
-                try
-                {
-                    lock (dsProxy)
-                    {
-                        dsProxy.TerminateUploadFileSession();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.WriteErrorMessage("DSRouterService.TerminateUploadFileSession() : Исключение : " + ex.Message);
-                }
-            }
-
-            _lockFileUploadSessionId = null;
+            _fileUploadHelper.TerminateUploadFileSession(_sessionId);
         }
 
         #endregion
@@ -1771,6 +1681,7 @@ namespace DSRouterService
             InitProjectSettings();
 
             _dataSource = new DataServersCollector();
+            _fileUploadHelper = new FileUploadHelper(_dataSource as DataServersCollector);
         }
 
         /// <summary>
@@ -1901,28 +1812,14 @@ namespace DSRouterService
         /// </summary>
         void CloseFileUploadSession()
         {
-            if (_lockFileUploadSessionId == _sessionId)
-            {
-                if (dWCFClientsList.ContainsKey(_dsGuidFileTransfer))
-                {
-                    var dsProxy = dWCFClientsList[_dsGuidFileTransfer].wcfDataServer;
-
-                    try
-                    {
-                        lock (dsProxy)
-                        {
-                            dsProxy.TerminateUploadFileSession();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.WriteErrorMessage("DSRouterService.CloseFileUploadSession() : Исключение : " + ex.Message);
-                    }
-                }
-
-                _lockFileUploadSessionId = null;
-            }
+            _fileUploadHelper.TerminateUploadFileSession(_sessionId);
         }
+
+        #endregion
+
+        #region Вспомогательные методы для работы с DS
+
+        
 
         #endregion
 
