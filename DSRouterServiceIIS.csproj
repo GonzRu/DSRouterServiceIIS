@@ -109,6 +109,7 @@
     <Compile Include="DSService.cs" />
     <Compile Include="DSServiceCallback.cs" />
     <Compile Include="Helpers\FileSaver.cs" />
+    <Compile Include="Helpers\FileUploadHelper.cs" />
     <Compile Include="HMI_Settings.cs" />
     <Compile Include="IDSRouterCallback.cs" />
     <Compile Include="DSRouterService.svc.cs">
