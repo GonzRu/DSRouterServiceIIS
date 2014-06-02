@@ -126,7 +126,7 @@ namespace DSRouterService
             }
             catch (Exception ex)
             {
-                Log.LogTrace("DSService.GetTagsValue() : Исключение : " + ex.Message);
+                Log.WriteErrorMessage("DSService.GetTagsValue() : Исключение : " + ex.Message);
             }
 
             return CreateLostConnectionResponse();
