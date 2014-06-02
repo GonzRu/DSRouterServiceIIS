@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace DSRouterService
 {
@@ -38,6 +39,7 @@ namespace DSRouterService
             #if (DEBUG)
             {              
                 Source.TraceEvent(TraceEventType.Verbose, 0, message);
+                Console.WriteLine(message);
             }
             #endif
         }
@@ -48,6 +50,7 @@ namespace DSRouterService
         public static void WriteErrorMessage(string message)
         {
             Source.TraceEvent(TraceEventType.Error, 0, message);
+            Console.WriteLine(message);
         }
 
         /// <summary>
@@ -56,6 +59,7 @@ namespace DSRouterService
         public static void WriteWarningMessage(string message)
         {
             Source.TraceEvent(TraceEventType.Warning, 0, message);
+            Console.WriteLine(message);
         }
 
         /// <summary>
@@ -64,6 +68,7 @@ namespace DSRouterService
         public static void WriteCriticalMessage(string message)
         {
             Source.TraceEvent(TraceEventType.Critical, 0, message);
+            Console.WriteLine(message);
         }
     }
 }
