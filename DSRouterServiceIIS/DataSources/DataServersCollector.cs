@@ -186,8 +186,9 @@ namespace DSFakeService.DataSources
                     dsService.TagsValuesUpdated += TagsValuesUpdated;
                     _dsServiceDictionary.Add(dsGuid, dsService);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Log.WriteErrorMessage("DataServersCollector:InitDataServers : " + ex.Message);
                 }
             }
         }
