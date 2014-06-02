@@ -179,10 +179,10 @@ namespace DSFakeService.DataSources
                 {
                     UInt16 dsGuid = UInt16.Parse(dsConfigXElement.Attribute("UniDS_GUID").Value);
 
-                    string ipAddress = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("IPAddress").Value;
-                    string port = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("Port").Value;
+                    string ipAddress = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("IPAddress").Attribute("value").Value;
+                    string port = dsConfigXElement.Element("DSAccessInfo").Element("binding").Element("Port").Attribute("value").Value;
 
-                    var dsService = new DSService(dsGuid, "127.0.0.1", "8732");
+                    var dsService = new DSService(dsGuid, ipAddress, port);
                     dsService.TagsValuesUpdated += TagsValuesUpdated;
                     _dsServiceDictionary.Add(dsGuid, dsService);
                 }
