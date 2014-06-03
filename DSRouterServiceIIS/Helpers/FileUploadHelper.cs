@@ -131,6 +131,14 @@ namespace DSRouterServiceIIS.Helpers
             RemoveFileUploadSessionLockObject(lockObject);
         }
 
+        /// <summary>
+        /// Получить номер DS на который загружается файл
+        /// </summary>
+        public UInt16 GetDsGuid(object lockObject)
+        {
+            return fileUploadSessions[lockObject].Item1;
+        }
+
         #endregion
 
         #region Private-metods
