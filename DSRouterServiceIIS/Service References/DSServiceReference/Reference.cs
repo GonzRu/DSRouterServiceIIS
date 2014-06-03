@@ -23,6 +23,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(byte[][]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser[]))]
@@ -96,6 +98,90 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSAuthResult", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    [System.SerializableAttribute()]
+    public partial class DSAuthResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DSRouterServiceIIS.DSServiceReference.AuthResult AuthResultField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DSRouterServiceIIS.DSServiceReference.DSUser DSUserField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DSRouterServiceIIS.DSServiceReference.AuthResult AuthResult {
+            get {
+                return this.AuthResultField;
+            }
+            set {
+                if ((this.AuthResultField.Equals(value) != true)) {
+                    this.AuthResultField = value;
+                    this.RaisePropertyChanged("AuthResult");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DSRouterServiceIIS.DSServiceReference.DSUser DSUser {
+            get {
+                return this.DSUserField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DSUserField, value) != true)) {
+                    this.DSUserField = value;
+                    this.RaisePropertyChanged("DSUser");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AuthResult", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    public enum AuthResult : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        None = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Ok = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        WrongLoginOrPassword = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoConnectionToDb = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NoConnectionToDs = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Unknown = 5,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -248,7 +334,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
         private string GroupNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int GroupRightField;
+        private string GroupRightField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -326,12 +412,12 @@ namespace DSRouterServiceIIS.DSServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int GroupRight {
+        public string GroupRight {
             get {
                 return this.GroupRightField;
             }
             set {
-                if ((this.GroupRightField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.GroupRightField, value) != true)) {
                     this.GroupRightField = value;
                     this.RaisePropertyChanged("GroupRight");
                 }
@@ -1379,6 +1465,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser[]))]
@@ -1415,12 +1503,12 @@ namespace DSRouterServiceIIS.DSServiceReference {
         void EndReSetTagValueFromHMI(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/Authorization", ReplyAction="http://tempuri.org/IWcfDataServer/AuthorizationResponse")]
-        DSRouterServiceIIS.DSServiceReference.DSUser Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo);
+        DSRouterServiceIIS.DSServiceReference.DSAuthResult Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/Authorization", ReplyAction="http://tempuri.org/IWcfDataServer/AuthorizationResponse")]
         System.IAsyncResult BeginAuthorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
-        DSRouterServiceIIS.DSServiceReference.DSUser EndAuthorization(System.IAsyncResult result);
+        DSRouterServiceIIS.DSServiceReference.DSAuthResult EndAuthorization(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetUsersList", ReplyAction="http://tempuri.org/IWcfDataServer/GetUsersListResponse")]
         DSRouterServiceIIS.DSServiceReference.DSUser[] GetUsersList();
@@ -1541,6 +1629,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser[]))]
@@ -2211,10 +2301,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
             this.results = results;
         }
         
-        public DSRouterServiceIIS.DSServiceReference.DSUser Result {
+        public DSRouterServiceIIS.DSServiceReference.DSAuthResult Result {
             get {
                 base.RaiseExceptionIfNecessary();
-                return ((DSRouterServiceIIS.DSServiceReference.DSUser)(this.results[0]));
+                return ((DSRouterServiceIIS.DSServiceReference.DSAuthResult)(this.results[0]));
             }
         }
     }
@@ -4844,7 +4934,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
                         idTag}, this.onEndReSetTagValueFromHMIDelegate, this.onReSetTagValueFromHMICompletedDelegate, userState);
         }
         
-        public DSRouterServiceIIS.DSServiceReference.DSUser Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+        public DSRouterServiceIIS.DSServiceReference.DSAuthResult Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
             return base.Channel.Authorization(userName, userPassword, isFirstAuthorization, userSessionInfo);
         }
         
@@ -4854,7 +4944,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public DSRouterServiceIIS.DSServiceReference.DSUser EndAuthorization(System.IAsyncResult result) {
+        public DSRouterServiceIIS.DSServiceReference.DSAuthResult EndAuthorization(System.IAsyncResult result) {
             return base.Channel.EndAuthorization(result);
         }
         
@@ -4867,7 +4957,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
         }
         
         private object[] OnEndAuthorization(System.IAsyncResult result) {
-            DSRouterServiceIIS.DSServiceReference.DSUser retVal = this.EndAuthorization(result);
+            DSRouterServiceIIS.DSServiceReference.DSAuthResult retVal = this.EndAuthorization(result);
             return new object[] {
                     retVal};
         }

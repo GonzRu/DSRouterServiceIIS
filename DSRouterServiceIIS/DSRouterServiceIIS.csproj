@@ -86,6 +86,9 @@
     <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.LstError.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSAuthResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Service References\DSServiceReference\WcfDataServer.disco" />
     <None Include="Service References\DSServiceReference\configuration91.svcinfo" />
     <None Include="Service References\DSServiceReference\configuration.svcinfo" />

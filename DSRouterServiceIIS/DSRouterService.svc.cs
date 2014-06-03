@@ -83,7 +83,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Класс пользователя, который обслуживается текущей сессией
         /// </summary>
-        private DSRouterUser _currentUser;
+        private RouterAuthResult _authResult;
 
         /// <summary>
         /// Идентификатор сессии
@@ -840,37 +840,38 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Метод авторизации пользователя
         /// </summary>
-        DSRouterUser IDSRouter.Authorization(string userName, string userPassword, Boolean isFirstEnter)
+        RouterAuthResult IDSRouter.Authorization(string userName, string userPassword, Boolean isFirstEnter)
         {
-            try
+            var routerAuthResult = new RouterAuthResult();
+            routerAuthResult.DSAuthResults = new Dictionary<ushort, DSRouterAuthResult>();
+
+            #warning Use dWCFClientsList
+            foreach (var dsGuid in dWCFClientsList.Keys)
             {
-                #warning Необходимо определить "главный" DS, который будет выполнять авторизацию пользователя
+                var dsProxy = _dataSource.GetDsProxy(dsGuid);
 
-                if (dWCFClientsList.ContainsKey(0))
+                try
                 {
-                    IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
-
-                    DSUser dsUser = null;
-                    lock (dataServerProxy)
+                    var dsAuthResult = new DSServiceReference.DSAuthResult();
+                    lock (dsProxy)
                     {
-                        dsUser = dataServerProxy.Authorization(userName, userPassword, isFirstEnter, CreateDsUserSessionInfoForAuthorization());
+                        dsAuthResult = dsProxy.Authorization(userName, userPassword, isFirstEnter, CreateDsUserSessionInfoForAuthorization());                        
                     }
 
-                    if (dsUser == null)       
-                        return null;
-
-                    Log.WriteDebugMessage("Присоединился пользователь " + dsUser.UserName);
-
-                    _currentUser = new DSRouterUser(dsUser);
-                    return _currentUser;
+                    var dsRouterAuthResult = new DSRouterAuthResult(dsAuthResult);
+                    dsRouterAuthResult.UserName = userName;
+                    dsRouterAuthResult.UserPassword = userPassword;
+                    routerAuthResult.DSAuthResults.Add(dsGuid, dsRouterAuthResult);
+                }
+                catch (Exception ex)
+                {
+                    routerAuthResult.DSAuthResults.Add(dsGuid, new DSRouterAuthResult {AuthResult = AuthResult.NoConnectionToDs});
                 }
             }
-            catch (Exception ex)
-            {
-                Log.WriteErrorMessage("DSRouterService.Authorization() : Исключение : " + ex.Message);
-            }
 
-            return null;
+            _authResult = routerAuthResult;
+
+            return routerAuthResult;
         }
 
         /// <summary>
@@ -915,7 +916,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         List<DSRouterUserGroup> IDSRouter.GetUserGroupsList()
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             try
@@ -955,7 +956,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         bool IDSRouter.CreateUserGroup(string groupName, string groupComment, int groupRight)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return false;
 
             try
@@ -968,7 +969,7 @@ namespace DSRouterServiceIIS
 
                     lock (dataServerProxy)
                     {
-                        return dataServerProxy.CreateUserGroup(groupName, groupComment, groupRight, CreateDsUserSessionInfo());
+                        return dataServerProxy.CreateUserGroup(groupName, groupComment, groupRight, CreateDsUserSessionInfo(0));
                     }
                 }
             }
@@ -985,7 +986,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         bool IDSRouter.CreateUser(string userName, string userPassword, string userComment, int userGroupID)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return false;
 
             try
@@ -998,7 +999,7 @@ namespace DSRouterServiceIIS
 
                     lock (dataServerProxy)
                     {
-                        return dataServerProxy.CreateUser(userName, userPassword, userComment, userGroupID, CreateDsUserSessionInfo());
+                        return dataServerProxy.CreateUser(userName, userPassword, userComment, userGroupID, CreateDsUserSessionInfo(0));
                     }
                 }
             }
@@ -1021,7 +1022,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         List<DSRouterEventValue> IDSRouter.GetEvents(DateTime dateTimeFrom, DateTime dateTimeTo, bool needSystemEvents, bool needUserEvents, bool needTerminalEvents, List<Tuple<ushort, uint>> requestDevicesList)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             List<DSRouterEventValue> resultEventsList = new List<DSRouterEventValue>();
@@ -1104,7 +1105,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         string IDSRouter.GetOscillogramAsUrlByID(UInt16 dsGuid, Int32 eventDataID)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             try
@@ -1141,7 +1142,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetHistoricalDataByID(UInt16 dsGuid, Int32 dataID)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             try
@@ -1169,7 +1170,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetHistoricalDataByEvent(DSRouterEventValue dsRouterEvent)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             try
@@ -1296,7 +1297,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         Boolean IDSRouter.IsNotReceiptedEventsExist()
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return false;
 
             foreach (var dsGuid in dWCFClientsList.Keys)
@@ -1326,7 +1327,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         List<DSRouterEventValue> IDSRouter.GetNotReceiptedEvents()
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             var notReceiptedDsRouterEvents = new List<DSRouterEventValue>();
@@ -1363,7 +1364,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         void IDSRouter.ReceiptAllEvents(string receiptComment)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return;
 
             foreach (var dsGuid in dWCFClientsList.Keys)
@@ -1374,7 +1375,7 @@ namespace DSRouterServiceIIS
                 {
                     lock (dsProxy)
                     {
-                        dsProxy.ReceiptAllEvents(_currentUser.UserID, receiptComment, CreateDsUserSessionInfo());
+                        dsProxy.ReceiptAllEvents(_authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
                     }
                 }
                 catch (Exception ex)
@@ -1389,7 +1390,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         void IDSRouter.ReceiptEvents(List<DSRouterEventValue> eventValues, string receiptComment)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return;
 
             // Список ID событий, разбитых по DS
@@ -1417,7 +1418,7 @@ namespace DSRouterServiceIIS
                     {
                         lock (dsProxy)
                         {
-                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _currentUser.UserID, receiptComment, CreateDsUserSessionInfo());
+                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
                         }
                     }
                     catch (Exception ex)
@@ -1483,7 +1484,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         List<DSRouterDocumentDataValue> IDSRouter.GetDocumentsList(UInt16 dsGuid, Int32 devGuid)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             var documentsList = new List<DSRouterDocumentDataValue>();
@@ -1520,7 +1521,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         string IDSRouter.GetDocumentByID(UInt16 dsGuid, Int32 documentId)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
             if (dWCFClientsList.ContainsKey(dsGuid))
@@ -1560,7 +1561,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         bool IDSRouter.InitUploadFileSession(UInt16 dsGuid, Int32 devGuid, string fileName, string comment)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return false;
 
             return _fileUploadHelper.TryInitFileUploadSession(dsGuid, devGuid, fileName, comment, _sessionId);
@@ -1571,7 +1572,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         bool IDSRouter.UploadFileChunk(byte[] fileChunkBytes)
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return false;
 
             return _fileUploadHelper.UploadFileChunk(fileChunkBytes, _sessionId);
@@ -1582,10 +1583,11 @@ namespace DSRouterServiceIIS
         /// </summary>
         string IDSRouter.SaveUploadedFile()
         {
-            if (_currentUser == null)
+            if (_authResult == null)
                 return null;
 
-            return _fileUploadHelper.SaveUploadedFile(_sessionId, _currentUser.UserID);
+            var dsGuid = _fileUploadHelper.GetDsGuid(_sessionId);
+            return _fileUploadHelper.SaveUploadedFile(_sessionId, _authResult.DSAuthResults[dsGuid].User.UserID);
         }
 
         /// <summary>
@@ -1809,14 +1811,14 @@ namespace DSRouterServiceIIS
         /// Создает класс, несущий информацию о пользовательской сессии для DS
         /// </summary>
         /// <returns></returns>
-        private DSUserSessionInfo CreateDsUserSessionInfo()
+        private DSUserSessionInfo CreateDsUserSessionInfo(UInt16 dsGuid)
         {
             //MessageProperties messageProperties = OperationContext.Current.IncomingMessageProperties;
             //RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
 
             return new DSUserSessionInfo
             {
-                UserId = _currentUser.UserID,
+                UserId = _authResult.DSAuthResults[dsGuid].User.UserID,
                 UserIpAddress = GetuserIpAddress(),
                 UserMacAddress = GetUserMacAddress()
             };
