@@ -478,13 +478,15 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="userName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="userPassword" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isFirstAuthorization" type="xs:boolean" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q11:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AuthorizationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="AuthorizationResult" nillable="true" type="q11:DSUser" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="AuthorizationResult" nillable="true" type="q12:DSUser" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -496,7 +498,7 @@
   <xs:element name="GetUsersListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUsersListResult" nillable="true" type="q12:ArrayOfDSUser" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUsersListResult" nillable="true" type="q13:ArrayOfDSUser" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -508,7 +510,7 @@
   <xs:element name="GetUserGroupsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUserGroupsListResult" nillable="true" type="q13:ArrayOfDSUserGroup" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetUserGroupsListResult" nillable="true" type="q14:ArrayOfDSUserGroup" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -518,6 +520,7 @@
         <xs:element minOccurs="0" name="groupName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="groupComment" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="groupRight" type="xs:int" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q15:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -535,6 +538,7 @@
         <xs:element minOccurs="0" name="userPassword" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="userComment" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="userGroupID" type="xs:int" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q16:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -553,14 +557,14 @@
         <xs:element minOccurs="0" name="needSystemEvents" type="xs:boolean" />
         <xs:element minOccurs="0" name="needUserEvents" type="xs:boolean" />
         <xs:element minOccurs="0" name="needTerminalEvents" type="xs:boolean" />
-        <xs:element xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="devicesList" nillable="true" type="q14:ArrayOfunsignedInt" />
+        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="devicesList" nillable="true" type="q17:ArrayOfunsignedInt" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetEventsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetEventsResult" nillable="true" type="q15:ArrayOfDSEventValue" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetEventsResult" nillable="true" type="q18:ArrayOfDSEventValue" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -574,7 +578,7 @@
   <xs:element name="GetOscillogramByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetOscillogramByIDResult" nillable="true" type="q16:DSOscillogram" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetOscillogramByIDResult" nillable="true" type="q19:DSOscillogram" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -588,7 +592,7 @@
   <xs:element name="GetHistoricalDataByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHistoricalDataByIDResult" nillable="true" type="q17:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q20="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHistoricalDataByIDResult" nillable="true" type="q20:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -612,16 +616,17 @@
   <xs:element name="GetNotReceiptedEventsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetNotReceiptedEventsResult" nillable="true" type="q18:ArrayOfDSEventValue" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetNotReceiptedEventsResult" nillable="true" type="q21:ArrayOfDSEventValue" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiptEvents">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="eventValuesId" nillable="true" type="q19:ArrayOfint" />
+        <xs:element xmlns:q22="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="eventValuesId" nillable="true" type="q22:ArrayOfint" />
         <xs:element minOccurs="0" name="userID" type="xs:int" />
         <xs:element minOccurs="0" name="receiptComment" nillable="true" type="xs:string" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q23:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -635,6 +640,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
         <xs:element minOccurs="0" name="receiptComment" nillable="true" type="xs:string" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q24:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -653,7 +659,7 @@
   <xs:element name="GetSettingsSetsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetSettingsSetsListResult" nillable="true" type="q20:ArrayOfDSSettingsSet" />
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetSettingsSetsListResult" nillable="true" type="q25:ArrayOfDSSettingsSet" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -661,14 +667,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="settingsSetID" type="xs:int" />
-        <xs:element xmlns:q21="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsList" nillable="true" type="q21:ArrayOfstring" />
+        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsList" nillable="true" type="q26:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetValuesFromSettingsSetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetValuesFromSettingsSetResult" nillable="true" type="q22:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetValuesFromSettingsSetResult" nillable="true" type="q27:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -676,7 +682,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
-        <xs:element xmlns:q23="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsValues" nillable="true" type="q23:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsValues" nillable="true" type="q28:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -690,7 +696,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
         <xs:element minOccurs="0" name="commandID" nillable="true" type="xs:string" />
-        <xs:element xmlns:q24="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q24:ArrayOfanyType" />
+        <xs:element xmlns:q29="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q29:ArrayOfanyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -709,7 +715,7 @@
   <xs:element name="GetDocumentsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentsListResult" nillable="true" type="q25:ArrayOfDSDocumentDataValue" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentsListResult" nillable="true" type="q30:ArrayOfDSDocumentDataValue" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -723,7 +729,7 @@
   <xs:element name="GetDocumentByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentByIDResult" nillable="true" type="q26:DSDataFile" />
+        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentByIDResult" nillable="true" type="q31:DSDataFile" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -783,7 +789,7 @@
   <xs:element name="NotifyChangedTags">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstChangedTags" nillable="true" type="q27:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstChangedTags" nillable="true" type="q32:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

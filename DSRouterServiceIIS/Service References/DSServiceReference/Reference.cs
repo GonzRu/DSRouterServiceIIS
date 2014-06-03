@@ -30,7 +30,7 @@ namespace DSFakeService.DSServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSOscillogram))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventType))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventDataType))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSDocumentDataValue[]))]
@@ -40,6 +40,7 @@ namespace DSFakeService.DSServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.IO.Stream))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.MarshalByRefObject))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.LstError))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSUserSessionInfo))]
     public partial class DSTagValue : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -584,7 +585,7 @@ namespace DSFakeService.DSServiceReference {
         private System.DateTime DateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private DSFakeService.DSServiceReference.DSEventType OscillogramTypeField;
+        private DSFakeService.DSServiceReference.DSEventDataType OscillogramTypeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SourceCommentField;
@@ -629,7 +630,7 @@ namespace DSFakeService.DSServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public DSFakeService.DSServiceReference.DSEventType OscillogramType {
+        public DSFakeService.DSServiceReference.DSEventDataType OscillogramType {
             get {
                 return this.OscillogramTypeField;
             }
@@ -678,8 +679,8 @@ namespace DSFakeService.DSServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DSEventType", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
-    public enum DSEventType : int {
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSEventDataType", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    public enum DSEventDataType : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Ustavki = 1,
@@ -1010,6 +1011,83 @@ namespace DSFakeService.DSServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSUserSessionInfo", Namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib")]
+    [System.SerializableAttribute()]
+    public partial class DSUserSessionInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int UserIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserIpAddressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserMacAddressField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int UserId {
+            get {
+                return this.UserIdField;
+            }
+            set {
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserIpAddress {
+            get {
+                return this.UserIpAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserIpAddressField, value) != true)) {
+                    this.UserIpAddressField = value;
+                    this.RaisePropertyChanged("UserIpAddress");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserMacAddress {
+            get {
+                return this.UserMacAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserMacAddressField, value) != true)) {
+                    this.UserMacAddressField = value;
+                    this.RaisePropertyChanged("UserMacAddress");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DSServiceReference.IWcfDataServer", CallbackContract=typeof(DSFakeService.DSServiceReference.IWcfDataServerCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface IWcfDataServer {
@@ -1308,7 +1386,7 @@ namespace DSFakeService.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSOscillogram))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventDataType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSDocumentDataValue[]))]
@@ -1320,6 +1398,7 @@ namespace DSFakeService.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSTagValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSUserSessionInfo))]
         void SetTagValueFromHMI(string idTag, object valinobject);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/SetTagValueFromHMI")]
@@ -1336,10 +1415,10 @@ namespace DSFakeService.DSServiceReference {
         void EndReSetTagValueFromHMI(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/Authorization", ReplyAction="http://tempuri.org/IWcfDataServer/AuthorizationResponse")]
-        DSFakeService.DSServiceReference.DSUser Authorization(string userName, string userPassword);
+        DSFakeService.DSServiceReference.DSUser Authorization(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/Authorization", ReplyAction="http://tempuri.org/IWcfDataServer/AuthorizationResponse")]
-        System.IAsyncResult BeginAuthorization(string userName, string userPassword, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginAuthorization(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         DSFakeService.DSServiceReference.DSUser EndAuthorization(System.IAsyncResult result);
         
@@ -1360,18 +1439,18 @@ namespace DSFakeService.DSServiceReference {
         DSFakeService.DSServiceReference.DSUserGroup[] EndGetUserGroupsList(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/CreateUserGroup", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserGroupResponse")]
-        bool CreateUserGroup(string groupName, string groupComment, int groupRight);
+        bool CreateUserGroup(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/CreateUserGroup", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserGroupResponse")]
-        System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         bool EndCreateUserGroup(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/CreateUser", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserResponse")]
-        bool CreateUser(string userName, string userPassword, string userComment, int userGroupID);
+        bool CreateUser(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/CreateUser", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserResponse")]
-        System.IAsyncResult BeginCreateUser(string userName, string userPassword, string userComment, int userGroupID, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginCreateUser(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         bool EndCreateUser(System.IAsyncResult result);
         
@@ -1416,18 +1495,18 @@ namespace DSFakeService.DSServiceReference {
         DSFakeService.DSServiceReference.DSEventValue[] EndGetNotReceiptedEvents(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/ReceiptEvents", ReplyAction="http://tempuri.org/IWcfDataServer/ReceiptEventsResponse")]
-        void ReceiptEvents(int[] eventValuesId, int userID, string receiptComment);
+        void ReceiptEvents(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/ReceiptEvents", ReplyAction="http://tempuri.org/IWcfDataServer/ReceiptEventsResponse")]
-        System.IAsyncResult BeginReceiptEvents(int[] eventValuesId, int userID, string receiptComment, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginReceiptEvents(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         void EndReceiptEvents(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/ReceiptAllEvents", ReplyAction="http://tempuri.org/IWcfDataServer/ReceiptAllEventsResponse")]
-        void ReceiptAllEvents(int userID, string receiptComment);
+        void ReceiptAllEvents(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/ReceiptAllEvents", ReplyAction="http://tempuri.org/IWcfDataServer/ReceiptAllEventsResponse")]
-        System.IAsyncResult BeginReceiptAllEvents(int userID, string receiptComment, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginReceiptAllEvents(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         void EndReceiptAllEvents(System.IAsyncResult result);
         
@@ -1469,7 +1548,7 @@ namespace DSFakeService.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSOscillogram))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSEventDataType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSDocumentDataValue[]))]
@@ -1481,6 +1560,7 @@ namespace DSFakeService.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSTagValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSFakeService.DSServiceReference.DSUserSessionInfo))]
         void CommandRun(uint devGuid, string commandID, object[] parameters);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/CommandRun", ReplyAction="http://tempuri.org/IWcfDataServer/CommandRunResponse")]
@@ -4764,13 +4844,13 @@ namespace DSFakeService.DSServiceReference {
                         idTag}, this.onEndReSetTagValueFromHMIDelegate, this.onReSetTagValueFromHMICompletedDelegate, userState);
         }
         
-        public DSFakeService.DSServiceReference.DSUser Authorization(string userName, string userPassword) {
-            return base.Channel.Authorization(userName, userPassword);
+        public DSFakeService.DSServiceReference.DSUser Authorization(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            return base.Channel.Authorization(userName, userPassword, isFirstAuthorization, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginAuthorization(string userName, string userPassword, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginAuthorization(userName, userPassword, callback, asyncState);
+        public System.IAsyncResult BeginAuthorization(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginAuthorization(userName, userPassword, isFirstAuthorization, userSessionInfo, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -4781,7 +4861,9 @@ namespace DSFakeService.DSServiceReference {
         private System.IAsyncResult OnBeginAuthorization(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string userName = ((string)(inValues[0]));
             string userPassword = ((string)(inValues[1]));
-            return this.BeginAuthorization(userName, userPassword, callback, asyncState);
+            bool isFirstAuthorization = ((bool)(inValues[2]));
+            DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSFakeService.DSServiceReference.DSUserSessionInfo)(inValues[3]));
+            return this.BeginAuthorization(userName, userPassword, isFirstAuthorization, userSessionInfo, callback, asyncState);
         }
         
         private object[] OnEndAuthorization(System.IAsyncResult result) {
@@ -4797,11 +4879,11 @@ namespace DSFakeService.DSServiceReference {
             }
         }
         
-        public void AuthorizationAsync(string userName, string userPassword) {
-            this.AuthorizationAsync(userName, userPassword, null);
+        public void AuthorizationAsync(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            this.AuthorizationAsync(userName, userPassword, isFirstAuthorization, userSessionInfo, null);
         }
         
-        public void AuthorizationAsync(string userName, string userPassword, object userState) {
+        public void AuthorizationAsync(string userName, string userPassword, bool isFirstAuthorization, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginAuthorizationDelegate == null)) {
                 this.onBeginAuthorizationDelegate = new BeginOperationDelegate(this.OnBeginAuthorization);
             }
@@ -4813,7 +4895,9 @@ namespace DSFakeService.DSServiceReference {
             }
             base.InvokeAsync(this.onBeginAuthorizationDelegate, new object[] {
                         userName,
-                        userPassword}, this.onEndAuthorizationDelegate, this.onAuthorizationCompletedDelegate, userState);
+                        userPassword,
+                        isFirstAuthorization,
+                        userSessionInfo}, this.onEndAuthorizationDelegate, this.onAuthorizationCompletedDelegate, userState);
         }
         
         public DSFakeService.DSServiceReference.DSUser[] GetUsersList() {
@@ -4912,13 +4996,13 @@ namespace DSFakeService.DSServiceReference {
             base.InvokeAsync(this.onBeginGetUserGroupsListDelegate, null, this.onEndGetUserGroupsListDelegate, this.onGetUserGroupsListCompletedDelegate, userState);
         }
         
-        public bool CreateUserGroup(string groupName, string groupComment, int groupRight) {
-            return base.Channel.CreateUserGroup(groupName, groupComment, groupRight);
+        public bool CreateUserGroup(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            return base.Channel.CreateUserGroup(groupName, groupComment, groupRight, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginCreateUserGroup(groupName, groupComment, groupRight, callback, asyncState);
+        public System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCreateUserGroup(groupName, groupComment, groupRight, userSessionInfo, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -4930,7 +5014,8 @@ namespace DSFakeService.DSServiceReference {
             string groupName = ((string)(inValues[0]));
             string groupComment = ((string)(inValues[1]));
             int groupRight = ((int)(inValues[2]));
-            return this.BeginCreateUserGroup(groupName, groupComment, groupRight, callback, asyncState);
+            DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSFakeService.DSServiceReference.DSUserSessionInfo)(inValues[3]));
+            return this.BeginCreateUserGroup(groupName, groupComment, groupRight, userSessionInfo, callback, asyncState);
         }
         
         private object[] OnEndCreateUserGroup(System.IAsyncResult result) {
@@ -4946,11 +5031,11 @@ namespace DSFakeService.DSServiceReference {
             }
         }
         
-        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight) {
-            this.CreateUserGroupAsync(groupName, groupComment, groupRight, null);
+        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            this.CreateUserGroupAsync(groupName, groupComment, groupRight, userSessionInfo, null);
         }
         
-        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight, object userState) {
+        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginCreateUserGroupDelegate == null)) {
                 this.onBeginCreateUserGroupDelegate = new BeginOperationDelegate(this.OnBeginCreateUserGroup);
             }
@@ -4963,16 +5048,17 @@ namespace DSFakeService.DSServiceReference {
             base.InvokeAsync(this.onBeginCreateUserGroupDelegate, new object[] {
                         groupName,
                         groupComment,
-                        groupRight}, this.onEndCreateUserGroupDelegate, this.onCreateUserGroupCompletedDelegate, userState);
+                        groupRight,
+                        userSessionInfo}, this.onEndCreateUserGroupDelegate, this.onCreateUserGroupCompletedDelegate, userState);
         }
         
-        public bool CreateUser(string userName, string userPassword, string userComment, int userGroupID) {
-            return base.Channel.CreateUser(userName, userPassword, userComment, userGroupID);
+        public bool CreateUser(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            return base.Channel.CreateUser(userName, userPassword, userComment, userGroupID, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginCreateUser(string userName, string userPassword, string userComment, int userGroupID, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginCreateUser(userName, userPassword, userComment, userGroupID, callback, asyncState);
+        public System.IAsyncResult BeginCreateUser(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginCreateUser(userName, userPassword, userComment, userGroupID, userSessionInfo, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -4985,7 +5071,8 @@ namespace DSFakeService.DSServiceReference {
             string userPassword = ((string)(inValues[1]));
             string userComment = ((string)(inValues[2]));
             int userGroupID = ((int)(inValues[3]));
-            return this.BeginCreateUser(userName, userPassword, userComment, userGroupID, callback, asyncState);
+            DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSFakeService.DSServiceReference.DSUserSessionInfo)(inValues[4]));
+            return this.BeginCreateUser(userName, userPassword, userComment, userGroupID, userSessionInfo, callback, asyncState);
         }
         
         private object[] OnEndCreateUser(System.IAsyncResult result) {
@@ -5001,11 +5088,11 @@ namespace DSFakeService.DSServiceReference {
             }
         }
         
-        public void CreateUserAsync(string userName, string userPassword, string userComment, int userGroupID) {
-            this.CreateUserAsync(userName, userPassword, userComment, userGroupID, null);
+        public void CreateUserAsync(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            this.CreateUserAsync(userName, userPassword, userComment, userGroupID, userSessionInfo, null);
         }
         
-        public void CreateUserAsync(string userName, string userPassword, string userComment, int userGroupID, object userState) {
+        public void CreateUserAsync(string userName, string userPassword, string userComment, int userGroupID, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginCreateUserDelegate == null)) {
                 this.onBeginCreateUserDelegate = new BeginOperationDelegate(this.OnBeginCreateUser);
             }
@@ -5019,7 +5106,8 @@ namespace DSFakeService.DSServiceReference {
                         userName,
                         userPassword,
                         userComment,
-                        userGroupID}, this.onEndCreateUserDelegate, this.onCreateUserCompletedDelegate, userState);
+                        userGroupID,
+                        userSessionInfo}, this.onEndCreateUserDelegate, this.onCreateUserCompletedDelegate, userState);
         }
         
         public DSFakeService.DSServiceReference.DSEventValue[] GetEvents(System.DateTime dateTimeFrom, System.DateTime dateTimeTo, bool needSystemEvents, bool needUserEvents, bool needTerminalEvents, uint[] devicesList) {
@@ -5278,13 +5366,13 @@ namespace DSFakeService.DSServiceReference {
             base.InvokeAsync(this.onBeginGetNotReceiptedEventsDelegate, null, this.onEndGetNotReceiptedEventsDelegate, this.onGetNotReceiptedEventsCompletedDelegate, userState);
         }
         
-        public void ReceiptEvents(int[] eventValuesId, int userID, string receiptComment) {
-            base.Channel.ReceiptEvents(eventValuesId, userID, receiptComment);
+        public void ReceiptEvents(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            base.Channel.ReceiptEvents(eventValuesId, userID, receiptComment, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginReceiptEvents(int[] eventValuesId, int userID, string receiptComment, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginReceiptEvents(eventValuesId, userID, receiptComment, callback, asyncState);
+        public System.IAsyncResult BeginReceiptEvents(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginReceiptEvents(eventValuesId, userID, receiptComment, userSessionInfo, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -5296,7 +5384,8 @@ namespace DSFakeService.DSServiceReference {
             int[] eventValuesId = ((int[])(inValues[0]));
             int userID = ((int)(inValues[1]));
             string receiptComment = ((string)(inValues[2]));
-            return this.BeginReceiptEvents(eventValuesId, userID, receiptComment, callback, asyncState);
+            DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSFakeService.DSServiceReference.DSUserSessionInfo)(inValues[3]));
+            return this.BeginReceiptEvents(eventValuesId, userID, receiptComment, userSessionInfo, callback, asyncState);
         }
         
         private object[] OnEndReceiptEvents(System.IAsyncResult result) {
@@ -5311,11 +5400,11 @@ namespace DSFakeService.DSServiceReference {
             }
         }
         
-        public void ReceiptEventsAsync(int[] eventValuesId, int userID, string receiptComment) {
-            this.ReceiptEventsAsync(eventValuesId, userID, receiptComment, null);
+        public void ReceiptEventsAsync(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            this.ReceiptEventsAsync(eventValuesId, userID, receiptComment, userSessionInfo, null);
         }
         
-        public void ReceiptEventsAsync(int[] eventValuesId, int userID, string receiptComment, object userState) {
+        public void ReceiptEventsAsync(int[] eventValuesId, int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginReceiptEventsDelegate == null)) {
                 this.onBeginReceiptEventsDelegate = new BeginOperationDelegate(this.OnBeginReceiptEvents);
             }
@@ -5328,16 +5417,17 @@ namespace DSFakeService.DSServiceReference {
             base.InvokeAsync(this.onBeginReceiptEventsDelegate, new object[] {
                         eventValuesId,
                         userID,
-                        receiptComment}, this.onEndReceiptEventsDelegate, this.onReceiptEventsCompletedDelegate, userState);
+                        receiptComment,
+                        userSessionInfo}, this.onEndReceiptEventsDelegate, this.onReceiptEventsCompletedDelegate, userState);
         }
         
-        public void ReceiptAllEvents(int userID, string receiptComment) {
-            base.Channel.ReceiptAllEvents(userID, receiptComment);
+        public void ReceiptAllEvents(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            base.Channel.ReceiptAllEvents(userID, receiptComment, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginReceiptAllEvents(int userID, string receiptComment, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginReceiptAllEvents(userID, receiptComment, callback, asyncState);
+        public System.IAsyncResult BeginReceiptAllEvents(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginReceiptAllEvents(userID, receiptComment, userSessionInfo, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -5348,7 +5438,8 @@ namespace DSFakeService.DSServiceReference {
         private System.IAsyncResult OnBeginReceiptAllEvents(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int userID = ((int)(inValues[0]));
             string receiptComment = ((string)(inValues[1]));
-            return this.BeginReceiptAllEvents(userID, receiptComment, callback, asyncState);
+            DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSFakeService.DSServiceReference.DSUserSessionInfo)(inValues[2]));
+            return this.BeginReceiptAllEvents(userID, receiptComment, userSessionInfo, callback, asyncState);
         }
         
         private object[] OnEndReceiptAllEvents(System.IAsyncResult result) {
@@ -5363,11 +5454,11 @@ namespace DSFakeService.DSServiceReference {
             }
         }
         
-        public void ReceiptAllEventsAsync(int userID, string receiptComment) {
-            this.ReceiptAllEventsAsync(userID, receiptComment, null);
+        public void ReceiptAllEventsAsync(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+            this.ReceiptAllEventsAsync(userID, receiptComment, userSessionInfo, null);
         }
         
-        public void ReceiptAllEventsAsync(int userID, string receiptComment, object userState) {
+        public void ReceiptAllEventsAsync(int userID, string receiptComment, DSFakeService.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginReceiptAllEventsDelegate == null)) {
                 this.onBeginReceiptAllEventsDelegate = new BeginOperationDelegate(this.OnBeginReceiptAllEvents);
             }
@@ -5379,7 +5470,8 @@ namespace DSFakeService.DSServiceReference {
             }
             base.InvokeAsync(this.onBeginReceiptAllEventsDelegate, new object[] {
                         userID,
-                        receiptComment}, this.onEndReceiptAllEventsDelegate, this.onReceiptAllEventsCompletedDelegate, userState);
+                        receiptComment,
+                        userSessionInfo}, this.onEndReceiptAllEventsDelegate, this.onReceiptAllEventsCompletedDelegate, userState);
         }
         
         public DSFakeService.DSServiceReference.DSSettingsSet[] GetSettingsSetsList(uint devGuid) {
