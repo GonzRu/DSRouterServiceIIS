@@ -1165,36 +1165,6 @@ namespace DSRouterServiceIIS
             return null;
         }
 
-        /// <summary>
-        /// Получить архивную информацию (аварии, уставки и т.д.) как словарь значений
-        /// </summary>
-        Dictionary<string, DSRouterTagValue> IDSRouter.GetHistoricalDataByEvent(DSRouterEventValue dsRouterEvent)
-        {
-            if (_authResult == null)
-                return null;
-
-            try
-            {
-                UInt16 dsGuid = dsRouterEvent.DsGuid;
-
-                if (dWCFClientsList.ContainsKey(dsGuid))
-                {
-                    IWcfDataServer dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
-
-                    lock (dsProxy)
-                    {
-                        return ConvertDsTagDictionaryToDsRouterDictionary(dsProxy.GetHistoricalDataByID(dsRouterEvent.EventID));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.WriteErrorMessage("DSRouterService.GetHistoricalDataByEvent() : Исключение : " + ex.Message);
-            }
-
-            return null;
-        }
-
         #endregion
 
         #region Работа с квитированием

@@ -296,12 +296,6 @@ namespace DSRouterServiceIIS
         [OperationContract]
         Dictionary<string, DSRouterTagValue> GetHistoricalDataByID(UInt16 dsGuid, Int32 dataID);
 
-        /// <summary>
-        /// Получить архивную информацию (аварии, уставки и т.д.) как словарь значений
-        /// </summary>
-        [OperationContract]
-        Dictionary<string, DSRouterTagValue> GetHistoricalDataByEvent(DSRouterEventValue dsRouterEvent);
-
         #endregion
 
         #region Работа с квитированием
