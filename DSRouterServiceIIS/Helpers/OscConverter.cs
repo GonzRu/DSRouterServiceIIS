@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using DSFakeService.DSServiceReference;
+using DSRouterServiceIIS.DSServiceReference;
 
-namespace DSFakeService.Helpers
+namespace DSRouterServiceIIS.Helpers
 {
     public static class OscConverter
     {

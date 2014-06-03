@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Web;
-using DSFakeService.DataSources;
-using DSFakeService.DSServiceReference;
+using DSRouterServiceIIS.DataSources;
+using DSRouterServiceIIS.DSServiceReference;
 
-namespace DSRouterService.Helpers
+namespace DSRouterServiceIIS.Helpers
 {
     public class FileUploadHelper
     {

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DSFakeService.DSServiceReference;
-using DSRouterService;
+using DSRouterServiceIIS.DSServiceReference;
 
-namespace DSFakeService.DataSources
+namespace DSRouterServiceIIS.DataSources
 {
     public interface IDataSource
     {

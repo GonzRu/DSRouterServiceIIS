@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
-using DSFakeService.DataSources;
-using DSFakeService.DSServiceReference;
-using DSFakeService.Helpers;
-using DSRouterService.Helpers;
+using DSRouterServiceIIS.DataSources;
+using DSRouterServiceIIS.DSServiceReference;
+using DSRouterServiceIIS.Helpers;
 using HMI_MT_Settings;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS
 {
     //[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]    
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
@@ -855,7 +853,7 @@ namespace DSRouterService
                     DSUser dsUser = null;
                     lock (dataServerProxy)
                     {
-                        dsUser = dataServerProxy.Authorization(userName, userPassword);
+                        dsUser = dataServerProxy.Authorization(userName, userPassword, isFirstEnter, CreateDsUserSessionInfoForAuthorization());
                     }
 
                     if (dsUser == null)       
@@ -970,7 +968,7 @@ namespace DSRouterService
 
                     lock (dataServerProxy)
                     {
-                        return dataServerProxy.CreateUserGroup(groupName, groupComment, groupRight);
+                        return dataServerProxy.CreateUserGroup(groupName, groupComment, groupRight, CreateDsUserSessionInfo());
                     }
                 }
             }
@@ -1000,7 +998,7 @@ namespace DSRouterService
 
                     lock (dataServerProxy)
                     {
-                        return dataServerProxy.CreateUser(userName, userPassword, userComment, userGroupID);
+                        return dataServerProxy.CreateUser(userName, userPassword, userComment, userGroupID, CreateDsUserSessionInfo());
                     }
                 }
             }
@@ -1376,7 +1374,7 @@ namespace DSRouterService
                 {
                     lock (dsProxy)
                     {
-                        dsProxy.ReceiptAllEvents(_currentUser.UserID, receiptComment);
+                        dsProxy.ReceiptAllEvents(_currentUser.UserID, receiptComment, CreateDsUserSessionInfo());
                     }
                 }
                 catch (Exception ex)
@@ -1419,7 +1417,7 @@ namespace DSRouterService
                     {
                         lock (dsProxy)
                         {
-                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _currentUser.UserID, receiptComment);
+                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _currentUser.UserID, receiptComment, CreateDsUserSessionInfo());
                         }
                     }
                     catch (Exception ex)
@@ -1806,6 +1804,38 @@ namespace DSRouterService
         #endregion
 
         #region Вспомогательные методы для работы с текущей сессией
+
+        /// <summary>
+        /// Создает класс, несущий информацию о пользовательской сессии для DS
+        /// </summary>
+        /// <returns></returns>
+        private DSUserSessionInfo CreateDsUserSessionInfo()
+        {
+            //MessageProperties messageProperties = OperationContext.Current.IncomingMessageProperties;
+            //RemoteEndpointMessageProperty endpointProperty = messageProperties[RemoteEndpointMessageProperty.Name] as RemoteEndpointMessageProperty;
+
+            return new DSUserSessionInfo
+            {
+                UserId = _currentUser.UserID,
+                UserIpAddress = GetuserIpAddress(),
+                UserMacAddress = GetUserMacAddress()
+            };
+        }
+
+        private DSUserSessionInfo CreateDsUserSessionInfoForAuthorization()
+        {
+            return new DSUserSessionInfo {UserIpAddress = GetuserIpAddress(), UserMacAddress = GetUserMacAddress()};
+        }
+
+        private string GetuserIpAddress()
+        {
+            return "127.0.0.1";
+        }
+
+        private string GetUserMacAddress()
+        {
+            return "00-00-00-00-00-00";
+        }
 
         /// <summary>
         /// Закрывает сеанс передачи данных

@@ -13,7 +13,7 @@ namespace DSRouterServiceConsoleHost
         {
             ServiceUrl = "net.tcp://localhost:3332/DSRouter.DSRouterService";
 
-            var host = new ServiceHost(typeof(DSRouterService.DSRouterService));
+            var host = new ServiceHost(typeof(DSRouterServiceIIS.DSRouterService));
 
             NetTcpBinding tcpBinding = new NetTcpBinding();
             tcpBinding.TransactionFlow = false;
@@ -26,7 +26,7 @@ namespace DSRouterServiceConsoleHost
             tcpBinding.ReaderQuotas.MaxArrayLength = int.MaxValue;// 150000000;
 
             // Add a endpoint
-            host.AddServiceEndpoint(typeof(DSRouterService.IDSRouter/*.DSRouterService*/), tcpBinding, ServiceUrl);
+            host.AddServiceEndpoint(typeof(DSRouterServiceIIS.IDSRouter/*.DSRouterService*/), tcpBinding, ServiceUrl);
             host.Opening += new EventHandler(host_Opening);
             host.Opened += new EventHandler(host_Opened);
             host.Closing += new EventHandler(host_Closing);

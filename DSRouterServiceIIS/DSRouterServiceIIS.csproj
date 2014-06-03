@@ -11,7 +11,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSFakeService</RootNamespace>
+    <RootNamespace>DSRouterServiceIIS</RootNamespace>
     <AssemblyName>DSRouterService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
@@ -47,8 +47,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -61,31 +59,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DSRouterService.svc" />
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSEventValue.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSDataFile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSTagValue.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.LstError.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSEventValue.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSSettingsSet.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSOscillogram.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSUser.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSSettingsSet.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSUserGroup.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSTagValue.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSOscillogram.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSUser.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSDataFile.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSUserGroup.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\DSServiceReference\DSFakeService.DSServiceReference.DSDocumentDataValue.datasource">
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.LstError.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\DSServiceReference\WcfDataServer.disco" />

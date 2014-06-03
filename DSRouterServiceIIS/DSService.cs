@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Timers;
-using DSFakeService.DSServiceReference;
+using DSRouterServiceIIS.DSServiceReference;
+using DSRouterServiceIIS.Helpers;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS
 {
     /// <summary>
     /// класс представляющий DataServer в списке 

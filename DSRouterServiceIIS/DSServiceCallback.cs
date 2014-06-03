@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using DSFakeService.DSServiceReference;
+using DSRouterServiceIIS.DSServiceReference;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS
 {
     public delegate void NewError(string strerror);
     public delegate void NewTagValues(Dictionary<string, DSTagValue> tv);

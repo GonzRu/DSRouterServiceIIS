@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using DSFakeService.DSServiceReference;
+using DSRouterServiceIIS.DSServiceReference;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS
 {
     [ServiceContract(CallbackContract = typeof(IDSRouterCallback), SessionMode = SessionMode.Required)]
     //[ServiceKnownType(typeof(EnumerationCommandStates))]    

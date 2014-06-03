@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS
 {
     [ServiceContract]
     public interface IDSRouterCallback

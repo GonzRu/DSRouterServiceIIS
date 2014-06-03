@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace DSRouterService
+namespace DSRouterServiceIIS.Helpers
 {
 
     public static class Log
