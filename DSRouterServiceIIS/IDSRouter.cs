@@ -745,7 +745,7 @@ namespace DSRouterServiceIIS
         /// Права группы
         /// </summary>
         [DataMember]
-        public Int32 GroupRight { get; set; }
+        public string GroupRight { get; set; }
 
         /// <summary>
         /// Дата создания группы
