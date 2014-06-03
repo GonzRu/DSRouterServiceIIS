@@ -2,6 +2,24 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InterfaceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="DSAuthResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AuthResult" type="tns:AuthResult" />
+      <xs:element minOccurs="0" name="DSUser" nillable="true" type="tns:DSUser" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSAuthResult" nillable="true" type="tns:DSAuthResult" />
+  <xs:simpleType name="AuthResult">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Ok" />
+      <xs:enumeration value="WrongLoginOrPassword" />
+      <xs:enumeration value="NoConnectionToDb" />
+      <xs:enumeration value="NoConnectionToDs" />
+      <xs:enumeration value="Unknown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AuthResult" nillable="true" type="tns:AuthResult" />
   <xs:complexType name="DSUser">
     <xs:sequence>
       <xs:element minOccurs="0" name="CreateDateTime" type="xs:dateTime" />
@@ -20,7 +38,7 @@
       <xs:element minOccurs="0" name="GroupComment" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="GroupID" type="xs:int" />
       <xs:element minOccurs="0" name="GroupName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="GroupRight" type="xs:int" />
+      <xs:element minOccurs="0" name="GroupRight" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DSUserGroup" nillable="true" type="tns:DSUserGroup" />

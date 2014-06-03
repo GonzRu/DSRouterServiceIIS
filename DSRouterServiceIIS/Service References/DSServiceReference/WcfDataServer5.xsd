@@ -486,7 +486,7 @@
   <xs:element name="AuthorizationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="AuthorizationResult" nillable="true" type="q12:DSUser" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="AuthorizationResult" nillable="true" type="q12:DSAuthResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
