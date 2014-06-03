@@ -98,19 +98,19 @@ namespace DSFakeService.Helpers
         /// <summary>
         /// Возвращает необходимое для файла осциллограммы расширение
         /// </summary>
-        private static string GetOscExtensionByOscType(DSEventType oscillogramType)
+        private static string GetOscExtensionByOscType(DSEventDataType oscillogramType)
         {
             switch (oscillogramType)
             {
-                case DSEventType.Diagramm:
+                case DSEventDataType.Diagramm:
                     return ".dgm";
-                case DSEventType.Oscillogram:
+                case DSEventDataType.Oscillogram:
                     return ".osc";
-                case DSEventType.OscillogramSirius2:
+                case DSEventDataType.OscillogramSirius2:
                     return ".trd";
-                case DSEventType.OscillogramEkra:
+                case DSEventDataType.OscillogramEkra:
                     return ".dfr";
-                case DSEventType.OscillogramBresler:
+                case DSEventDataType.OscillogramBresler:
                     return ".zbrs";
             }
 
