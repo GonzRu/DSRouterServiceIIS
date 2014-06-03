@@ -840,37 +840,38 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Метод авторизации пользователя
         /// </summary>
-        DSRouterUser IDSRouter.Authorization(string userName, string userPassword, Boolean isFirstEnter)
+        RouterAuthResult IDSRouter.Authorization(string userName, string userPassword, Boolean isFirstEnter)
         {
-            try
+            var routerAuthResult = new RouterAuthResult();
+            routerAuthResult.DSAuthResults = new Dictionary<ushort, DSRouterAuthResult>();
+
+            #warning Use dWCFClientsList
+            foreach (var dsGuid in dWCFClientsList.Keys)
             {
-                #warning Необходимо определить "главный" DS, который будет выполнять авторизацию пользователя
+                var dsProxy = _dataSource.GetDsProxy(dsGuid);
 
-                if (dWCFClientsList.ContainsKey(0))
+                try
                 {
-                    IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
-
-                    DSUser dsUser = null;
-                    lock (dataServerProxy)
+                    var dsAuthResult = new DSServiceReference.DSAuthResult();
+                    lock (dsProxy)
                     {
-                        dsUser = dataServerProxy.Authorization(userName, userPassword, isFirstEnter, CreateDsUserSessionInfoForAuthorization());
+                        dsAuthResult = dsProxy.Authorization(userName, userPassword, isFirstEnter, CreateDsUserSessionInfoForAuthorization());                        
                     }
 
-                    if (dsUser == null)       
-                        return null;
-
-                    Log.WriteDebugMessage("Присоединился пользователь " + dsUser.UserName);
-
-                    _currentUser = new DSRouterUser(dsUser);
-                    return _currentUser;
+                    var dsRouterAuthResult = new DSRouterAuthResult(dsAuthResult);
+                    dsRouterAuthResult.UserName = userName;
+                    dsRouterAuthResult.UserPassword = userPassword;
+                    routerAuthResult.DSAuthResults.Add(dsGuid, dsRouterAuthResult);
+                }
+                catch (Exception ex)
+                {
+                    routerAuthResult.DSAuthResults.Add(dsGuid, new DSRouterAuthResult {AuthResult = AuthResult.NoConnectionToDs});
                 }
             }
-            catch (Exception ex)
-            {
-                Log.WriteErrorMessage("DSRouterService.Authorization() : Исключение : " + ex.Message);
-            }
 
-            return null;
+            _authResult = routerAuthResult;
+
+            return routerAuthResult;
         }
 
         /// <summary>

@@ -242,7 +242,7 @@ namespace DSRouterServiceIIS
         /// Метод авторизации пользователя
         /// </summary>
         [OperationContract]
-        DSRouterUser Authorization(string userName, string userPassword, Boolean isFirstEnter);
+        RouterAuthResult Authorization(string userName, string userPassword, Boolean isFirstEnter);
 
         /// <summary>
         /// Получить список пользователей
