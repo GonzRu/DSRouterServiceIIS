@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DSRouterService.DSRouterService" CodeBehind="DSRouterService.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="DSRouterServiceIIS.DSRouterService" CodeBehind="DSRouterService.svc.cs" %>
