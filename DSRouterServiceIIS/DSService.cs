@@ -240,6 +240,9 @@ namespace DSRouterService
         /// <returns></returns>
         private Dictionary<string, DSRouterTagValue> CreateLostConnectionResponse()
         {
+            if (_requestedTagsList == null)
+                return new Dictionary<string, DSRouterTagValue>();
+
             return _requestedTagsList.ToDictionary(
                 s => s,
                 s => new DSRouterTagValue {VarQuality = 10, VarValueAsObject = null}
