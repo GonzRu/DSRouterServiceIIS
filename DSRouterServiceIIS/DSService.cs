@@ -319,7 +319,7 @@ namespace DSRouterServiceIIS
         /// </summary>
         private void OnTagsValuesUpdated(Dictionary<string, DSRouterTagValue> tagsValues)
         {
-            if (TagsValuesUpdated != null)
+            if (TagsValuesUpdated != null && tagsValues != null && tagsValues.Count != 0)
                 TagsValuesUpdated(tagsValues);
         }
 
