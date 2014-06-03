@@ -837,6 +837,63 @@ namespace DSRouterServiceIIS
 
     #endregion
 
+    #region Результат Авторизации
+
+    public enum AuthResult
+    {
+        None,                   // Данные не доступны
+        Ok,                     // Авторизация прошла успешно
+        WrongLoginOrPassword,   // Неверный логин и/или пароль
+        NoConnectionToDb,       // Нет соединения с БД
+        NoConnectionToDs,       // нет соединения с DS
+        Unknown                 // Неизвестный результат
+    }
+
+    [DataContract]
+    public class RouterAuthResult
+    {
+        [DataMember]
+        public Dictionary<UInt16, DSRouterAuthResult> DSAuthResults { get; set; }
+
+        public RouterAuthResult()
+        {
+            DSAuthResults = null;
+        }
+    }
+
+    [DataContract]
+    public class DSRouterAuthResult
+    {
+        [DataMember]
+        public DSRouterUser User { get; set; }
+
+        [DataMember]
+        public AuthResult AuthResult { get; set; }
+
+        /// <summary>
+        /// Имя пользователя для внутренних нужд
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Пароль пользователя для внутренних нужд
+        /// </summary>
+        public string UserPassword { get; set; }
+
+        public DSRouterAuthResult()
+        {
+            User = null;
+            AuthResult = AuthResult.None;
+        }
+
+        public DSRouterAuthResult(DSAuthResult dsAuthResult)
+        {
+            User = new DSRouterUser(dsAuthResult.DSUser);
+            AuthResult = (AuthResult) dsAuthResult.AuthResult;
+        }
+    }
+
     #endregion
 
+    #endregion
 }
