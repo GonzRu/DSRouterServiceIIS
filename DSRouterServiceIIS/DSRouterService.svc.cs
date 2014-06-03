@@ -88,7 +88,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Идентификатор сессии
         /// </summary>
-        private string _sessionId;
+        private readonly string _sessionId;
 
         #endregion
 
