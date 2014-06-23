@@ -260,7 +260,7 @@ namespace DSRouterServiceIIS
         /// Создание группы пользователей
         /// </summary>
         [OperationContract]
-        Boolean CreateUserGroup(string groupName, string groupComment, Int32 groupRight);
+        Boolean CreateUserGroup(string groupName, string groupComment, string groupRight);
 
         /// <summary>
         /// Создание пользователя

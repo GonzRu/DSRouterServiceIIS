@@ -954,7 +954,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Создание группы пользователей
         /// </summary>
-        bool IDSRouter.CreateUserGroup(string groupName, string groupComment, int groupRight)
+        bool IDSRouter.CreateUserGroup(string groupName, string groupComment, string groupRight)
         {
             if (_authResult == null)
                 return false;
