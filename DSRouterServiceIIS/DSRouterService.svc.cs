@@ -103,7 +103,7 @@ namespace DSRouterServiceIIS
             TraceSourceLib.TraceSourceDiagMes.StartTrace("AppDiagnosticLog", 30000);
 
             DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Share");
-            DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES = "/DSRouter.DSRouterService/Share/";
+            DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES = "/Share/";
         }
 
         public DSRouterService()
