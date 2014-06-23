@@ -253,6 +253,36 @@
   <wsdl:message name="IWcfDataServer_ReSetTagValueFromHMI_InputMessage">
     <wsdl:part name="parameters" element="tns:ReSetTagValueFromHMI" />
   </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagAnalogTransformationRatio_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagAnalogTransformationRatio" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagAnalogTransformationRatio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagAnalogTransformationRatioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_SetTagAnalogTransformationRatio_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetTagAnalogTransformationRatio" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_SetTagAnalogTransformationRatio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetTagAnalogTransformationRatioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_ReSetTagAnalogTransformationRatio_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReSetTagAnalogTransformationRatio" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_ReSetTagAnalogTransformationRatio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReSetTagAnalogTransformationRatioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_IsInverseDiscretTag_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsInverseDiscretTag" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_IsInverseDiscretTag_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsInverseDiscretTagResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_InverseDiscretTag_InputMessage">
+    <wsdl:part name="parameters" element="tns:InverseDiscretTag" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_InverseDiscretTag_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InverseDiscretTagResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfDataServer_Authorization_InputMessage">
     <wsdl:part name="parameters" element="tns:Authorization" />
   </wsdl:message>
@@ -533,6 +563,26 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReSetTagValueFromHMI">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/ReSetTagValueFromHMI" message="tns:IWcfDataServer_ReSetTagValueFromHMI_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagAnalogTransformationRatio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio" message="tns:IWcfDataServer_GetTagAnalogTransformationRatio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatioResponse" message="tns:IWcfDataServer_GetTagAnalogTransformationRatio_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="SetTagAnalogTransformationRatio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio" message="tns:IWcfDataServer_SetTagAnalogTransformationRatio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatioResponse" message="tns:IWcfDataServer_SetTagAnalogTransformationRatio_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReSetTagAnalogTransformationRatio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatio" message="tns:IWcfDataServer_ReSetTagAnalogTransformationRatio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatioResponse" message="tns:IWcfDataServer_ReSetTagAnalogTransformationRatio_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="IsInverseDiscretTag">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/IsInverseDiscretTag" message="tns:IWcfDataServer_IsInverseDiscretTag_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/IsInverseDiscretTagResponse" message="tns:IWcfDataServer_IsInverseDiscretTag_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="InverseDiscretTag">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/InverseDiscretTag" message="tns:IWcfDataServer_InverseDiscretTag_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/InverseDiscretTagResponse" message="tns:IWcfDataServer_InverseDiscretTag_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Authorization">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/Authorization" message="tns:IWcfDataServer_Authorization_InputMessage" />
@@ -948,6 +998,51 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReSetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsInverseDiscretTag">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/IsInverseDiscretTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InverseDiscretTag">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/InverseDiscretTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Authorization">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/Authorization" style="document" />
@@ -1480,6 +1575,51 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReSetTagAnalogTransformationRatio">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatio" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsInverseDiscretTag">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/IsInverseDiscretTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InverseDiscretTag">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/InverseDiscretTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Authorization">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/Authorization" style="document" />

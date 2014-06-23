@@ -1502,6 +1502,102 @@ namespace DSRouterServiceIIS.DSServiceReference {
         
         void EndReSetTagValueFromHMI(System.IAsyncResult result);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatioResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        object GetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatioResponse")]
+        System.IAsyncResult BeginGetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        object EndGetTagAnalogTransformationRatio(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatioResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        void SetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatioResponse")]
+        System.IAsyncResult BeginSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio, System.AsyncCallback callback, object asyncState);
+        
+        void EndSetTagAnalogTransformationRatio(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatioResponse")]
+        void ReSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/ReSetTagAnalogTransformationRatioResponse")]
+        System.IAsyncResult BeginReSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        void EndReSetTagAnalogTransformationRatio(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/IsInverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/IsInverseDiscretTagResponse")]
+        bool IsInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/IsInverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/IsInverseDiscretTagResponse")]
+        System.IAsyncResult BeginIsInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        bool EndIsInverseDiscretTag(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/InverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/InverseDiscretTagResponse")]
+        void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/InverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/InverseDiscretTagResponse")]
+        System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        void EndInverseDiscretTag(System.IAsyncResult result);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/Authorization", ReplyAction="http://tempuri.org/IWcfDataServer/AuthorizationResponse")]
         DSRouterServiceIIS.DSServiceReference.DSAuthResult Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
@@ -1527,10 +1623,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         DSRouterServiceIIS.DSServiceReference.DSUserGroup[] EndGetUserGroupsList(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/CreateUserGroup", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserGroupResponse")]
-        bool CreateUserGroup(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo);
+        bool CreateUserGroup(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/CreateUserGroup", ReplyAction="http://tempuri.org/IWcfDataServer/CreateUserGroupResponse")]
-        System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState);
         
         bool EndCreateUserGroup(System.IAsyncResult result);
         
@@ -2292,6 +2388,44 @@ namespace DSRouterServiceIIS.DSServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetTagAnalogTransformationRatioCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetTagAnalogTransformationRatioCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public object Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((object)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class IsInverseDiscretTagCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public IsInverseDiscretTagCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public bool Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class AuthorizationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -2820,6 +2954,36 @@ namespace DSRouterServiceIIS.DSServiceReference {
         
         private System.Threading.SendOrPostCallback onReSetTagValueFromHMICompletedDelegate;
         
+        private BeginOperationDelegate onBeginGetTagAnalogTransformationRatioDelegate;
+        
+        private EndOperationDelegate onEndGetTagAnalogTransformationRatioDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetTagAnalogTransformationRatioCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginSetTagAnalogTransformationRatioDelegate;
+        
+        private EndOperationDelegate onEndSetTagAnalogTransformationRatioDelegate;
+        
+        private System.Threading.SendOrPostCallback onSetTagAnalogTransformationRatioCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginReSetTagAnalogTransformationRatioDelegate;
+        
+        private EndOperationDelegate onEndReSetTagAnalogTransformationRatioDelegate;
+        
+        private System.Threading.SendOrPostCallback onReSetTagAnalogTransformationRatioCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginIsInverseDiscretTagDelegate;
+        
+        private EndOperationDelegate onEndIsInverseDiscretTagDelegate;
+        
+        private System.Threading.SendOrPostCallback onIsInverseDiscretTagCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginInverseDiscretTagDelegate;
+        
+        private EndOperationDelegate onEndInverseDiscretTagDelegate;
+        
+        private System.Threading.SendOrPostCallback onInverseDiscretTagCompletedDelegate;
+        
         private BeginOperationDelegate onBeginAuthorizationDelegate;
         
         private EndOperationDelegate onEndAuthorizationDelegate;
@@ -3039,6 +3203,16 @@ namespace DSRouterServiceIIS.DSServiceReference {
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetTagValueFromHMICompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ReSetTagValueFromHMICompleted;
+        
+        public event System.EventHandler<GetTagAnalogTransformationRatioCompletedEventArgs> GetTagAnalogTransformationRatioCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetTagAnalogTransformationRatioCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> ReSetTagAnalogTransformationRatioCompleted;
+        
+        public event System.EventHandler<IsInverseDiscretTagCompletedEventArgs> IsInverseDiscretTagCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> InverseDiscretTagCompleted;
         
         public event System.EventHandler<AuthorizationCompletedEventArgs> AuthorizationCompleted;
         
@@ -4934,6 +5108,275 @@ namespace DSRouterServiceIIS.DSServiceReference {
                         idTag}, this.onEndReSetTagValueFromHMIDelegate, this.onReSetTagValueFromHMICompletedDelegate, userState);
         }
         
+        public object GetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid) {
+            return base.Channel.GetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public object EndGetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            return base.Channel.EndGetTagAnalogTransformationRatio(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetTagAnalogTransformationRatio(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            ushort dsGuid = ((ushort)(inValues[0]));
+            uint devGuid = ((uint)(inValues[1]));
+            uint tagGuid = ((uint)(inValues[2]));
+            return this.BeginGetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndGetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            object retVal = this.EndGetTagAnalogTransformationRatio(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGetTagAnalogTransformationRatioCompleted(object state) {
+            if ((this.GetTagAnalogTransformationRatioCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetTagAnalogTransformationRatioCompleted(this, new GetTagAnalogTransformationRatioCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid) {
+            this.GetTagAnalogTransformationRatioAsync(dsGuid, devGuid, tagGuid, null);
+        }
+        
+        public void GetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginGetTagAnalogTransformationRatioDelegate == null)) {
+                this.onBeginGetTagAnalogTransformationRatioDelegate = new BeginOperationDelegate(this.OnBeginGetTagAnalogTransformationRatio);
+            }
+            if ((this.onEndGetTagAnalogTransformationRatioDelegate == null)) {
+                this.onEndGetTagAnalogTransformationRatioDelegate = new EndOperationDelegate(this.OnEndGetTagAnalogTransformationRatio);
+            }
+            if ((this.onGetTagAnalogTransformationRatioCompletedDelegate == null)) {
+                this.onGetTagAnalogTransformationRatioCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTagAnalogTransformationRatioCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetTagAnalogTransformationRatioDelegate, new object[] {
+                        dsGuid,
+                        devGuid,
+                        tagGuid}, this.onEndGetTagAnalogTransformationRatioDelegate, this.onGetTagAnalogTransformationRatioCompletedDelegate, userState);
+        }
+        
+        public void SetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio) {
+            base.Channel.SetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, transformationRatio);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, transformationRatio, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndSetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            base.Channel.EndSetTagAnalogTransformationRatio(result);
+        }
+        
+        private System.IAsyncResult OnBeginSetTagAnalogTransformationRatio(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            ushort dsGuid = ((ushort)(inValues[0]));
+            uint devGuid = ((uint)(inValues[1]));
+            uint tagGuid = ((uint)(inValues[2]));
+            object transformationRatio = ((object)(inValues[3]));
+            return this.BeginSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, transformationRatio, callback, asyncState);
+        }
+        
+        private object[] OnEndSetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            this.EndSetTagAnalogTransformationRatio(result);
+            return null;
+        }
+        
+        private void OnSetTagAnalogTransformationRatioCompleted(object state) {
+            if ((this.SetTagAnalogTransformationRatioCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SetTagAnalogTransformationRatioCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void SetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio) {
+            this.SetTagAnalogTransformationRatioAsync(dsGuid, devGuid, tagGuid, transformationRatio, null);
+        }
+        
+        public void SetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio, object userState) {
+            if ((this.onBeginSetTagAnalogTransformationRatioDelegate == null)) {
+                this.onBeginSetTagAnalogTransformationRatioDelegate = new BeginOperationDelegate(this.OnBeginSetTagAnalogTransformationRatio);
+            }
+            if ((this.onEndSetTagAnalogTransformationRatioDelegate == null)) {
+                this.onEndSetTagAnalogTransformationRatioDelegate = new EndOperationDelegate(this.OnEndSetTagAnalogTransformationRatio);
+            }
+            if ((this.onSetTagAnalogTransformationRatioCompletedDelegate == null)) {
+                this.onSetTagAnalogTransformationRatioCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetTagAnalogTransformationRatioCompleted);
+            }
+            base.InvokeAsync(this.onBeginSetTagAnalogTransformationRatioDelegate, new object[] {
+                        dsGuid,
+                        devGuid,
+                        tagGuid,
+                        transformationRatio}, this.onEndSetTagAnalogTransformationRatioDelegate, this.onSetTagAnalogTransformationRatioCompletedDelegate, userState);
+        }
+        
+        public void ReSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid) {
+            base.Channel.ReSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginReSetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginReSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndReSetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            base.Channel.EndReSetTagAnalogTransformationRatio(result);
+        }
+        
+        private System.IAsyncResult OnBeginReSetTagAnalogTransformationRatio(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            ushort dsGuid = ((ushort)(inValues[0]));
+            uint devGuid = ((uint)(inValues[1]));
+            uint tagGuid = ((uint)(inValues[2]));
+            return this.BeginReSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndReSetTagAnalogTransformationRatio(System.IAsyncResult result) {
+            this.EndReSetTagAnalogTransformationRatio(result);
+            return null;
+        }
+        
+        private void OnReSetTagAnalogTransformationRatioCompleted(object state) {
+            if ((this.ReSetTagAnalogTransformationRatioCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.ReSetTagAnalogTransformationRatioCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void ReSetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid) {
+            this.ReSetTagAnalogTransformationRatioAsync(dsGuid, devGuid, tagGuid, null);
+        }
+        
+        public void ReSetTagAnalogTransformationRatioAsync(ushort dsGuid, uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginReSetTagAnalogTransformationRatioDelegate == null)) {
+                this.onBeginReSetTagAnalogTransformationRatioDelegate = new BeginOperationDelegate(this.OnBeginReSetTagAnalogTransformationRatio);
+            }
+            if ((this.onEndReSetTagAnalogTransformationRatioDelegate == null)) {
+                this.onEndReSetTagAnalogTransformationRatioDelegate = new EndOperationDelegate(this.OnEndReSetTagAnalogTransformationRatio);
+            }
+            if ((this.onReSetTagAnalogTransformationRatioCompletedDelegate == null)) {
+                this.onReSetTagAnalogTransformationRatioCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnReSetTagAnalogTransformationRatioCompleted);
+            }
+            base.InvokeAsync(this.onBeginReSetTagAnalogTransformationRatioDelegate, new object[] {
+                        dsGuid,
+                        devGuid,
+                        tagGuid}, this.onEndReSetTagAnalogTransformationRatioDelegate, this.onReSetTagAnalogTransformationRatioCompletedDelegate, userState);
+        }
+        
+        public bool IsInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid) {
+            return base.Channel.IsInverseDiscretTag(dsGuid, devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginIsInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginIsInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public bool EndIsInverseDiscretTag(System.IAsyncResult result) {
+            return base.Channel.EndIsInverseDiscretTag(result);
+        }
+        
+        private System.IAsyncResult OnBeginIsInverseDiscretTag(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            ushort dsGuid = ((ushort)(inValues[0]));
+            uint devGuid = ((uint)(inValues[1]));
+            uint tagGuid = ((uint)(inValues[2]));
+            return this.BeginIsInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndIsInverseDiscretTag(System.IAsyncResult result) {
+            bool retVal = this.EndIsInverseDiscretTag(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnIsInverseDiscretTagCompleted(object state) {
+            if ((this.IsInverseDiscretTagCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.IsInverseDiscretTagCompleted(this, new IsInverseDiscretTagCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void IsInverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid) {
+            this.IsInverseDiscretTagAsync(dsGuid, devGuid, tagGuid, null);
+        }
+        
+        public void IsInverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginIsInverseDiscretTagDelegate == null)) {
+                this.onBeginIsInverseDiscretTagDelegate = new BeginOperationDelegate(this.OnBeginIsInverseDiscretTag);
+            }
+            if ((this.onEndIsInverseDiscretTagDelegate == null)) {
+                this.onEndIsInverseDiscretTagDelegate = new EndOperationDelegate(this.OnEndIsInverseDiscretTag);
+            }
+            if ((this.onIsInverseDiscretTagCompletedDelegate == null)) {
+                this.onIsInverseDiscretTagCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnIsInverseDiscretTagCompleted);
+            }
+            base.InvokeAsync(this.onBeginIsInverseDiscretTagDelegate, new object[] {
+                        dsGuid,
+                        devGuid,
+                        tagGuid}, this.onEndIsInverseDiscretTagDelegate, this.onIsInverseDiscretTagCompletedDelegate, userState);
+        }
+        
+        public void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid) {
+            base.Channel.InverseDiscretTag(dsGuid, devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndInverseDiscretTag(System.IAsyncResult result) {
+            base.Channel.EndInverseDiscretTag(result);
+        }
+        
+        private System.IAsyncResult OnBeginInverseDiscretTag(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            ushort dsGuid = ((ushort)(inValues[0]));
+            uint devGuid = ((uint)(inValues[1]));
+            uint tagGuid = ((uint)(inValues[2]));
+            return this.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndInverseDiscretTag(System.IAsyncResult result) {
+            this.EndInverseDiscretTag(result);
+            return null;
+        }
+        
+        private void OnInverseDiscretTagCompleted(object state) {
+            if ((this.InverseDiscretTagCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.InverseDiscretTagCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid) {
+            this.InverseDiscretTagAsync(dsGuid, devGuid, tagGuid, null);
+        }
+        
+        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginInverseDiscretTagDelegate == null)) {
+                this.onBeginInverseDiscretTagDelegate = new BeginOperationDelegate(this.OnBeginInverseDiscretTag);
+            }
+            if ((this.onEndInverseDiscretTagDelegate == null)) {
+                this.onEndInverseDiscretTagDelegate = new EndOperationDelegate(this.OnEndInverseDiscretTag);
+            }
+            if ((this.onInverseDiscretTagCompletedDelegate == null)) {
+                this.onInverseDiscretTagCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnInverseDiscretTagCompleted);
+            }
+            base.InvokeAsync(this.onBeginInverseDiscretTagDelegate, new object[] {
+                        dsGuid,
+                        devGuid,
+                        tagGuid}, this.onEndInverseDiscretTagDelegate, this.onInverseDiscretTagCompletedDelegate, userState);
+        }
+        
         public DSRouterServiceIIS.DSServiceReference.DSAuthResult Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
             return base.Channel.Authorization(userName, userPassword, isFirstAuthorization, userSessionInfo);
         }
@@ -5086,12 +5529,12 @@ namespace DSRouterServiceIIS.DSServiceReference {
             base.InvokeAsync(this.onBeginGetUserGroupsListDelegate, null, this.onEndGetUserGroupsListDelegate, this.onGetUserGroupsListCompletedDelegate, userState);
         }
         
-        public bool CreateUserGroup(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+        public bool CreateUserGroup(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
             return base.Channel.CreateUserGroup(groupName, groupComment, groupRight, userSessionInfo);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
+        public System.IAsyncResult BeginCreateUserGroup(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, System.AsyncCallback callback, object asyncState) {
             return base.Channel.BeginCreateUserGroup(groupName, groupComment, groupRight, userSessionInfo, callback, asyncState);
         }
         
@@ -5103,7 +5546,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
         private System.IAsyncResult OnBeginCreateUserGroup(object[] inValues, System.AsyncCallback callback, object asyncState) {
             string groupName = ((string)(inValues[0]));
             string groupComment = ((string)(inValues[1]));
-            int groupRight = ((int)(inValues[2]));
+            string groupRight = ((string)(inValues[2]));
             DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo = ((DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo)(inValues[3]));
             return this.BeginCreateUserGroup(groupName, groupComment, groupRight, userSessionInfo, callback, asyncState);
         }
@@ -5121,11 +5564,11 @@ namespace DSRouterServiceIIS.DSServiceReference {
             }
         }
         
-        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
+        public void CreateUserGroupAsync(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
             this.CreateUserGroupAsync(groupName, groupComment, groupRight, userSessionInfo, null);
         }
         
-        public void CreateUserGroupAsync(string groupName, string groupComment, int groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
+        public void CreateUserGroupAsync(string groupName, string groupComment, string groupRight, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo, object userState) {
             if ((this.onBeginCreateUserGroupDelegate == null)) {
                 this.onBeginCreateUserGroupDelegate = new BeginOperationDelegate(this.OnBeginCreateUserGroup);
             }

@@ -473,6 +473,81 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetTagAnalogTransformationRatio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTagAnalogTransformationRatioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetTagAnalogTransformationRatioResult" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTagAnalogTransformationRatio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="transformationRatio" nillable="true" type="xs:anyType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetTagAnalogTransformationRatioResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReSetTagAnalogTransformationRatio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReSetTagAnalogTransformationRatioResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsInverseDiscretTag">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IsInverseDiscretTagResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="IsInverseDiscretTagResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InverseDiscretTag">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
+        <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InverseDiscretTagResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Authorization">
     <xs:complexType>
       <xs:sequence>
@@ -519,7 +594,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="groupName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="groupComment" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="groupRight" type="xs:int" />
+        <xs:element minOccurs="0" name="groupRight" nillable="true" type="xs:string" />
         <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" minOccurs="0" name="userSessionInfo" nillable="true" type="q15:DSUserSessionInfo" />
       </xs:sequence>
     </xs:complexType>
