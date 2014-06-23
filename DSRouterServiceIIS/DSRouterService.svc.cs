@@ -1592,7 +1592,7 @@ namespace DSRouterServiceIIS
         /// с уровня HMI через тип object
         /// (качество тега vqHandled)
         /// </summary>
-        void IDSRouter.SetTagValueFromHMI(UInt16 dsGuid, Int32 devGuid, Int32 tagGuid, object valinobject)
+        void IDSRouter.SetTagValueFromHMI(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, object valinobject)
         {
             if (dWCFClientsList.ContainsKey(dsGuid))
             {
@@ -1616,7 +1616,7 @@ namespace DSRouterServiceIIS
         /// восстановить процесс естесвенного обновления тега
         /// (качество тега vqGood или по факту)
         /// </summary>
-        void IDSRouter.ReSetTagValueFromHMI(UInt16 dsGuid, Int32 devGuid, Int32 tagGuid)
+        void IDSRouter.ReSetTagValueFromHMI(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid)
         {
             if (dWCFClientsList.ContainsKey(dsGuid))
             {

@@ -453,14 +453,14 @@ namespace DSRouterServiceIIS
         /// (качество тега vqHandled)
         /// </summary>
         [OperationContract(IsOneWay = true)]
-        void SetTagValueFromHMI(UInt16 dsGuid, Int32 devGuid, Int32 tagGuid, object valinobject);
+        void SetTagValueFromHMI(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, object valinobject);
 
         /// <summary>
         /// восстановить процесс естесвенного обновления тега
         /// (качество тега vqGood или по факту)
         /// </summary>
         [OperationContract(IsOneWay = true)]
-        void ReSetTagValueFromHMI(UInt16 dsGuid, Int32 devGuid, Int32 tagGuid);
+        void ReSetTagValueFromHMI(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid);
 
         #endregion
     }
