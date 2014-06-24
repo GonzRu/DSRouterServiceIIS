@@ -188,17 +188,26 @@ namespace DSRouterServiceIIS
         private void CreateDsProxy()
         {
             NetTcpBinding tcpBinding = new NetTcpBinding();
+            tcpBinding.Security.Mode = SecurityMode.None;
+
+            tcpBinding.MaxReceivedMessageSize = int.MaxValue;
+            tcpBinding.MaxBufferSize = int.MaxValue;
+            tcpBinding.ReaderQuotas.MaxArrayLength = int.MaxValue;
+
             tcpBinding.ReceiveTimeout = new TimeSpan(0, 1, 0);
             tcpBinding.SendTimeout = new TimeSpan(0, 1, 0);
-            tcpBinding.MaxReceivedMessageSize = Int32.MaxValue;
 
-            EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer_Lib.WcfDataServer", _ipAddress, _port));
+            EndpointAddress endpointAddress = new EndpointAddress(String.Format(@"net.tcp://{0}:{1}/WcfDataServer", _ipAddress, _port));
 
             DSServiceCallback dsServiceCallback = new DSServiceCallback();
             dsServiceCallback.OnNewTagValues += TagsValuesUpdatedHandler;
 
             wcfDataServer = new WcfDataServerClient(new InstanceContext(dsServiceCallback), tcpBinding, endpointAddress);
-            (wcfDataServer as WcfDataServerClient).Open();
+
+            lock (wcfDataServer)
+            {
+                (wcfDataServer as WcfDataServerClient).Open();
+            }
             (wcfDataServer as WcfDataServerClient).InnerChannel.Closed += DsDisconnected;
             (wcfDataServer as WcfDataServerClient).InnerChannel.Faulted += DsDisconnected;
 
