@@ -97,7 +97,8 @@ namespace DSRouterServiceIIS.DataSources
             // Подготавливаем ответ на основе словаря актуальных значений тегов
             var result = new Dictionary<string, DSRouterTagValue>();
             foreach (var tagIdAsStr in tagsList)
-                result.Add(tagIdAsStr, _subscribedTagsValue[tagIdAsStr]);
+                if (_subscribedTagsValue.ContainsKey(tagIdAsStr))
+                    result.Add(tagIdAsStr, _subscribedTagsValue[tagIdAsStr]);
 
             return result;
         }
