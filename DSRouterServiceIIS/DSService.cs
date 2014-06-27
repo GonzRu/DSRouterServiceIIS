@@ -163,9 +163,9 @@ namespace DSRouterServiceIIS
 
                 Log.WriteDebugMessage(String.Format("DSService: с DS-{0} установлена связь", dsUID));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                createDsConnectionTimer.Start();
+                StartTimerToRecreateDsConnection();
             }
         }
 
