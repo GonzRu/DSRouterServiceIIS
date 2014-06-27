@@ -1587,6 +1587,8 @@ namespace DSRouterServiceIIS
 
         #region Ручной ввод данных
 
+        #region Ручной ввод значений тегов
+
         /// <summary>
         /// Установить значение тега 
         /// с уровня HMI через тип object
@@ -1635,6 +1637,131 @@ namespace DSRouterServiceIIS
                 }
             }
         }
+
+        #endregion
+
+        #region Ручной ввод преобразовывающих коэффициентов
+
+        /// <summary>
+        /// Получить коэффициент преобразования для тега
+        /// </summary>
+        Object IDSRouter.GetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid)
+        {
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.GetTagAnalogTransformationRatio() : Исключение : " + ex.Message);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Установить коэффициент преобразования
+        /// </summary>
+        void IDSRouter.SetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, Object transformationRatio)
+        {
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        dsProxy.SetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid, transformationRatio);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.SetTagAnalogTransformationRatio() : Исключение : " + ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Сбросить коэффициент преобразования
+        /// </summary>
+        void IDSRouter.ReSetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid)
+        {
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        dsProxy.ReSetTagAnalogTransformationRatio(dsGuid, devGuid, tagGuid);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.ReSetTagAnalogTransformationRatio() : Исключение : " + ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Возвращает true, если значение дискретного тега инверсируется
+        /// </summary>
+        bool? IDSRouter.IsInverseDiscretTag(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid)
+        {
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        return dsProxy.IsInverseDiscretTag(dsGuid, devGuid, tagGuid);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.IsInverseDiscretTag() : Исключение : " + ex.Message);
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Инверсирует значение дискретного тега
+        /// </summary>
+        void IDSRouter.InverseDiscretTag(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, Boolean newInverseValue)
+        {
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        dsProxy.InverseDiscretTag(dsGuid, devGuid, tagGuid, newInverseValue);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.InverseDiscretTag() : Исключение : " + ex.Message);
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
 

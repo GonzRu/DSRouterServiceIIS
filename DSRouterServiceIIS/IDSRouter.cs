@@ -447,6 +447,8 @@ namespace DSRouterServiceIIS
 
         #region Ручной ввод данных
 
+        #region Ручной ввод значений тегов
+
         /// <summary>
         /// Установить значение тега 
         /// с уровня HMI через тип object
@@ -461,6 +463,42 @@ namespace DSRouterServiceIIS
         /// </summary>
         [OperationContract(IsOneWay = true)]
         void ReSetTagValueFromHMI(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid);
+
+        #endregion
+
+        #region Ручной ввод преобразовывающих коэффициентов
+
+        /// <summary>
+        /// Получить коэффициент преобразования для тега
+        /// </summary>
+        [OperationContract]
+        Object GetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid);
+
+        /// <summary>
+        /// Установить коэффициент преобразования
+        /// </summary>
+        [OperationContract]
+        void SetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, Object transformationRatio);
+
+        /// <summary>
+        /// Сбросить коэффициент преобразования
+        /// </summary>
+        [OperationContract]
+        void ReSetTagAnalogTransformationRatio(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid);
+
+        /// <summary>
+        /// Возвращает true, если значение дискретного тега инверсируется
+        /// </summary>
+        [OperationContract]
+        bool? IsInverseDiscretTag(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid);
+
+        /// <summary>
+        /// Инверсирует значение дискретного тега
+        /// </summary>
+        [OperationContract]
+        void InverseDiscretTag(UInt16 dsGuid, UInt32 devGuid, UInt32 tagGuid, Boolean newInverseValue);
+
+        #endregion
 
         #endregion
     }
