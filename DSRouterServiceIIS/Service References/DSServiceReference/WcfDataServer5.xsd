@@ -540,6 +540,7 @@
         <xs:element minOccurs="0" name="dsGuid" type="xs:unsignedShort" />
         <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
         <xs:element minOccurs="0" name="tagGuid" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="newInverseProperty" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

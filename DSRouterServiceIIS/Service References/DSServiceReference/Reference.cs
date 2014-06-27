@@ -1591,10 +1591,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         bool EndIsInverseDiscretTag(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/InverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/InverseDiscretTagResponse")]
-        void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid);
+        void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/InverseDiscretTag", ReplyAction="http://tempuri.org/IWcfDataServer/InverseDiscretTagResponse")]
-        System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty, System.AsyncCallback callback, object asyncState);
         
         void EndInverseDiscretTag(System.IAsyncResult result);
         
@@ -5324,13 +5324,13 @@ namespace DSRouterServiceIIS.DSServiceReference {
                         tagGuid}, this.onEndIsInverseDiscretTagDelegate, this.onIsInverseDiscretTagCompletedDelegate, userState);
         }
         
-        public void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid) {
-            base.Channel.InverseDiscretTag(dsGuid, devGuid, tagGuid);
+        public void InverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty) {
+            base.Channel.InverseDiscretTag(dsGuid, devGuid, tagGuid, newInverseProperty);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+        public System.IAsyncResult BeginInverseDiscretTag(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, newInverseProperty, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -5342,7 +5342,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
             ushort dsGuid = ((ushort)(inValues[0]));
             uint devGuid = ((uint)(inValues[1]));
             uint tagGuid = ((uint)(inValues[2]));
-            return this.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, callback, asyncState);
+            bool newInverseProperty = ((bool)(inValues[3]));
+            return this.BeginInverseDiscretTag(dsGuid, devGuid, tagGuid, newInverseProperty, callback, asyncState);
         }
         
         private object[] OnEndInverseDiscretTag(System.IAsyncResult result) {
@@ -5357,11 +5358,11 @@ namespace DSRouterServiceIIS.DSServiceReference {
             }
         }
         
-        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid) {
-            this.InverseDiscretTagAsync(dsGuid, devGuid, tagGuid, null);
+        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty) {
+            this.InverseDiscretTagAsync(dsGuid, devGuid, tagGuid, newInverseProperty, null);
         }
         
-        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid, object userState) {
+        public void InverseDiscretTagAsync(ushort dsGuid, uint devGuid, uint tagGuid, bool newInverseProperty, object userState) {
             if ((this.onBeginInverseDiscretTagDelegate == null)) {
                 this.onBeginInverseDiscretTagDelegate = new BeginOperationDelegate(this.OnBeginInverseDiscretTag);
             }
@@ -5374,7 +5375,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
             base.InvokeAsync(this.onBeginInverseDiscretTagDelegate, new object[] {
                         dsGuid,
                         devGuid,
-                        tagGuid}, this.onEndInverseDiscretTagDelegate, this.onInverseDiscretTagCompletedDelegate, userState);
+                        tagGuid,
+                        newInverseProperty}, this.onEndInverseDiscretTagDelegate, this.onInverseDiscretTagCompletedDelegate, userState);
         }
         
         public DSRouterServiceIIS.DSServiceReference.DSAuthResult Authorization(string userName, string userPassword, bool isFirstAuthorization, DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo userSessionInfo) {
