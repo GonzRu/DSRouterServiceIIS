@@ -882,7 +882,7 @@ namespace DSRouterServiceIIS
 
         public DSRouterAuthResult(DSAuthResult dsAuthResult)
         {
-            User = new DSRouterUser(dsAuthResult.DSUser);
+            User = dsAuthResult.DSUser == null ? null : new DSRouterUser(dsAuthResult.DSUser);
             AuthResult = (AuthResult) dsAuthResult.AuthResult;
         }
     }
