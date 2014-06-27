@@ -8,25 +8,37 @@ namespace DSRouterServiceConsoleHost
     {
         private static string ServiceUrl;
         private static string MetaUrl;
+        private static ServiceHost host;
 
         static void Main(string[] args)
         {
-            ServiceUrl = "net.tcp://localhost:3332/DSRouter.DSRouterService";
+            CreateHost();
 
-            var host = new ServiceHost(typeof(DSRouterServiceIIS.DSRouterService));
+            OpenHost();
+
+            Console.WriteLine("Для завершения работы нажмите ВВОД");
+            Console.ReadLine();
+
+            CloseHost();
+        }
+
+        #region Private-metods
+
+        private static void CreateHost()
+        {
+            ServiceUrl = "net.tcp://localhost:3332/DSRouter.DSRouterService/DSRouterService.svc";
+
+            host = new ServiceHost(typeof(DSRouterServiceIIS.DSRouterService));
 
             NetTcpBinding tcpBinding = new NetTcpBinding();
-            tcpBinding.TransactionFlow = false;
-            tcpBinding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign;
-            tcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
             tcpBinding.Security.Mode = SecurityMode.None;
 
-            tcpBinding.MaxReceivedMessageSize = int.MaxValue;// 150000000;
-            tcpBinding.MaxBufferSize = int.MaxValue;//150000000;
-            tcpBinding.ReaderQuotas.MaxArrayLength = int.MaxValue;// 150000000;
+            tcpBinding.MaxReceivedMessageSize = int.MaxValue;
+            tcpBinding.MaxBufferSize = int.MaxValue;
+            tcpBinding.ReaderQuotas.MaxArrayLength = int.MaxValue;
 
             // Add a endpoint
-            host.AddServiceEndpoint(typeof(DSRouterServiceIIS.IDSRouter/*.DSRouterService*/), tcpBinding, ServiceUrl);
+            host.AddServiceEndpoint(typeof(DSRouterServiceIIS.IDSRouter), tcpBinding, ServiceUrl);
             host.Opening += new EventHandler(host_Opening);
             host.Opened += new EventHandler(host_Opened);
             host.Closing += new EventHandler(host_Closing);
@@ -41,19 +53,32 @@ namespace DSRouterServiceConsoleHost
                 metadataBehavior.HttpGetUrl = new Uri("http://localhost:3333/DSRouter.DSRouterService/mex");
 
                 metadataBehavior.HttpGetEnabled = true;
-                metadataBehavior.ToString();
                 host.Description.Behaviors.Add(metadataBehavior);
                 MetaUrl = metadataBehavior.HttpGetUrl.ToString();
             }
+        }
 
-            host.Open();
+        private static void OpenHost()
+        {
+            try
+            {
+                host.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
-            Console.WriteLine("Для завершения работы нажмите ВВОД");
-            Console.ReadLine();
-
+        private static void CloseHost()
+        {
             if (host != null)
                 host.Close();
         }
+
+        #endregion
+
+        #region Handlers
 
         static void host_Opening(object sender, EventArgs e)
         {
@@ -77,5 +102,8 @@ namespace DSRouterServiceConsoleHost
             Console.WriteLine("Meta URL:\t" + MetaUrl + " (Not that relevant)");
             Console.WriteLine("Waiting for clients...");
         }
+
+        #endregion
+
     }
 }
