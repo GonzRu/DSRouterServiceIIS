@@ -288,6 +288,10 @@ namespace DSRouterServiceIIS.DataSources
             {
                 if (_subscribedTagsValue.ContainsKey(dsTagAsStr))
                 {
+                    // Если значение реально не обновилось, то ничего не обновляем
+                    if (_subscribedTagsValue[dsTagAsStr].VarQuality == tv[dsTagAsStr].VarQuality && _subscribedTagsValue[dsTagAsStr].VarValueAsObject.Equals(tv[dsTagAsStr].VarValueAsObject))
+                        continue;
+
                     // Обновляем значение тега в списке актуальных значений тегов
                     _subscribedTagsValue[dsTagAsStr] = tv[dsTagAsStr];
 
