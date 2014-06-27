@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InterfaceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="DSAuthResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AuthResult" type="tns:AuthResult" />
+      <xs:element minOccurs="0" name="DSUser" nillable="true" type="tns:DSUser" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSAuthResult" nillable="true" type="tns:DSAuthResult" />
+  <xs:simpleType name="AuthResult">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Ok" />
+      <xs:enumeration value="WrongLoginOrPassword" />
+      <xs:enumeration value="NoConnectionToDb" />
+      <xs:enumeration value="NoConnectionToDs" />
+      <xs:enumeration value="Unknown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AuthResult" nillable="true" type="tns:AuthResult" />
+  <xs:complexType name="DSUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CreateDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DsUserGroup" nillable="true" type="tns:DSUserGroup" />
+      <xs:element minOccurs="0" name="EditDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="UserComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserID" type="xs:int" />
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSUser" nillable="true" type="tns:DSUser" />
+  <xs:complexType name="DSUserGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CreateDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="EditDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="GroupComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GroupID" type="xs:int" />
+      <xs:element minOccurs="0" name="GroupName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="GroupRight" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSUserGroup" nillable="true" type="tns:DSUserGroup" />
+  <xs:complexType name="ArrayOfDSUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DSUser" nillable="true" type="tns:DSUser" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDSUser" nillable="true" type="tns:ArrayOfDSUser" />
+  <xs:complexType name="ArrayOfDSUserGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DSUserGroup" nillable="true" type="tns:DSUserGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDSUserGroup" nillable="true" type="tns:ArrayOfDSUserGroup" />
+  <xs:complexType name="ArrayOfDSEventValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DSEventValue" nillable="true" type="tns:DSEventValue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDSEventValue" nillable="true" type="tns:ArrayOfDSEventValue" />
+  <xs:complexType name="DSEventValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DevGuid" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" name="EventDataID" type="xs:int" />
+      <xs:element minOccurs="0" name="EventID" type="xs:int" />
+      <xs:element minOccurs="0" name="EventSourceComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EventSourceName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EventText" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EventTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IsNeedReceipt" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsReceipted" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ReceiptMessage" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ReceiptTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ReceiptUser" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSEventValue" nillable="true" type="tns:DSEventValue" />
+  <xs:complexType name="DSOscillogram">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Content" nillable="true" type="q1:ArrayOfbase64Binary" />
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OscillogramType" type="tns:DSEventDataType" />
+      <xs:element minOccurs="0" name="SourceComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SourceName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSOscillogram" nillable="true" type="tns:DSOscillogram" />
+  <xs:simpleType name="DSEventDataType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Ustavki">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Alarm">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Storage">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Oscillogram">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Diagramm">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BMCSJournal">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="USOJournal">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OscillogramSirius2">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Siriu2Journal">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OscillogramEkra">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OscillogramBresler">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">11</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OscillogramBMRZ100">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">12</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DSEventDataType" nillable="true" type="tns:DSEventDataType" />
+  <xs:complexType name="ArrayOfDSSettingsSet">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DSSettingsSet" nillable="true" type="tns:DSSettingsSet" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDSSettingsSet" nillable="true" type="tns:ArrayOfDSSettingsSet" />
+  <xs:complexType name="DSSettingsSet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SettingsSetComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SettingsSetDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SettingsSetID" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSSettingsSet" nillable="true" type="tns:DSSettingsSet" />
+  <xs:complexType name="ArrayOfDSDocumentDataValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DSDocumentDataValue" nillable="true" type="tns:DSDocumentDataValue" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDSDocumentDataValue" nillable="true" type="tns:ArrayOfDSDocumentDataValue" />
+  <xs:complexType name="DSDocumentDataValue">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DocumentAddDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DocumentComment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DocumentFileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DocumentID" type="xs:int" />
+      <xs:element minOccurs="0" name="DocumentUserName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSDocumentDataValue" nillable="true" type="tns:DSDocumentDataValue" />
+  <xs:complexType name="DSDataFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Content" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DSDataFile" nillable="true" type="tns:DSDataFile" />
+</xs:schema>
