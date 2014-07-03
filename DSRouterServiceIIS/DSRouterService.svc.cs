@@ -1419,7 +1419,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Получение значений для указанных тегов из конкретного архивного набора уставок
         /// </summary>
-        Dictionary<string, DSRouterTagValue> IDSRouter.GetValuesFromSettingsSet(int settingsSetID, List<string> tagsList)
+        Dictionary<String, DSRouterTagValue> IDSRouter.GetValuesFromSettingsSet(UInt16 dsGuid, Int32 settingsSetID)
         {
             throw new NotImplementedException();
         }

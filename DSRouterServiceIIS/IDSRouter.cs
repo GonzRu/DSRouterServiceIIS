@@ -367,7 +367,7 @@ namespace DSRouterServiceIIS
         /// Получение значений для указанных тегов из конкретного архивного набора уставок
         /// </summary>
         [OperationContract]
-        Dictionary<String, DSRouterTagValue> GetValuesFromSettingsSet(Int32 settingsSetID, List<string> tagsList);
+        Dictionary<String, DSRouterTagValue> GetValuesFromSettingsSet(UInt16 dsGuid, Int32 settingsSetID);
 
         /// <summary>
         /// Запись набора уставкок в устройство
