@@ -31,8 +31,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
@@ -450,6 +450,9 @@ namespace DSRouterServiceIIS.DSServiceReference {
         private int EventDataIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DSRouterServiceIIS.DSServiceReference.DSEventDataType EventDataTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int EventIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -511,6 +514,19 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 if ((this.EventDataIDField.Equals(value) != true)) {
                     this.EventDataIDField = value;
                     this.RaisePropertyChanged("EventDataID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DSRouterServiceIIS.DSServiceReference.DSEventDataType EventDataType {
+            get {
+                return this.EventDataTypeField;
+            }
+            set {
+                if ((this.EventDataTypeField.Equals(value) != true)) {
+                    this.EventDataTypeField = value;
+                    this.RaisePropertyChanged("EventDataType");
                 }
             }
         }
@@ -655,6 +671,53 @@ namespace DSRouterServiceIIS.DSServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSEventDataType", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    public enum DSEventDataType : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        None = -1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Ustavki = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Alarm = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Storage = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Oscillogram = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Diagramm = 5,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        BMCSJournal = 6,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        USOJournal = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramSirius2 = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Siriu2Journal = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramEkra = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramBresler = 11,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramBMRZ100 = 12,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramComtrade = 13,
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="DSOscillogram", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
@@ -762,50 +825,6 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DSEventDataType", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
-    public enum DSEventDataType : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Ustavki = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Alarm = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Storage = 3,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Oscillogram = 4,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Diagramm = 5,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        BMCSJournal = 6,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        USOJournal = 7,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OscillogramSirius2 = 8,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Siriu2Journal = 9,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OscillogramEkra = 10,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OscillogramBresler = 11,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OscillogramBMRZ100 = 12,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        OscillogramComtrade = 13,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1476,8 +1495,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
@@ -1520,8 +1539,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
@@ -1556,8 +1575,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
@@ -1736,8 +1755,8 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserGroup[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSEventDataType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSOscillogram))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSSettingsSet))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]

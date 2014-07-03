@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/InterfaceLibrary" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="DSAuthResult">
     <xs:sequence>
       <xs:element minOccurs="0" name="AuthResult" type="tns:AuthResult" />
@@ -64,6 +64,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="DevGuid" type="xs:unsignedInt" />
       <xs:element minOccurs="0" name="EventDataID" type="xs:int" />
+      <xs:element minOccurs="0" name="EventDataType" type="tns:DSEventDataType" />
       <xs:element minOccurs="0" name="EventID" type="xs:int" />
       <xs:element minOccurs="0" name="EventSourceComment" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EventSourceName" nillable="true" type="xs:string" />
@@ -77,6 +78,31 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DSEventValue" nillable="true" type="tns:DSEventValue" />
+  <xs:simpleType name="DSEventDataType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">-1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Ustavki" />
+      <xs:enumeration value="Alarm" />
+      <xs:enumeration value="Storage" />
+      <xs:enumeration value="Oscillogram" />
+      <xs:enumeration value="Diagramm" />
+      <xs:enumeration value="BMCSJournal" />
+      <xs:enumeration value="USOJournal" />
+      <xs:enumeration value="OscillogramSirius2" />
+      <xs:enumeration value="Siriu2Journal" />
+      <xs:enumeration value="OscillogramEkra" />
+      <xs:enumeration value="OscillogramBresler" />
+      <xs:enumeration value="OscillogramBMRZ100" />
+      <xs:enumeration value="OscillogramComtrade" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="DSEventDataType" nillable="true" type="tns:DSEventDataType" />
   <xs:complexType name="DSOscillogram">
     <xs:sequence>
       <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Content" nillable="true" type="q1:ArrayOfbase64Binary" />
@@ -87,102 +113,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DSOscillogram" nillable="true" type="tns:DSOscillogram" />
-  <xs:simpleType name="DSEventDataType">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Ustavki">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Alarm">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Storage">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Oscillogram">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Diagramm">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="BMCSJournal">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="USOJournal">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="OscillogramSirius2">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="Siriu2Journal">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="OscillogramEkra">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="OscillogramBresler">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">11</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="OscillogramBMRZ100">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">12</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="OscillogramComtrade">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">13</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="DSEventDataType" nillable="true" type="tns:DSEventDataType" />
   <xs:complexType name="ArrayOfDSSettingsSet">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="DSSettingsSet" nillable="true" type="tns:DSSettingsSet" />
