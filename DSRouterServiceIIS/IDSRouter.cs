@@ -557,6 +557,22 @@ namespace DSRouterServiceIIS
     #region События
 
     /// <summary>
+    /// Тип данных, которые могут быть привязаны к событию
+    /// </summary>
+    [DataContract]
+    public enum DSRouterEventDataType
+    {
+        [EnumMember]
+        None = -1,
+        [EnumMember]
+        Ustavki = 1,
+        [EnumMember]
+        Alarm = 2,
+        [EnumMember]
+        Oscillogram = 3
+    }
+
+    /// <summary>
     /// Класс, описывающий событие
     /// </summary>
     [DataContract]
@@ -609,6 +625,12 @@ namespace DSRouterServiceIIS
         /// </summary>
         [DataMember]
         public Int32 EventDataID { get; set; }
+
+        /// <summary>
+        /// Тип данных, привязанных к событию
+        /// </summary>
+        [DataMember]
+        public DSRouterEventDataType EventDataType { get; set; }
 
         /// <summary>
         /// Нужно ли квитирование событие
@@ -665,6 +687,15 @@ namespace DSRouterServiceIIS
             ReceiptMessage = dsEventValue.ReceiptMessage;
             ReceiptUser = dsEventValue.ReceiptUser;
             ReceiptTime = dsEventValue.ReceiptTime;
+
+            if (dsEventValue.EventDataType == DSEventDataType.None)
+                EventDataType = DSRouterEventDataType.None;
+            else if (dsEventValue.EventDataType == DSEventDataType.Alarm)
+                EventDataType = DSRouterEventDataType.Alarm;
+            else if (dsEventValue.EventDataType == DSEventDataType.Ustavki)
+                EventDataType = DSRouterEventDataType.Ustavki;
+            else
+                EventDataType = DSRouterEventDataType.Oscillogram;
         }
     }
     #endregion
