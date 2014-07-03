@@ -112,6 +112,8 @@ namespace DSRouterServiceIIS.Helpers
                     return ".dfr";
                 case DSEventDataType.OscillogramBresler:
                     return ".zbrs";
+                case DSEventDataType.OscillogramComtrade:
+                    return ".zosc";
             }
 
             throw new Exception("Для данного типа формат не предусмотрен");
