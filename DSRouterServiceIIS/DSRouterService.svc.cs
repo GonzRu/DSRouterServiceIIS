@@ -104,6 +104,21 @@ namespace DSRouterServiceIIS
 
             DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Share");
             DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES = "/Share/";
+
+            if (!Directory.Exists(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES))
+                Directory.CreateDirectory(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES);
+
+            try
+            {
+                foreach (var file in Directory.GetFiles(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES))
+                {
+                    File.Delete(file);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("Исключение при удалении файлов из папки share : " + ex.Message);
+            }
         }
 
         public DSRouterService()
