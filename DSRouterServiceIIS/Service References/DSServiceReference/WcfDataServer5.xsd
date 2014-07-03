@@ -743,14 +743,13 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="settingsSetID" type="xs:int" />
-        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsList" nillable="true" type="q26:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetValuesFromSettingsSetResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetValuesFromSettingsSetResult" nillable="true" type="q27:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetValuesFromSettingsSetResult" nillable="true" type="q26:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -758,7 +757,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
-        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsValues" nillable="true" type="q28:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="tagsValues" nillable="true" type="q27:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -772,7 +771,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="devGuid" type="xs:unsignedInt" />
         <xs:element minOccurs="0" name="commandID" nillable="true" type="xs:string" />
-        <xs:element xmlns:q29="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q29:ArrayOfanyType" />
+        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="parameters" nillable="true" type="q28:ArrayOfanyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -791,7 +790,7 @@
   <xs:element name="GetDocumentsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentsListResult" nillable="true" type="q30:ArrayOfDSDocumentDataValue" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentsListResult" nillable="true" type="q29:ArrayOfDSDocumentDataValue" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -805,7 +804,7 @@
   <xs:element name="GetDocumentByIDResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentByIDResult" nillable="true" type="q31:DSDataFile" />
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/InterfaceLibrary" minOccurs="0" name="GetDocumentByIDResult" nillable="true" type="q30:DSDataFile" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -865,7 +864,7 @@
   <xs:element name="NotifyChangedTags">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstChangedTags" nillable="true" type="q32:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
+        <xs:element xmlns:q31="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstChangedTags" nillable="true" type="q31:ArrayOfKeyValueOfstringDSTagValue7RXE_SH9H" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

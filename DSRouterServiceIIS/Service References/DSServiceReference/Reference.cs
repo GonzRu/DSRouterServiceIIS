@@ -803,6 +803,9 @@ namespace DSRouterServiceIIS.DSServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         OscillogramBMRZ100 = 12,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        OscillogramComtrade = 13,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1703,10 +1706,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         DSRouterServiceIIS.DSServiceReference.DSSettingsSet[] EndGetSettingsSetsList(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetValuesFromSettingsSet", ReplyAction="http://tempuri.org/IWcfDataServer/GetValuesFromSettingsSetResponse")]
-        System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> GetValuesFromSettingsSet(int settingsSetID, string[] tagsList);
+        System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> GetValuesFromSettingsSet(int settingsSetID);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetValuesFromSettingsSet", ReplyAction="http://tempuri.org/IWcfDataServer/GetValuesFromSettingsSetResponse")]
-        System.IAsyncResult BeginGetValuesFromSettingsSet(int settingsSetID, string[] tagsList, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginGetValuesFromSettingsSet(int settingsSetID, System.AsyncCallback callback, object asyncState);
         
         System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> EndGetValuesFromSettingsSet(System.IAsyncResult result);
         
@@ -6059,13 +6062,13 @@ namespace DSRouterServiceIIS.DSServiceReference {
                         devGuid}, this.onEndGetSettingsSetsListDelegate, this.onGetSettingsSetsListCompletedDelegate, userState);
         }
         
-        public System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> GetValuesFromSettingsSet(int settingsSetID, string[] tagsList) {
-            return base.Channel.GetValuesFromSettingsSet(settingsSetID, tagsList);
+        public System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> GetValuesFromSettingsSet(int settingsSetID) {
+            return base.Channel.GetValuesFromSettingsSet(settingsSetID);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginGetValuesFromSettingsSet(int settingsSetID, string[] tagsList, System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetValuesFromSettingsSet(settingsSetID, tagsList, callback, asyncState);
+        public System.IAsyncResult BeginGetValuesFromSettingsSet(int settingsSetID, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetValuesFromSettingsSet(settingsSetID, callback, asyncState);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -6075,8 +6078,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
         
         private System.IAsyncResult OnBeginGetValuesFromSettingsSet(object[] inValues, System.AsyncCallback callback, object asyncState) {
             int settingsSetID = ((int)(inValues[0]));
-            string[] tagsList = ((string[])(inValues[1]));
-            return this.BeginGetValuesFromSettingsSet(settingsSetID, tagsList, callback, asyncState);
+            return this.BeginGetValuesFromSettingsSet(settingsSetID, callback, asyncState);
         }
         
         private object[] OnEndGetValuesFromSettingsSet(System.IAsyncResult result) {
@@ -6092,11 +6094,11 @@ namespace DSRouterServiceIIS.DSServiceReference {
             }
         }
         
-        public void GetValuesFromSettingsSetAsync(int settingsSetID, string[] tagsList) {
-            this.GetValuesFromSettingsSetAsync(settingsSetID, tagsList, null);
+        public void GetValuesFromSettingsSetAsync(int settingsSetID) {
+            this.GetValuesFromSettingsSetAsync(settingsSetID, null);
         }
         
-        public void GetValuesFromSettingsSetAsync(int settingsSetID, string[] tagsList, object userState) {
+        public void GetValuesFromSettingsSetAsync(int settingsSetID, object userState) {
             if ((this.onBeginGetValuesFromSettingsSetDelegate == null)) {
                 this.onBeginGetValuesFromSettingsSetDelegate = new BeginOperationDelegate(this.OnBeginGetValuesFromSettingsSet);
             }
@@ -6107,8 +6109,7 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 this.onGetValuesFromSettingsSetCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetValuesFromSettingsSetCompleted);
             }
             base.InvokeAsync(this.onBeginGetValuesFromSettingsSetDelegate, new object[] {
-                        settingsSetID,
-                        tagsList}, this.onEndGetValuesFromSettingsSetDelegate, this.onGetValuesFromSettingsSetCompletedDelegate, userState);
+                        settingsSetID}, this.onEndGetValuesFromSettingsSetDelegate, this.onGetValuesFromSettingsSetCompletedDelegate, userState);
         }
         
         public void SaveSettingsToDevice(uint devGuid, System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue> tagsValues) {
