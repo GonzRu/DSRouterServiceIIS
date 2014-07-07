@@ -26,8 +26,6 @@ namespace DSRouterServiceIIS.Helpers
         /// </summary>
         private const string OSC_FILE_NAME_WITH_PARTS = "{0}____{1}____{2}_part-{3}{4}";
 
-        private const string DARE_TOSTRING_TEMPLATE = "";
-
         #endregion
 
         #region Public - методы
@@ -37,7 +35,7 @@ namespace DSRouterServiceIIS.Helpers
         /// </summary>
         public static string SaveOscillogrammToFile(string pathToSave, DSOscillogram dsOscillogram)
         {
-            string oscDate = dsOscillogram.Date.ToString("yy-MM-dd");
+            string oscDate = dsOscillogram.Date.ToString("yy-MM-dd hh-mm-ss");
 
             // Создаем временную директорию
             string pathToTempDirectory = GetTemporaryDirectory();
