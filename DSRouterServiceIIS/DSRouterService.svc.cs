@@ -1135,12 +1135,13 @@ namespace DSRouterServiceIIS
 
                     #region Разбор полученных данных
 
+                    if (dsOscillogram == null)
+                        return null;
+
                     return DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + OscConverter.SaveOscillogrammToFile(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, dsOscillogram);
 
                     #endregion
                 }
-                else
-                    throw new ArgumentException();
             }
             catch (Exception ex)
             {
