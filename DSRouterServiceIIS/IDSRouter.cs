@@ -291,6 +291,12 @@ namespace DSRouterServiceIIS
         string GetOscillogramAsUrlByID(UInt16 dsGuid, Int32 eventDataID);
 
         /// <summary>
+        /// Получить zip архив с осциллограммами как кортеж массива байтов и имени архива
+        /// </summary>
+        [OperationContract]
+        Tuple<byte [], string> GetOscillogramAsByteArray(UInt16 dsGuid, Int32 eventDataID);
+
+        /// <summary>
         /// Получить архивную информацию (аварии, уставки и т.д.) как словарь значений
         /// </summary>
         [OperationContract]

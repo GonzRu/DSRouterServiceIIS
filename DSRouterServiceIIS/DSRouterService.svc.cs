@@ -1154,6 +1154,41 @@ namespace DSRouterServiceIIS
         }
 
         /// <summary>
+        /// Получить zip архив с осциллограммами как кортеж массива байтов и имени архива
+        /// </summary>
+        Tuple<byte[], string> IDSRouter.GetOscillogramAsByteArray(UInt16 dsGuid, Int32 eventDataID)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    IWcfDataServer dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    DSOscillogram dsOscillogram;
+                    lock (dsProxy)
+                    {
+                        dsOscillogram = dsProxy.GetOscillogramByID(eventDataID);
+                    }
+
+                    #region Разбор полученных данных
+
+                    if (dsOscillogram == null)
+                        return null;
+
+                    return OscConverter.GetOscillogramData(dsOscillogram);
+
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetOscillogramAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Получить архивную информацию (аварии, уставки и т.д.) как словарь значений
         /// </summary>
         Dictionary<string, DSRouterTagValue> IDSRouter.GetHistoricalDataByID(UInt16 dsGuid, Int32 dataID)

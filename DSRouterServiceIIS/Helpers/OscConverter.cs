@@ -81,6 +81,23 @@ namespace DSRouterServiceIIS.Helpers
             return resultZipFileName;
         }
 
+        /// <summary>
+        /// Сохраняет осциллограмму на диск, архивирует её и возвращает содержимое архива с его именем
+        /// </summary>
+        public static Tuple<byte[], string> GetOscillogramData(DSOscillogram dsOscillogram)
+        {
+            var tempPath = Path.GetTempPath();
+            var oscZipName = SaveOscillogrammToFile(tempPath, dsOscillogram);
+
+            var stream = File.Open(Path.Combine(tempPath, oscZipName), FileMode.Open);
+            byte[] data = new byte[stream.Length];
+
+            stream.Read(data, 0, data.Length);
+            stream.Close();
+
+            return new Tuple<byte[], string>(data, oscZipName);
+        }
+
         #endregion
 
         #region Private - методы
