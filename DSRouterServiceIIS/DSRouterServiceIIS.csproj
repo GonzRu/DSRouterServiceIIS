@@ -96,6 +96,9 @@
     <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSAuthResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSTrendSettings.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Service References\DSServiceReference\WcfDataServer.disco" />
     <None Include="Service References\DSServiceReference\configuration91.svcinfo" />
     <None Include="Service References\DSServiceReference\configuration.svcinfo" />
@@ -138,9 +141,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DSServiceReference\WcfDataServer1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DSServiceReference\WcfDataServer2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\DSServiceReference\WcfDataServer3.xsd">

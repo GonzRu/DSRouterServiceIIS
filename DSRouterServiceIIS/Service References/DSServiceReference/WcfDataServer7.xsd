@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:complexType name="DSTagValue">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="VarQuality" type="xs:unsignedInt" />
-      <xs:element minOccurs="0" name="VarValueAsObject" nillable="true" type="xs:anyType" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="DSTagValue" nillable="true" type="tns:DSTagValue" />
-  <xs:complexType name="LstError">
-    <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstError" nillable="true" type="q1:ArrayOfstring" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="LstError" nillable="true" type="tns:LstError" />
-  <xs:complexType name="DSUserSessionInfo">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="UserId" type="xs:int" />
-      <xs:element minOccurs="0" name="UserIpAddress" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="UserMacAddress" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="DSUserSessionInfo" nillable="true" type="tns:DSUserSessionInfo" />
+<xs:schema xmlns:tns="http://schemas.microsoft.com/Message" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/Message" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="StreamBody">
+    <xs:restriction base="xs:base64Binary" />
+  </xs:simpleType>
 </xs:schema>
