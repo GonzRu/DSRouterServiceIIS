@@ -15,14 +15,136 @@ namespace DSRouterServiceIIS.DSServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DSTagValue", Namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSTrendSettings", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(string[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(uint[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(byte[][]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    public partial class DSTrendSettings : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<float> AbsoluteErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool EnableField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private uint MaxCacheMinutesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private uint MaxCacheValuesCountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<float> RelativeErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private uint SampleField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<float> AbsoluteError {
+            get {
+                return this.AbsoluteErrorField;
+            }
+            set {
+                if ((this.AbsoluteErrorField.Equals(value) != true)) {
+                    this.AbsoluteErrorField = value;
+                    this.RaisePropertyChanged("AbsoluteError");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Enable {
+            get {
+                return this.EnableField;
+            }
+            set {
+                if ((this.EnableField.Equals(value) != true)) {
+                    this.EnableField = value;
+                    this.RaisePropertyChanged("Enable");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public uint MaxCacheMinutes {
+            get {
+                return this.MaxCacheMinutesField;
+            }
+            set {
+                if ((this.MaxCacheMinutesField.Equals(value) != true)) {
+                    this.MaxCacheMinutesField = value;
+                    this.RaisePropertyChanged("MaxCacheMinutes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public uint MaxCacheValuesCount {
+            get {
+                return this.MaxCacheValuesCountField;
+            }
+            set {
+                if ((this.MaxCacheValuesCountField.Equals(value) != true)) {
+                    this.MaxCacheValuesCountField = value;
+                    this.RaisePropertyChanged("MaxCacheValuesCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<float> RelativeError {
+            get {
+                return this.RelativeErrorField;
+            }
+            set {
+                if ((this.RelativeErrorField.Equals(value) != true)) {
+                    this.RelativeErrorField = value;
+                    this.RaisePropertyChanged("RelativeError");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public uint Sample {
+            get {
+                return this.SampleField;
+            }
+            set {
+                if ((this.SampleField.Equals(value) != true)) {
+                    this.SampleField = value;
+                    this.RaisePropertyChanged("Sample");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSTagValue", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTrendSettings))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
@@ -38,11 +160,19 @@ namespace DSRouterServiceIIS.DSServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.MarshalByRefObject))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(string[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(uint[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(byte[][]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.IO.MemoryStream))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.IO.Stream))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(System.MarshalByRefObject))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
     public partial class DSTagValue : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
@@ -86,6 +216,128 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 if ((object.ReferenceEquals(this.VarValueAsObjectField, value) != true)) {
                     this.VarValueAsObjectField = value;
                     this.RaisePropertyChanged("VarValueAsObject");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LstError", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    [System.SerializableAttribute()]
+    public partial class LstError : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string[] lstErrorField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string[] lstError {
+            get {
+                return this.lstErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.lstErrorField, value) != true)) {
+                    this.lstErrorField = value;
+                    this.RaisePropertyChanged("lstError");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DSUserSessionInfo", Namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary")]
+    [System.SerializableAttribute()]
+    public partial class DSUserSessionInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int UserIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserIpAddressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UserMacAddressField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int UserId {
+            get {
+                return this.UserIdField;
+            }
+            set {
+                if ((this.UserIdField.Equals(value) != true)) {
+                    this.UserIdField = value;
+                    this.RaisePropertyChanged("UserId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserIpAddress {
+            get {
+                return this.UserIpAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserIpAddressField, value) != true)) {
+                    this.UserIpAddressField = value;
+                    this.RaisePropertyChanged("UserIpAddress");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserMacAddress {
+            get {
+                return this.UserMacAddressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UserMacAddressField, value) != true)) {
+                    this.UserMacAddressField = value;
+                    this.RaisePropertyChanged("UserMacAddress");
                 }
             }
         }
@@ -1074,131 +1326,41 @@ namespace DSRouterServiceIIS.DSServiceReference {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LstError", Namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib")]
-    [System.SerializableAttribute()]
-    public partial class LstError : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string[] lstErrorField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string[] lstError {
-            get {
-                return this.lstErrorField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.lstErrorField, value) != true)) {
-                    this.lstErrorField = value;
-                    this.RaisePropertyChanged("lstError");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DSUserSessionInfo", Namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib")]
-    [System.SerializableAttribute()]
-    public partial class DSUserSessionInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int UserIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UserIpAddressField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string UserMacAddressField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int UserId {
-            get {
-                return this.UserIdField;
-            }
-            set {
-                if ((this.UserIdField.Equals(value) != true)) {
-                    this.UserIdField = value;
-                    this.RaisePropertyChanged("UserId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string UserIpAddress {
-            get {
-                return this.UserIpAddressField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.UserIpAddressField, value) != true)) {
-                    this.UserIpAddressField = value;
-                    this.RaisePropertyChanged("UserIpAddress");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string UserMacAddress {
-            get {
-                return this.UserMacAddressField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.UserMacAddressField, value) != true)) {
-                    this.UserMacAddressField = value;
-                    this.RaisePropertyChanged("UserMacAddress");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DSServiceReference.IWcfDataServer", CallbackContract=typeof(DSRouterServiceIIS.DSServiceReference.IWcfDataServerCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
     public interface IWcfDataServer {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRanges", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRangesResponse")]
+        System.Tuple<System.DateTime, System.DateTime>[] GetTagTrendDateTimeRanges(uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRanges", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRangesResponse")]
+        System.IAsyncResult BeginGetTagTrendDateTimeRanges(uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        System.Tuple<System.DateTime, System.DateTime>[] EndGetTagTrendDateTimeRanges(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTagTrend", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagTrendResponse")]
+        System.Tuple<System.DateTime, object>[] GetTagTrend(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTagTrend", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagTrendResponse")]
+        System.IAsyncResult BeginGetTagTrend(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime, System.AsyncCallback callback, object asyncState);
+        
+        System.Tuple<System.DateTime, object>[] EndGetTagTrend(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTrendSettings", ReplyAction="http://tempuri.org/IWcfDataServer/GetTrendSettingsResponse")]
+        DSRouterServiceIIS.DSServiceReference.DSTrendSettings GetTrendSettings(uint devGuid, uint tagGuid);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTrendSettings", ReplyAction="http://tempuri.org/IWcfDataServer/GetTrendSettingsResponse")]
+        System.IAsyncResult BeginGetTrendSettings(uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState);
+        
+        DSRouterServiceIIS.DSServiceReference.DSTrendSettings EndGetTrendSettings(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/SetTrendSettings", ReplyAction="http://tempuri.org/IWcfDataServer/SetTrendSettingsResponse")]
+        void SetTrendSettings(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings);
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/SetTrendSettings", ReplyAction="http://tempuri.org/IWcfDataServer/SetTrendSettingsResponse")]
+        System.IAsyncResult BeginSetTrendSettings(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings, System.AsyncCallback callback, object asyncState);
+        
+        void EndSetTrendSettings(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/RunCMD", ReplyAction="http://tempuri.org/IWcfDataServer/RunCMDResponse")]
         bool RunCMD(ushort numksdu, uint numvtu, uint tagguid, byte[] arr);
@@ -1481,12 +1643,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         void EndPing(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IWcfDataServer/SetTagValueFromHMI")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTrendSettings))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
@@ -1502,13 +1662,20 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
         void SetTagValueFromHMI(string idTag, object valinobject);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/SetTagValueFromHMI")]
@@ -1525,12 +1692,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         void EndReSetTagValueFromHMI(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatioResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTrendSettings))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
@@ -1546,13 +1711,20 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
         object GetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagAnalogTransformationRatioResponse")]
@@ -1561,12 +1733,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         object EndGetTagAnalogTransformationRatio(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatioResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTrendSettings))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
@@ -1582,13 +1752,20 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
         void SetTagAnalogTransformationRatio(ushort dsGuid, uint devGuid, uint tagGuid, object transformationRatio);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatio", ReplyAction="http://tempuri.org/IWcfDataServer/SetTagAnalogTransformationRatioResponse")]
@@ -1741,12 +1918,10 @@ namespace DSRouterServiceIIS.DSServiceReference {
         void EndSaveSettingsToDevice(System.IAsyncResult result);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/CommandRun", ReplyAction="http://tempuri.org/IWcfDataServer/CommandRunResponse")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTrendSettings))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSAuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.AuthResult))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUser))]
@@ -1762,13 +1937,20 @@ namespace DSRouterServiceIIS.DSServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDocumentDataValue))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSDataFile))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, System.DateTime>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Tuple<System.DateTime, object>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(string[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.Dictionary<string, DSRouterServiceIIS.DSServiceReference.DSTagValue>))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(uint[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[][]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.MemoryStream))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.IO.Stream))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.MarshalByRefObject))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSTagValue))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.LstError))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DSRouterServiceIIS.DSServiceReference.DSUserSessionInfo))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
         void CommandRun(uint devGuid, string commandID, object[] parameters);
         
         [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/CommandRun", ReplyAction="http://tempuri.org/IWcfDataServer/CommandRunResponse")]
@@ -1815,6 +1997,14 @@ namespace DSRouterServiceIIS.DSServiceReference {
         System.IAsyncResult BeginTerminateUploadFileSession(System.AsyncCallback callback, object asyncState);
         
         void EndTerminateUploadFileSession(System.IAsyncResult result);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSaveResponse")]
+        string[] GetTagsListWithEnabledTrendSave();
+        
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave", ReplyAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSaveResponse")]
+        System.IAsyncResult BeginGetTagsListWithEnabledTrendSave(System.AsyncCallback callback, object asyncState);
+        
+        string[] EndGetTagsListWithEnabledTrendSave(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1855,6 +2045,63 @@ namespace DSRouterServiceIIS.DSServiceReference {
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IWcfDataServerChannel : DSRouterServiceIIS.DSServiceReference.IWcfDataServer, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetTagTrendDateTimeRangesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetTagTrendDateTimeRangesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public System.Tuple<System.DateTime, System.DateTime>[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((System.Tuple<System.DateTime, System.DateTime>[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetTagTrendCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetTagTrendCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public System.Tuple<System.DateTime, object>[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((System.Tuple<System.DateTime, object>[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetTrendSettingsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetTrendSettingsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public DSRouterServiceIIS.DSServiceReference.DSTrendSettings Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((DSRouterServiceIIS.DSServiceReference.DSTrendSettings)(this.results[0]));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -2752,7 +2999,50 @@ namespace DSRouterServiceIIS.DSServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class GetTagsListWithEnabledTrendSaveCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        public GetTagsListWithEnabledTrendSaveCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        public string[] Result {
+            get {
+                base.RaiseExceptionIfNecessary();
+                return ((string[])(this.results[0]));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class WcfDataServerClient : System.ServiceModel.DuplexClientBase<DSRouterServiceIIS.DSServiceReference.IWcfDataServer>, DSRouterServiceIIS.DSServiceReference.IWcfDataServer {
+        
+        private BeginOperationDelegate onBeginGetTagTrendDateTimeRangesDelegate;
+        
+        private EndOperationDelegate onEndGetTagTrendDateTimeRangesDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetTagTrendDateTimeRangesCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginGetTagTrendDelegate;
+        
+        private EndOperationDelegate onEndGetTagTrendDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetTagTrendCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginGetTrendSettingsDelegate;
+        
+        private EndOperationDelegate onEndGetTrendSettingsDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetTrendSettingsCompletedDelegate;
+        
+        private BeginOperationDelegate onBeginSetTrendSettingsDelegate;
+        
+        private EndOperationDelegate onEndSetTrendSettingsDelegate;
+        
+        private System.Threading.SendOrPostCallback onSetTrendSettingsCompletedDelegate;
         
         private BeginOperationDelegate onBeginRunCMDDelegate;
         
@@ -3132,6 +3422,12 @@ namespace DSRouterServiceIIS.DSServiceReference {
         
         private System.Threading.SendOrPostCallback onTerminateUploadFileSessionCompletedDelegate;
         
+        private BeginOperationDelegate onBeginGetTagsListWithEnabledTrendSaveDelegate;
+        
+        private EndOperationDelegate onEndGetTagsListWithEnabledTrendSaveDelegate;
+        
+        private System.Threading.SendOrPostCallback onGetTagsListWithEnabledTrendSaveCompletedDelegate;
+        
         public WcfDataServerClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
@@ -3151,6 +3447,14 @@ namespace DSRouterServiceIIS.DSServiceReference {
         public WcfDataServerClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
         }
+        
+        public event System.EventHandler<GetTagTrendDateTimeRangesCompletedEventArgs> GetTagTrendDateTimeRangesCompleted;
+        
+        public event System.EventHandler<GetTagTrendCompletedEventArgs> GetTagTrendCompleted;
+        
+        public event System.EventHandler<GetTrendSettingsCompletedEventArgs> GetTrendSettingsCompleted;
+        
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SetTrendSettingsCompleted;
         
         public event System.EventHandler<RunCMDCompletedEventArgs> RunCMDCompleted;
         
@@ -3277,6 +3581,221 @@ namespace DSRouterServiceIIS.DSServiceReference {
         public event System.EventHandler<SaveUploadedFileCompletedEventArgs> SaveUploadedFileCompleted;
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> TerminateUploadFileSessionCompleted;
+        
+        public event System.EventHandler<GetTagsListWithEnabledTrendSaveCompletedEventArgs> GetTagsListWithEnabledTrendSaveCompleted;
+        
+        public System.Tuple<System.DateTime, System.DateTime>[] GetTagTrendDateTimeRanges(uint devGuid, uint tagGuid) {
+            return base.Channel.GetTagTrendDateTimeRanges(devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetTagTrendDateTimeRanges(uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTagTrendDateTimeRanges(devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.Tuple<System.DateTime, System.DateTime>[] EndGetTagTrendDateTimeRanges(System.IAsyncResult result) {
+            return base.Channel.EndGetTagTrendDateTimeRanges(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetTagTrendDateTimeRanges(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            uint devGuid = ((uint)(inValues[0]));
+            uint tagGuid = ((uint)(inValues[1]));
+            return this.BeginGetTagTrendDateTimeRanges(devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndGetTagTrendDateTimeRanges(System.IAsyncResult result) {
+            System.Tuple<System.DateTime, System.DateTime>[] retVal = this.EndGetTagTrendDateTimeRanges(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGetTagTrendDateTimeRangesCompleted(object state) {
+            if ((this.GetTagTrendDateTimeRangesCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetTagTrendDateTimeRangesCompleted(this, new GetTagTrendDateTimeRangesCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetTagTrendDateTimeRangesAsync(uint devGuid, uint tagGuid) {
+            this.GetTagTrendDateTimeRangesAsync(devGuid, tagGuid, null);
+        }
+        
+        public void GetTagTrendDateTimeRangesAsync(uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginGetTagTrendDateTimeRangesDelegate == null)) {
+                this.onBeginGetTagTrendDateTimeRangesDelegate = new BeginOperationDelegate(this.OnBeginGetTagTrendDateTimeRanges);
+            }
+            if ((this.onEndGetTagTrendDateTimeRangesDelegate == null)) {
+                this.onEndGetTagTrendDateTimeRangesDelegate = new EndOperationDelegate(this.OnEndGetTagTrendDateTimeRanges);
+            }
+            if ((this.onGetTagTrendDateTimeRangesCompletedDelegate == null)) {
+                this.onGetTagTrendDateTimeRangesCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTagTrendDateTimeRangesCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetTagTrendDateTimeRangesDelegate, new object[] {
+                        devGuid,
+                        tagGuid}, this.onEndGetTagTrendDateTimeRangesDelegate, this.onGetTagTrendDateTimeRangesCompletedDelegate, userState);
+        }
+        
+        public System.Tuple<System.DateTime, object>[] GetTagTrend(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime) {
+            return base.Channel.GetTagTrend(devGuid, tagGuid, startDateTime, endDateTime);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetTagTrend(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTagTrend(devGuid, tagGuid, startDateTime, endDateTime, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.Tuple<System.DateTime, object>[] EndGetTagTrend(System.IAsyncResult result) {
+            return base.Channel.EndGetTagTrend(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetTagTrend(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            uint devGuid = ((uint)(inValues[0]));
+            uint tagGuid = ((uint)(inValues[1]));
+            System.DateTime startDateTime = ((System.DateTime)(inValues[2]));
+            System.DateTime endDateTime = ((System.DateTime)(inValues[3]));
+            return this.BeginGetTagTrend(devGuid, tagGuid, startDateTime, endDateTime, callback, asyncState);
+        }
+        
+        private object[] OnEndGetTagTrend(System.IAsyncResult result) {
+            System.Tuple<System.DateTime, object>[] retVal = this.EndGetTagTrend(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGetTagTrendCompleted(object state) {
+            if ((this.GetTagTrendCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetTagTrendCompleted(this, new GetTagTrendCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetTagTrendAsync(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime) {
+            this.GetTagTrendAsync(devGuid, tagGuid, startDateTime, endDateTime, null);
+        }
+        
+        public void GetTagTrendAsync(uint devGuid, uint tagGuid, System.DateTime startDateTime, System.DateTime endDateTime, object userState) {
+            if ((this.onBeginGetTagTrendDelegate == null)) {
+                this.onBeginGetTagTrendDelegate = new BeginOperationDelegate(this.OnBeginGetTagTrend);
+            }
+            if ((this.onEndGetTagTrendDelegate == null)) {
+                this.onEndGetTagTrendDelegate = new EndOperationDelegate(this.OnEndGetTagTrend);
+            }
+            if ((this.onGetTagTrendCompletedDelegate == null)) {
+                this.onGetTagTrendCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTagTrendCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetTagTrendDelegate, new object[] {
+                        devGuid,
+                        tagGuid,
+                        startDateTime,
+                        endDateTime}, this.onEndGetTagTrendDelegate, this.onGetTagTrendCompletedDelegate, userState);
+        }
+        
+        public DSRouterServiceIIS.DSServiceReference.DSTrendSettings GetTrendSettings(uint devGuid, uint tagGuid) {
+            return base.Channel.GetTrendSettings(devGuid, tagGuid);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetTrendSettings(uint devGuid, uint tagGuid, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTrendSettings(devGuid, tagGuid, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public DSRouterServiceIIS.DSServiceReference.DSTrendSettings EndGetTrendSettings(System.IAsyncResult result) {
+            return base.Channel.EndGetTrendSettings(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetTrendSettings(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            uint devGuid = ((uint)(inValues[0]));
+            uint tagGuid = ((uint)(inValues[1]));
+            return this.BeginGetTrendSettings(devGuid, tagGuid, callback, asyncState);
+        }
+        
+        private object[] OnEndGetTrendSettings(System.IAsyncResult result) {
+            DSRouterServiceIIS.DSServiceReference.DSTrendSettings retVal = this.EndGetTrendSettings(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGetTrendSettingsCompleted(object state) {
+            if ((this.GetTrendSettingsCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetTrendSettingsCompleted(this, new GetTrendSettingsCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetTrendSettingsAsync(uint devGuid, uint tagGuid) {
+            this.GetTrendSettingsAsync(devGuid, tagGuid, null);
+        }
+        
+        public void GetTrendSettingsAsync(uint devGuid, uint tagGuid, object userState) {
+            if ((this.onBeginGetTrendSettingsDelegate == null)) {
+                this.onBeginGetTrendSettingsDelegate = new BeginOperationDelegate(this.OnBeginGetTrendSettings);
+            }
+            if ((this.onEndGetTrendSettingsDelegate == null)) {
+                this.onEndGetTrendSettingsDelegate = new EndOperationDelegate(this.OnEndGetTrendSettings);
+            }
+            if ((this.onGetTrendSettingsCompletedDelegate == null)) {
+                this.onGetTrendSettingsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTrendSettingsCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetTrendSettingsDelegate, new object[] {
+                        devGuid,
+                        tagGuid}, this.onEndGetTrendSettingsDelegate, this.onGetTrendSettingsCompletedDelegate, userState);
+        }
+        
+        public void SetTrendSettings(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings) {
+            base.Channel.SetTrendSettings(devGuid, tagGuid, trendSettings);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginSetTrendSettings(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings, System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginSetTrendSettings(devGuid, tagGuid, trendSettings, callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public void EndSetTrendSettings(System.IAsyncResult result) {
+            base.Channel.EndSetTrendSettings(result);
+        }
+        
+        private System.IAsyncResult OnBeginSetTrendSettings(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            uint devGuid = ((uint)(inValues[0]));
+            uint tagGuid = ((uint)(inValues[1]));
+            DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings = ((DSRouterServiceIIS.DSServiceReference.DSTrendSettings)(inValues[2]));
+            return this.BeginSetTrendSettings(devGuid, tagGuid, trendSettings, callback, asyncState);
+        }
+        
+        private object[] OnEndSetTrendSettings(System.IAsyncResult result) {
+            this.EndSetTrendSettings(result);
+            return null;
+        }
+        
+        private void OnSetTrendSettingsCompleted(object state) {
+            if ((this.SetTrendSettingsCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SetTrendSettingsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void SetTrendSettingsAsync(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings) {
+            this.SetTrendSettingsAsync(devGuid, tagGuid, trendSettings, null);
+        }
+        
+        public void SetTrendSettingsAsync(uint devGuid, uint tagGuid, DSRouterServiceIIS.DSServiceReference.DSTrendSettings trendSettings, object userState) {
+            if ((this.onBeginSetTrendSettingsDelegate == null)) {
+                this.onBeginSetTrendSettingsDelegate = new BeginOperationDelegate(this.OnBeginSetTrendSettings);
+            }
+            if ((this.onEndSetTrendSettingsDelegate == null)) {
+                this.onEndSetTrendSettingsDelegate = new EndOperationDelegate(this.OnEndSetTrendSettings);
+            }
+            if ((this.onSetTrendSettingsCompletedDelegate == null)) {
+                this.onSetTrendSettingsCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSetTrendSettingsCompleted);
+            }
+            base.InvokeAsync(this.onBeginSetTrendSettingsDelegate, new object[] {
+                        devGuid,
+                        tagGuid,
+                        trendSettings}, this.onEndSetTrendSettingsDelegate, this.onSetTrendSettingsCompletedDelegate, userState);
+        }
         
         public bool RunCMD(ushort numksdu, uint numvtu, uint tagguid, byte[] arr) {
             return base.Channel.RunCMD(numksdu, numvtu, tagguid, arr);
@@ -6486,6 +7005,54 @@ namespace DSRouterServiceIIS.DSServiceReference {
                 this.onTerminateUploadFileSessionCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnTerminateUploadFileSessionCompleted);
             }
             base.InvokeAsync(this.onBeginTerminateUploadFileSessionDelegate, null, this.onEndTerminateUploadFileSessionDelegate, this.onTerminateUploadFileSessionCompletedDelegate, userState);
+        }
+        
+        public string[] GetTagsListWithEnabledTrendSave() {
+            return base.Channel.GetTagsListWithEnabledTrendSave();
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public System.IAsyncResult BeginGetTagsListWithEnabledTrendSave(System.AsyncCallback callback, object asyncState) {
+            return base.Channel.BeginGetTagsListWithEnabledTrendSave(callback, asyncState);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        public string[] EndGetTagsListWithEnabledTrendSave(System.IAsyncResult result) {
+            return base.Channel.EndGetTagsListWithEnabledTrendSave(result);
+        }
+        
+        private System.IAsyncResult OnBeginGetTagsListWithEnabledTrendSave(object[] inValues, System.AsyncCallback callback, object asyncState) {
+            return this.BeginGetTagsListWithEnabledTrendSave(callback, asyncState);
+        }
+        
+        private object[] OnEndGetTagsListWithEnabledTrendSave(System.IAsyncResult result) {
+            string[] retVal = this.EndGetTagsListWithEnabledTrendSave(result);
+            return new object[] {
+                    retVal};
+        }
+        
+        private void OnGetTagsListWithEnabledTrendSaveCompleted(object state) {
+            if ((this.GetTagsListWithEnabledTrendSaveCompleted != null)) {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.GetTagsListWithEnabledTrendSaveCompleted(this, new GetTagsListWithEnabledTrendSaveCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
+            }
+        }
+        
+        public void GetTagsListWithEnabledTrendSaveAsync() {
+            this.GetTagsListWithEnabledTrendSaveAsync(null);
+        }
+        
+        public void GetTagsListWithEnabledTrendSaveAsync(object userState) {
+            if ((this.onBeginGetTagsListWithEnabledTrendSaveDelegate == null)) {
+                this.onBeginGetTagsListWithEnabledTrendSaveDelegate = new BeginOperationDelegate(this.OnBeginGetTagsListWithEnabledTrendSave);
+            }
+            if ((this.onEndGetTagsListWithEnabledTrendSaveDelegate == null)) {
+                this.onEndGetTagsListWithEnabledTrendSaveDelegate = new EndOperationDelegate(this.OnEndGetTagsListWithEnabledTrendSave);
+            }
+            if ((this.onGetTagsListWithEnabledTrendSaveCompletedDelegate == null)) {
+                this.onGetTagsListWithEnabledTrendSaveCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetTagsListWithEnabledTrendSaveCompleted);
+            }
+            base.InvokeAsync(this.onBeginGetTagsListWithEnabledTrendSaveDelegate, null, this.onEndGetTagsListWithEnabledTrendSaveDelegate, this.onGetTagsListWithEnabledTrendSaveCompletedDelegate, userState);
         }
     }
 }

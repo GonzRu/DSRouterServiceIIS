@@ -23,7 +23,6 @@
   <Metadata>
     <MetadataFile FileName="WcfDataServer.xsd" MetadataType="Schema" ID="133fba20-da27-4944-b625-dbfceac37f6d" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd1" />
     <MetadataFile FileName="WcfDataServer1.xsd" MetadataType="Schema" ID="fa00c0f4-aba7-409a-8bd4-07a6d812f703" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" />
-    <MetadataFile FileName="WcfDataServer2.xsd" MetadataType="Schema" ID="1f44b446-174f-45c4-9278-c7e42175e4a2" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd7" />
     <MetadataFile FileName="WcfDataServer3.xsd" MetadataType="Schema" ID="a1d5054b-7554-4c1d-a2dc-b4b7f5052a75" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd2" />
     <MetadataFile FileName="WcfDataServer4.xsd" MetadataType="Schema" ID="d0d70f3a-bbd2-4ace-bd88-1994efc78bb5" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd5" />
     <MetadataFile FileName="WcfDataServer5.xsd" MetadataType="Schema" ID="481e772f-7597-49c3-9c56-d6f77cb405fc" SourceId="1" SourceUrl="http://127.0.0.1:8733/WcfDataServer?xsd=xsd0" />
