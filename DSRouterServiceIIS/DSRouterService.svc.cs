@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
@@ -1810,6 +1811,143 @@ namespace DSRouterServiceIIS
         }
 
         #endregion
+
+        #endregion
+
+        #region Тренды
+
+        /// <summary>
+        /// Получить список тегов, у которых включена запись значений
+        /// </summary>
+        public List<string> GetTagsListWithEnabledTrendSave()
+        {
+            var result = new List<string>();
+
+            foreach (var dsService in dWCFClientsList.Values)
+            {
+                var dsProxy = dsService.wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        result.AddRange(dsProxy.GetTagsListWithEnabledTrendSave());
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить доступные диапозоны значений тренда
+        /// </summary>
+        public List<Tuple<DateTime, DateTime>> GetTrendDateTimeRanges(ushort dsGuid, uint devGuid, uint tagGuid)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagTrendDateTimeRanges(devGuid, tagGuid).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить тренд единым списком
+        /// </summary>
+        public List<Tuple<DateTime, object>> GetTagTrend(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagTrend(devGuid, tagGuid, startDateTime, endDateTime).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить настройки режима работы записи тренда
+        /// </summary>
+        public DSRouterTrendSettings GetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        var result = dsProxy.GetTrendSettings(devGuid, tagGuid);
+
+                        if (result != null)
+                            return new DSRouterTrendSettings(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Установить настройки режима работы записи тренда
+        /// </summary>
+        public void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        var dsTrendSettings = new DSTrendSettings
+                        {
+                            Enable = trendSettings.Enable,
+                            Sample = trendSettings.Sample,
+                            AbsoluteError = trendSettings.AbsoluteError,
+                            RelativeError = trendSettings.RelativeError,
+                            MaxCacheMinutes = trendSettings.MaxCacheMinutes,
+                            MaxCacheValuesCount = trendSettings.MaxCacheValuesCount
+                        };
+
+                        dsProxy.SetTrendSettings(devGuid, tagGuid, dsTrendSettings);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
 
         #endregion
 

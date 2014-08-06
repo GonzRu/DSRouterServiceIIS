@@ -507,6 +507,40 @@ namespace DSRouterServiceIIS
         #endregion
 
         #endregion
+
+        #region Тренды
+
+        /// <summary>
+        /// Получить список тегов, у которых включена запись значений
+        /// </summary>
+        [OperationContract]
+        List<string> GetTagsListWithEnabledTrendSave();
+
+        /// <summary>
+        /// Получить доступные диапозоны значений тренда
+        /// </summary>
+        [OperationContract]
+        List<Tuple<DateTime, DateTime>> GetTrendDateTimeRanges(ushort dsGuid, uint devGuid, uint tagGuid);
+
+            /// <summary>
+        /// Получить тренд единым списком
+        /// </summary>
+        [OperationContract]
+        List<Tuple<DateTime, object>> GetTagTrend(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime);
+
+        /// <summary>
+        /// Получить настройки режима работы записи тренда
+        /// </summary>
+        [OperationContract]
+        DSRouterTrendSettings GetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid);
+
+        /// <summary>
+        /// Установить настройки режима работы записи тренда
+        /// </summary>
+        [OperationContract]
+        void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings);
+
+        #endregion
     }
 
     #region DataContracts
@@ -959,6 +993,61 @@ namespace DSRouterServiceIIS
         {
             User = dsAuthResult.DSUser == null ? null : new DSRouterUser(dsAuthResult.DSUser);
             AuthResult = (AuthResult) dsAuthResult.AuthResult;
+        }
+    }
+
+    #endregion
+
+    #region Тренды
+
+    [DataContract]
+    public class DSRouterTrendSettings
+    {
+        /// <summary>
+        /// Включена ли запись тренда
+        /// </summary>
+        [DataMember]
+        public bool Enable { get; set; }
+
+        /// <summary>
+        /// Интервал записи значений. 0 - запись по факту изменения
+        /// </summary>
+        [DataMember]
+        public uint Sample { get; set; }
+
+        /// <summary>
+        /// Относительная погрешность изменения.
+        /// Допустимый диапозон значений (0,1]
+        /// </summary>
+        [DataMember]
+        public float? RelativeError { get; set; }
+
+        /// <summary>
+        /// Абсолютная погрешность изменения.
+        /// </summary>
+        [DataMember]
+        public float? AbsoluteError { get; set; }
+
+        /// <summary>
+        /// Максимальное число значений, которое будет кешироваться до записи в БД
+        /// </summary>
+        [DataMember]
+        public uint MaxCacheValuesCount { get; set; }
+
+        /// <summary>
+        /// Максимальное число минут для хранения закешированных данных
+        /// </summary>
+        [DataMember]
+        public uint MaxCacheMinutes { get; set; }
+
+        public DSRouterTrendSettings(DSTrendSettings dsTrendSettings)
+        {
+            Enable = dsTrendSettings.Enable;
+            Sample = dsTrendSettings.Sample;
+            AbsoluteError = dsTrendSettings.AbsoluteError;
+            RelativeError = dsTrendSettings.RelativeError;
+            MaxCacheMinutes = dsTrendSettings.MaxCacheMinutes;
+            MaxCacheValuesCount = dsTrendSettings.MaxCacheValuesCount;
         }
     }
 
