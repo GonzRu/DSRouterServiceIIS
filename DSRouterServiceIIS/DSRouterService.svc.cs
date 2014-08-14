@@ -1831,7 +1831,9 @@ namespace DSRouterServiceIIS
                 {
                     lock (dsProxy)
                     {
-                        result.AddRange(dsProxy.GetTagsListWithEnabledTrendSave());
+                        var r = dsProxy.GetTagsListWithEnabledTrendSave();
+
+                        result.AddRange(from s in r select String.Format("{0}.{1}", dsService.dsUID, s));
                     }
                 }
                 catch (Exception)
