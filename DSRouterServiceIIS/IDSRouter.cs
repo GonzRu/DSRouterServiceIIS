@@ -517,12 +517,12 @@ namespace DSRouterServiceIIS
         List<string> GetTagsListWithEnabledTrendSave();
 
         /// <summary>
-        /// Получить доступные диапозоны значений тренда
+        /// Получить доступные диапазоны значений тренда
         /// </summary>
         [OperationContract]
         List<Tuple<DateTime, DateTime>> GetTrendDateTimeRanges(ushort dsGuid, uint devGuid, uint tagGuid);
 
-            /// <summary>
+        /// <summary>
         /// Получить тренд единым списком
         /// </summary>
         [OperationContract]
