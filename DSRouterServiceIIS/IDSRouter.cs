@@ -529,6 +529,12 @@ namespace DSRouterServiceIIS
         List<Tuple<DateTime, object>> GetTagTrend(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime);
 
         /// <summary>
+        /// Получить список обособленных трендов
+        /// </summary>
+        [OperationContract]
+        List<List<Tuple<DateTime, object>>> GetTagTrendsList(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime);
+
+        /// <summary>
         /// Получить настройки режима работы записи тренда
         /// </summary>
         [OperationContract]

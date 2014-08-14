@@ -1891,6 +1891,30 @@ namespace DSRouterServiceIIS
         }
 
         /// <summary>
+        /// Получить список обособленных трендов
+        /// </summary>
+        public List<List<Tuple<DateTime, object>>> GetTagTrendsList(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Получить настройки режима работы записи тренда
         /// </summary>
         public DSRouterTrendSettings GetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid)
