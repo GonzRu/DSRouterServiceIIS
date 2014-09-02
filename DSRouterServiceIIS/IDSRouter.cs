@@ -609,7 +609,7 @@ namespace DSRouterServiceIIS
     public enum DSRouterEventDataType
     {
         [EnumMember]
-        None = -1,
+        None = 0,
         [EnumMember]
         Ustavki = 1,
         [EnumMember]
