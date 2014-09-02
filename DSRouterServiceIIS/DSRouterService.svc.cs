@@ -2054,9 +2054,10 @@ namespace DSRouterServiceIIS
                 EventDataID = -1,
                 EventID = -1,
                 EventTime = DateTime.Now,
-                EventSourceName = "Сервер данных",
+                EventSourceName = "DSRouter",
                 EventText = eventText,
-                EventSourceComment = "DSRouter"
+                EventSourceComment = "DSRouter",
+                EventDataType = DSRouterEventDataType.None
             };
         }
 
