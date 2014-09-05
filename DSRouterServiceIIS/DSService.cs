@@ -119,9 +119,9 @@ namespace DSRouterServiceIIS
             {
                 lock (wcfDataServer)
                 {
-                    wcfDataServer.SubscribeRTUTags(tagsRequestList.ToArray());
+                    wcfDataServer.SubscribeRTUTags(tagsRequestList);
 
-                    return ConvertDsTagsDictionaryToDsRouterTagsDictionary(wcfDataServer.GetTagsValue(tagsRequestList.ToArray()));
+                    return ConvertDsTagsDictionaryToDsRouterTagsDictionary(wcfDataServer.GetTagsValue(tagsRequestList));
                 }
             }
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace DSRouterServiceIIS
         public void UnsubscribeFromLastRequest()
         {
             if (_requestedTagsList != null && _requestedTagsList.Count != 0)
-                wcfDataServer.UnscribeRTUTags(_requestedTagsList.ToArray());
+                wcfDataServer.UnscribeRTUTags(_requestedTagsList);
         }
 
         #endregion

@@ -901,7 +901,7 @@ namespace DSRouterServiceIIS
                 {
                     IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
 
-                    DSUser[] users;
+                    List<DSUser> users;
                     lock (dataServerProxy)
                     {
                         users = dataServerProxy.GetUsersList();
@@ -941,7 +941,7 @@ namespace DSRouterServiceIIS
                 {
                     IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
 
-                    DSUserGroup[] userGroups;
+                    List<DSUserGroup> userGroups;
                     lock (dataServerProxy)
                     {
                         userGroups = dataServerProxy.GetUserGroupsList();
@@ -1073,12 +1073,12 @@ namespace DSRouterServiceIIS
 
                     try
                     {
-                        UInt32[] requestDevicesListForDs = null;
+                        List<UInt32> requestDevicesListForDs = null;
 
                         if (needTerminalEvents && requestDevicesList != null && dsDeviceListDictionary.ContainsKey(dsGuid))
-                            requestDevicesListForDs = dsDeviceListDictionary[dsGuid].ToArray();
+                            requestDevicesListForDs = dsDeviceListDictionary[dsGuid];
 
-                        DSEventValue[] eventsFromDs;
+                        List<DSEventValue> eventsFromDs;
                         lock (dsProxy)
                         {
                             eventsFromDs = dsProxy.GetEvents(dateTimeFrom, dateTimeTo, needSystemEvents, needUserEvents, needTerminalEvents, requestDevicesListForDs);
@@ -1358,7 +1358,7 @@ namespace DSRouterServiceIIS
 
                 try
                 {
-                    DSEventValue[] result = null;
+                    List<DSEventValue> result = null;
                     lock (dsProxy)
                     {
                         result = dsProxy.GetNotReceiptedEvents();
@@ -1438,7 +1438,7 @@ namespace DSRouterServiceIIS
                     {
                         lock (dsProxy)
                         {
-                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
+                            dsProxy.ReceiptEvents(eventsByDs[dsGuid], _authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
                         }
                     }
                     catch (Exception ex)
@@ -1666,7 +1666,7 @@ namespace DSRouterServiceIIS
 
                 try
                 {
-                    DSDocumentDataValue[] dsDocuments;
+                    List<DSDocumentDataValue> dsDocuments;
                     lock (dsProxy)
                     {
                         dsDocuments = dsProxy.GetDocumentsList(devGuid);

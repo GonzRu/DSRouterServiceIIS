@@ -41,13 +41,38 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System" />
-      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" />
-      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd4" namespace="http://schemas.microsoft.com/Message" />
-      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/System.IO" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/System" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/InterfaceLibrary" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd6" namespace="http://schemas.microsoft.com/Message" />
+      <xsd:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/System.IO" />
     </xsd:schema>
   </wsdl:types>
+  <wsdl:message name="IWcfDataServer_GetLastNonConfirmMAlarms_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastNonConfirmMAlarms" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetLastNonConfirmMAlarms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastNonConfirmMAlarmsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_ConfirmAlarm_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmAlarm" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_ConfirmAlarm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConfirmAlarmResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetAlarmsInDatesRange_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAlarmsInDatesRange" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetAlarmsInDatesRange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAlarmsInDatesRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagsListWithEnabledTrendSave_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagsListWithEnabledTrendSave" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagsListWithEnabledTrendSave_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagsListWithEnabledTrendSaveResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfDataServer_GetTagTrendDateTimeRanges_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTagTrendDateTimeRanges" />
   </wsdl:message>
@@ -59,6 +84,12 @@
   </wsdl:message>
   <wsdl:message name="IWcfDataServer_GetTagTrend_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetTagTrendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagTrendsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagTrendsList" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_GetTagTrendsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTagTrendsListResponse" />
   </wsdl:message>
   <wsdl:message name="IWcfDataServer_GetTrendSettings_InputMessage">
     <wsdl:part name="parameters" element="tns:GetTrendSettings" />
@@ -402,6 +433,12 @@
   <wsdl:message name="IWcfDataServer_CommandRun_OutputMessage">
     <wsdl:part name="parameters" element="tns:CommandRunResponse" />
   </wsdl:message>
+  <wsdl:message name="IWcfDataServer_CommandStateCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:CommandStateCheck" />
+  </wsdl:message>
+  <wsdl:message name="IWcfDataServer_CommandStateCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CommandStateCheckResponse" />
+  </wsdl:message>
   <wsdl:message name="IWcfDataServer_GetDocumentsList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetDocumentsList" />
   </wsdl:message>
@@ -432,12 +469,6 @@
   <wsdl:message name="IWcfDataServer_TerminateUploadFileSession_OutputMessage">
     <wsdl:part name="parameters" element="tns:TerminateUploadFileSessionResponse" />
   </wsdl:message>
-  <wsdl:message name="IWcfDataServer_GetTagsListWithEnabledTrendSave_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetTagsListWithEnabledTrendSave" />
-  </wsdl:message>
-  <wsdl:message name="IWcfDataServer_GetTagsListWithEnabledTrendSave_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetTagsListWithEnabledTrendSaveResponse" />
-  </wsdl:message>
   <wsdl:message name="IWcfDataServer_NewErrorEvent_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:NewErrorEvent" />
   </wsdl:message>
@@ -451,6 +482,22 @@
     <wsdl:part name="parameters" element="tns:NotifyCMDExecuted" />
   </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="IWcfDataServer">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetLastNonConfirmMAlarms">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetLastNonConfirmMAlarms" message="tns:IWcfDataServer_GetLastNonConfirmMAlarms_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetLastNonConfirmMAlarmsResponse" message="tns:IWcfDataServer_GetLastNonConfirmMAlarms_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConfirmAlarm">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/ConfirmAlarm" message="tns:IWcfDataServer_ConfirmAlarm_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/ConfirmAlarmResponse" message="tns:IWcfDataServer_ConfirmAlarm_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetAlarmsInDatesRange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetAlarmsInDatesRange" message="tns:IWcfDataServer_GetAlarmsInDatesRange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetAlarmsInDatesRangeResponse" message="tns:IWcfDataServer_GetAlarmsInDatesRange_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagsListWithEnabledTrendSave">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" message="tns:IWcfDataServer_GetTagsListWithEnabledTrendSave_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSaveResponse" message="tns:IWcfDataServer_GetTagsListWithEnabledTrendSave_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagTrendDateTimeRanges">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRanges" message="tns:IWcfDataServer_GetTagTrendDateTimeRanges_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRangesResponse" message="tns:IWcfDataServer_GetTagTrendDateTimeRanges_OutputMessage" />
@@ -458,6 +505,10 @@
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagTrend">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrend" message="tns:IWcfDataServer_GetTagTrend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrendResponse" message="tns:IWcfDataServer_GetTagTrend_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagTrendsList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrendsList" message="tns:IWcfDataServer_GetTagTrendsList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagTrendsListResponse" message="tns:IWcfDataServer_GetTagTrendsList_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTrendSettings">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTrendSettings" message="tns:IWcfDataServer_GetTrendSettings_InputMessage" />
@@ -693,6 +744,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/CommandRun" message="tns:IWcfDataServer_CommandRun_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/CommandRunResponse" message="tns:IWcfDataServer_CommandRun_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="CommandStateCheck">
+      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/CommandStateCheck" message="tns:IWcfDataServer_CommandStateCheck_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/CommandStateCheckResponse" message="tns:IWcfDataServer_CommandStateCheck_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetDocumentsList">
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetDocumentsList" message="tns:IWcfDataServer_GetDocumentsList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetDocumentsListResponse" message="tns:IWcfDataServer_GetDocumentsList_OutputMessage" />
@@ -713,10 +768,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/TerminateUploadFileSession" message="tns:IWcfDataServer_TerminateUploadFileSession_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/TerminateUploadFileSessionResponse" message="tns:IWcfDataServer_TerminateUploadFileSession_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="GetTagsListWithEnabledTrendSave">
-      <wsdl:input wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" message="tns:IWcfDataServer_GetTagsListWithEnabledTrendSave_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSaveResponse" message="tns:IWcfDataServer_GetTagsListWithEnabledTrendSave_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="NewErrorEvent">
       <wsdl:output wsaw:Action="http://tempuri.org/IWcfDataServer/NewErrorEvent" message="tns:IWcfDataServer_NewErrorEvent_OutputCallbackMessage" />
     </wsdl:operation>
@@ -733,6 +784,42 @@
   <wsdl:binding name="tcpfilestream_IWcfDataServer" type="tns:IWcfDataServer">
     <wsp:PolicyReference URI="#tcpfilestream_IWcfDataServer_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetLastNonConfirmMAlarms">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetLastNonConfirmMAlarms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmAlarm">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/ConfirmAlarm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAlarmsInDatesRange">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetAlarmsInDatesRange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagsListWithEnabledTrendSave">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetTagTrendDateTimeRanges">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRanges" style="document" />
       <wsdl:input>
@@ -744,6 +831,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetTagTrend">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTrendsList">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrendsList" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1273,6 +1369,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CommandStateCheck">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/CommandStateCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetDocumentsList">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetDocumentsList" style="document" />
       <wsdl:input>
@@ -1311,15 +1416,6 @@
     </wsdl:operation>
     <wsdl:operation name="TerminateUploadFileSession">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/TerminateUploadFileSession" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetTagsListWithEnabledTrendSave">
-      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1355,6 +1451,42 @@
   <wsdl:binding name="NetTcpBinding_IWcfDataServer" type="tns:IWcfDataServer">
     <wsp:PolicyReference URI="#NetTcpBinding_IWcfDataServer_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetLastNonConfirmMAlarms">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetLastNonConfirmMAlarms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConfirmAlarm">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/ConfirmAlarm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAlarmsInDatesRange">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetAlarmsInDatesRange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagsListWithEnabledTrendSave">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetTagTrendDateTimeRanges">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrendDateTimeRanges" style="document" />
       <wsdl:input>
@@ -1366,6 +1498,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetTagTrend">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTrendsList">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagTrendsList" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1895,6 +2036,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CommandStateCheck">
+      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/CommandStateCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetDocumentsList">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetDocumentsList" style="document" />
       <wsdl:input>
@@ -1933,15 +2083,6 @@
     </wsdl:operation>
     <wsdl:operation name="TerminateUploadFileSession">
       <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/TerminateUploadFileSession" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetTagsListWithEnabledTrendSave">
-      <soap12:operation soapAction="http://tempuri.org/IWcfDataServer/GetTagsListWithEnabledTrendSave" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
