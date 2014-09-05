@@ -1994,7 +1994,7 @@ namespace DSRouterServiceIIS
 
                     lock (dsProxy)
                     {
-                        
+                        return dsProxy.GetTagTrendsList(devGuid, tagGuid, startDateTime, endDateTime);
                     }
                 }
             }
