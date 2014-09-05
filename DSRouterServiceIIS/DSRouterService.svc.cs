@@ -321,7 +321,7 @@ namespace DSRouterServiceIIS
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1385, string.Format("{0} : Получен запрос на команду от HMI-клиента для {1}.", DateTime.Now.ToString(), dsdevTagGUID));
 
                 IWcfDataServer iwds = dWCFClientsList[ds].wcfDataServer;
-                rez = iwds.RunCMD(ds, dev, tagguid, pq);
+                iwds.RunCMD(ds, dev, tagguid, pq);
             }
             catch (Exception ex)
             {
@@ -1484,42 +1484,23 @@ namespace DSRouterServiceIIS
         #endregion
 
         #region Комманды
-
         private object lockObjectForCommands = new object();
         /// <summary>
         /// состояние текуцей команды
         /// </summary>
         EnumerationCommandStates CurrentCMDState = EnumerationCommandStates.undefined;
-        /// <summary>
-        /// таймер на отслеживание состояния выполнения команды
-        /// </summary>        
-        private System.Timers.Timer tmierUpdateCommandState;
-        /// <summary>
-        /// анти таймер на отслеживание состояния выполнения команды
-        /// </summary>
-        private System.Timers.Timer tmierUpdateCommandState_anti;
         private UInt16 DS4CurrtntCMD = 0;
-
         /// <summary>
         /// /// Запрос на запуск команды на устройстве
         /// </summary>
         /// <param name="ACommandID">ds.dev.cmdid</param>
         /// <param name="AParameters">массив параметров</param>
         /// <returns>false - если роутер уже выполняет другую команду</returns>
-        public bool CommandRun(string ACommandID, object[] AParameters)
+        public void CommandRun(string ACommandID, object[] AParameters)
         {
             try
             {
-                //if (IsCMDActive)
-                //{
-                //    /*
-                //     * на роутере уже есть активная команда
-                //     * ее нужно завершить прежде чем выдать новую
-                //     */
-                //    return false;
-                //}
-
-                //IsCMDActive = true;
+                CurrentCMDState = EnumerationCommandStates.sentFromClientToRouter;
 
                 string[] arrcmdid = ACommandID.Split(new char[] { '.' });
                 DS4CurrtntCMD = UInt16.Parse(arrcmdid[0]);
@@ -1528,61 +1509,44 @@ namespace DSRouterServiceIIS
 
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1385, string.Format("{0} : Получен запрос на команду от HMI-клиента для {1}.", DateTime.Now.ToString(), ACommandID));
 
-                #region запуск антитаймера на получение статуса команды от DS
-                tmierUpdateCommandState_anti = new System.Timers.Timer();
-                tmierUpdateCommandState_anti.Interval = 10000;
-                tmierUpdateCommandState_anti.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCommandState_anti);
-                tmierUpdateCommandState_anti.Stop();
-                #endregion
-
                 IWcfDataServer iwds = dWCFClientsList[DS4CurrtntCMD].wcfDataServer;
                 //bool rez = iwds.RunCMD(DS4CurrtntCMD, dev, tagguid, null /*byte[] pq*/);   // нужно поправить контракт на DS на массив объектов
-                bool rez = iwds.CommandRun(ACommandID, null);
-                
-                if (rez == false)   // dataserver занят другой командой
-                {
-                    //IsCMDActive = false;
-                    CurrentCMDState = EnumerationCommandStates.cmdDiscardByDataServer;
-                    tmierUpdateCommandState_anti.Stop();
-                }
-                
-                CurrentCMDState = EnumerationCommandStates.sentFromRouterToDataServer;
+                iwds.BeginCommandRun(ACommandID, null, GetCMDStateCallback, iwds);
 
-                #region запуск таймера на получение статуса команды от DS
-                tmierUpdateCommandState  = new System.Timers.Timer();
-                tmierUpdateCommandState.Interval = 1000;
-                tmierUpdateCommandState.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCommandState);
-                tmierUpdateCommandState.Start();
-                #endregion
+                CurrentCMDState = EnumerationCommandStates.sentFromRouterToDataServer;
             }
             catch (Exception ex)
             {
                 Log.WriteErrorMessage("DSRouterService.CommandRun() : Исключение : " + ex.Message);
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
-                tmierUpdateCommandState.Stop();
-                tmierUpdateCommandState_anti.Stop();
-
-                return false;
             }
-            return true;
+        }
+        /// <summary>
+        /// асинхронная функция для
+        /// инициирования запроса состояния выполнения команды 
+        /// с клиента
+        /// </summary>
+        /// <param name="result"></param>
+        void GetCMDStateCallback(IAsyncResult result)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+            }
         }
 
         /// <summary>
-        /// отменить текущую команду
+        /// возврат клиенту статуса 
+        /// выполнения команды        
         /// </summary>
-        public void CommandCancel(string ACommandID)
+        /// <param name="ACommandID"></param>
+        /// <returns></returns>
+        public EnumerationCommandStates CommandStateCheck(string ACommandID)
         {
-            //IsCMDActive = false;
-            CurrentCMDState = EnumerationCommandStates.undefined;
-            tmierUpdateCommandState.Stop();
-            tmierUpdateCommandState_anti.Stop();
-        }
-
-        // запрос DS по состоянию выполнения команды
-        private void UpdateCommandState(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            tmierUpdateCommandState.Stop();
-            tmierUpdateCommandState_anti.Start();
             try
             {
                 lock (lockObjectForCommands)
@@ -1591,61 +1555,35 @@ namespace DSRouterServiceIIS
 
                     DSServiceReference.EnumerationCommandStates ecs = iwds.CommandStateCheck();
 
-                    CurrentCMDState = (EnumerationCommandStates) ecs;
-
-                    //EnumerationCommandStates CurrentCMDState = iwds.CommandStateCheck();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log.LogTrace(" - Ошибка CommandStateCheck: " + ex.Message, traceSource);
-            }
-
-            tmierUpdateCommandState_anti.Stop();
-            tmierUpdateCommandState.Start();
-        }
-
-        /// <summary>
-        /// снять команду по таймеру
-        /// </summary>
-        private void UpdateCommandState_anti(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            try
-            {
-                tmierUpdateCommandState.Stop();
-                tmierUpdateCommandState_anti.Stop();
-                //IsCMDActive = false;
-                CurrentCMDState = EnumerationCommandStates.cmdCancelAtRouterByTimer;
-            }
-            catch (Exception ex)
-            {
-                // Log.LogTrace(" - Ошибка CommandStateCheck: " + ex.Message, traceSource);
-            }
-        }
-
-        /// <summary>
-        /// возврат клиенту статуса 
-        /// выполнения команды        
-        /// </summary>
-        public EnumerationCommandStates CommandStateCheck(string ACommandID)
-        {
-            try
-            {
-                lock (lockObjectForCommands)
-                {
-                    //if (CurrentCMDState == EnumerationCommandStates.complete)
-                    //    IsCMDActive = false;
+                    CurrentCMDState = (EnumerationCommandStates)ecs;
                 }
             }
             catch (Exception ex)
             {
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+
+                CurrentCMDState = EnumerationCommandStates.cmdNotSend_DSR_2_DS;
             }
             return CurrentCMDState;
         }
+        ///// <summary>
+        ///// асинхронная функция для
+        ///// инициирования запроса состояния выполнения команды 
+        ///// с клиента
+        ///// </summary>
+        ///// <param name="result"></param>
+        //void GetCMDStateCheck(IAsyncResult result)
+        //{
+        //    try
+        //    {
 
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+        //    }
+        //}
         #endregion
-
         #region Работа с документами
 
         #region Методы для работы с существующими документами

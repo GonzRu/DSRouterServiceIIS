@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -384,7 +385,6 @@ namespace DSRouterServiceIIS
         #endregion
 
         #region Комманды
-
         /// <summary>
         /// <summary>
         /// Запрос на запуск команды на устройстве
@@ -393,20 +393,14 @@ namespace DSRouterServiceIIS
         /// <param name="AParameters">массив параметров</param>
         /// <returns>false - если роутер уже выполняет другую команду</returns>
         [OperationContract]
-        bool CommandRun(string ACommandID, object[] AParameters);
-
-        /// <summary>
-        /// отменить текущую команду
-        /// </summary>
-        [OperationContract]
-        void CommandCancel(string ACommandID);
-
+        void CommandRun(string ACommandID, object[] AParameters);
         /// <summary>
         /// проверка статуса выполнения команды
         /// </summary>
+        /// <param name="ACommandID"></param>
+        /// <returns></returns>
         [OperationContract]
         EnumerationCommandStates CommandStateCheck(string ACommandID);
-
         #endregion
 
         #region Работа с документами
@@ -1080,27 +1074,43 @@ namespace DSRouterServiceIIS
     public enum EnumerationCommandStates
     {
         [EnumMember]
+        [Description("Команда неопределена")]
         undefined = 0,
         [EnumMember]
+        [Description("Команда послана с клиента на DSR")]
         sentFromClientToRouter = 1,
         [EnumMember]
+        [Description("Команда послана с DSR на DS")]
         sentFromRouterToDataServer = 2,
         [EnumMember]
+        [Description("Команда послана с DS на ECU")]
         sentFromDataServerToFC = 3,
         [EnumMember]
+        [Description("Команда послана с ECU на устройство")]
         sentFromFCToDevice = 4,
         [EnumMember]
+        [Description("Команда выполнена")]
         complete = 5,
         [EnumMember]
-        cmdactive = 6,    // на роутере уже есть активная команда
+        [Description("В процессе обработки уже есть активная команда")]
+        cmdactive = 6,
         [EnumMember]
-        cmdCancelAtRouterByTimer = 7,    // команда была снята на роутере по таймеру
+        [Description("команда была снята на DataServer по таймауту")]
+        cmdCancelAtDataServerByTimer = 7,
         [EnumMember]
-        cmdDiscardByDataServer = 8,    // команда не была принята DS (возможно он занят другой командой)
+        [Description("команда не была принята DS (возможно он занят другой командой)")]
+        cmdDiscardByDataServer = 8,
         [EnumMember]
-        cmdDiscardByRouter = 9    // команда была снята по команде DS
-
-   }    
+        [Description("команда не была выполнена ECU/RTU")]
+        cmdDiscardEcuRtu = 9,
+        [EnumMember]
+        [Description("Неизвестная команда")]
+        cmdUnknown = 10,
+        [EnumMember]
+        [Description("DSR не может отправить команду DS (возможно нет связи)")]
+        cmdNotSend_DSR_2_DS = 11
+    }
     #endregion
+
     #endregion
 }
