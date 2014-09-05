@@ -386,10 +386,26 @@ namespace DSRouterServiceIIS
         #region Комманды
 
         /// <summary>
+        /// <summary>
         /// Запрос на запуск команды на устройстве
         /// </summary>
+        /// <param name="ACommandID">ds.dev.cmdid</param>
+        /// <param name="AParameters">массив параметров</param>
+        /// <returns>false - если роутер уже выполняет другую команду</returns>
         [OperationContract]
-        void CommandRun(UInt16 dsGuid, UInt32 devGuid, string commandID, Object[] parameters);
+        bool CommandRun(string ACommandID, object[] AParameters);
+
+        /// <summary>
+        /// отменить текущую команду
+        /// </summary>
+        [OperationContract]
+        void CommandCancel(string ACommandID);
+
+        /// <summary>
+        /// проверка статуса выполнения команды
+        /// </summary>
+        [OperationContract]
+        EnumerationCommandStates CommandStateCheck(string ACommandID);
 
         #endregion
 
@@ -1059,5 +1075,32 @@ namespace DSRouterServiceIIS
 
     #endregion
 
+    #region Команды
+    [DataContract]
+    public enum EnumerationCommandStates
+    {
+        [EnumMember]
+        undefined = 0,
+        [EnumMember]
+        sentFromClientToRouter = 1,
+        [EnumMember]
+        sentFromRouterToDataServer = 2,
+        [EnumMember]
+        sentFromDataServerToFC = 3,
+        [EnumMember]
+        sentFromFCToDevice = 4,
+        [EnumMember]
+        complete = 5,
+        [EnumMember]
+        cmdactive = 6,    // на роутере уже есть активная команда
+        [EnumMember]
+        cmdCancelAtRouterByTimer = 7,    // команда была снята на роутере по таймеру
+        [EnumMember]
+        cmdDiscardByDataServer = 8,    // команда не была принята DS (возможно он занят другой командой)
+        [EnumMember]
+        cmdDiscardByRouter = 9    // команда была снята по команде DS
+
+   }    
+    #endregion
     #endregion
 }

@@ -1485,12 +1485,163 @@ namespace DSRouterServiceIIS
 
         #region Комманды
 
+        private object lockObjectForCommands = new object();
         /// <summary>
-        /// Запрос на запуск команды на устройстве
+        /// состояние текуцей команды
         /// </summary>
-        void IDSRouter.CommandRun(ushort dsGuid, uint devGuid, string commandID, object[] parameters)
+        EnumerationCommandStates CurrentCMDState = EnumerationCommandStates.undefined;
+        /// <summary>
+        /// таймер на отслеживание состояния выполнения команды
+        /// </summary>        
+        private System.Timers.Timer tmierUpdateCommandState;
+        /// <summary>
+        /// анти таймер на отслеживание состояния выполнения команды
+        /// </summary>
+        private System.Timers.Timer tmierUpdateCommandState_anti;
+        private UInt16 DS4CurrtntCMD = 0;
+
+        /// <summary>
+        /// /// Запрос на запуск команды на устройстве
+        /// </summary>
+        /// <param name="ACommandID">ds.dev.cmdid</param>
+        /// <param name="AParameters">массив параметров</param>
+        /// <returns>false - если роутер уже выполняет другую команду</returns>
+        public bool CommandRun(string ACommandID, object[] AParameters)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //if (IsCMDActive)
+                //{
+                //    /*
+                //     * на роутере уже есть активная команда
+                //     * ее нужно завершить прежде чем выдать новую
+                //     */
+                //    return false;
+                //}
+
+                //IsCMDActive = true;
+
+                string[] arrcmdid = ACommandID.Split(new char[] { '.' });
+                DS4CurrtntCMD = UInt16.Parse(arrcmdid[0]);
+                uint dev = UInt32.Parse(arrcmdid[1]);
+                uint tagguid = UInt32.Parse(arrcmdid[2]);
+
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1385, string.Format("{0} : Получен запрос на команду от HMI-клиента для {1}.", DateTime.Now.ToString(), ACommandID));
+
+                #region запуск антитаймера на получение статуса команды от DS
+                tmierUpdateCommandState_anti = new System.Timers.Timer();
+                tmierUpdateCommandState_anti.Interval = 10000;
+                tmierUpdateCommandState_anti.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCommandState_anti);
+                tmierUpdateCommandState_anti.Stop();
+                #endregion
+
+                IWcfDataServer iwds = dWCFClientsList[DS4CurrtntCMD].wcfDataServer;
+                //bool rez = iwds.RunCMD(DS4CurrtntCMD, dev, tagguid, null /*byte[] pq*/);   // нужно поправить контракт на DS на массив объектов
+                bool rez = iwds.CommandRun(ACommandID, null);
+                
+                if (rez == false)   // dataserver занят другой командой
+                {
+                    //IsCMDActive = false;
+                    CurrentCMDState = EnumerationCommandStates.cmdDiscardByDataServer;
+                    tmierUpdateCommandState_anti.Stop();
+                }
+                
+                CurrentCMDState = EnumerationCommandStates.sentFromRouterToDataServer;
+
+                #region запуск таймера на получение статуса команды от DS
+                tmierUpdateCommandState  = new System.Timers.Timer();
+                tmierUpdateCommandState.Interval = 1000;
+                tmierUpdateCommandState.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCommandState);
+                tmierUpdateCommandState.Start();
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.CommandRun() : Исключение : " + ex.Message);
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+                tmierUpdateCommandState.Stop();
+                tmierUpdateCommandState_anti.Stop();
+
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// отменить текущую команду
+        /// </summary>
+        public void CommandCancel(string ACommandID)
+        {
+            //IsCMDActive = false;
+            CurrentCMDState = EnumerationCommandStates.undefined;
+            tmierUpdateCommandState.Stop();
+            tmierUpdateCommandState_anti.Stop();
+        }
+
+        // запрос DS по состоянию выполнения команды
+        private void UpdateCommandState(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            tmierUpdateCommandState.Stop();
+            tmierUpdateCommandState_anti.Start();
+            try
+            {
+                lock (lockObjectForCommands)
+                {
+                    IWcfDataServer iwds = dWCFClientsList[DS4CurrtntCMD].wcfDataServer;
+
+                    DSServiceReference.EnumerationCommandStates ecs = iwds.CommandStateCheck();
+
+                    CurrentCMDState = (EnumerationCommandStates) ecs;
+
+                    //EnumerationCommandStates CurrentCMDState = iwds.CommandStateCheck();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log.LogTrace(" - Ошибка CommandStateCheck: " + ex.Message, traceSource);
+            }
+
+            tmierUpdateCommandState_anti.Stop();
+            tmierUpdateCommandState.Start();
+        }
+
+        /// <summary>
+        /// снять команду по таймеру
+        /// </summary>
+        private void UpdateCommandState_anti(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                tmierUpdateCommandState.Stop();
+                tmierUpdateCommandState_anti.Stop();
+                //IsCMDActive = false;
+                CurrentCMDState = EnumerationCommandStates.cmdCancelAtRouterByTimer;
+            }
+            catch (Exception ex)
+            {
+                // Log.LogTrace(" - Ошибка CommandStateCheck: " + ex.Message, traceSource);
+            }
+        }
+
+        /// <summary>
+        /// возврат клиенту статуса 
+        /// выполнения команды        
+        /// </summary>
+        public EnumerationCommandStates CommandStateCheck(string ACommandID)
+        {
+            try
+            {
+                lock (lockObjectForCommands)
+                {
+                    //if (CurrentCMDState == EnumerationCommandStates.complete)
+                    //    IsCMDActive = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+            }
+            return CurrentCMDState;
         }
 
         #endregion
@@ -2184,16 +2335,16 @@ namespace DSRouterServiceIIS
             try
             {
                 // уберем факт выдачи команды
-                if (/*kvp.Value.*/IsCMDActive)
-                {
-                    currClient.NotifyCMDExecuted(cmdarray);
+                //if (/*kvp.Value.*/IsCMDActive)
+                //{
+                //    currClient.NotifyCMDExecuted(cmdarray);
 
-                    IsCMDActive = false;
+                //    IsCMDActive = false;
 
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2416, string.Format("{0} : {1} : {2} : Результат команды ретранслирован от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
-                }
-                else
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2419, string.Format("{0} : {1} : {2} : Ошибка ретрансляции команды от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
+                //    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2416, string.Format("{0} : {1} : {2} : Результат команды ретранслирован от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
+                //}
+                //else
+                //    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2419, string.Format("{0} : {1} : {2} : Ошибка ретрансляции команды от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
             }
             catch (Exception ex)
             {
