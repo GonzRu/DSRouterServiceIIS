@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WcfDataServer_Lib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://127.0.0.1:8733/WcfDataServer?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:complexType name="DSTagValue">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfTupleOfdateTimedateTime">
     <xs:sequence>
-      <xs:element minOccurs="0" name="VarQuality" type="xs:unsignedInt" />
-      <xs:element minOccurs="0" name="VarValueAsObject" nillable="true" type="xs:anyType" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfdateTimedateTime" nillable="true" type="tns:TupleOfdateTimedateTime" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="DSTagValue" nillable="true" type="tns:DSTagValue" />
-  <xs:complexType name="LstError">
+  <xs:element name="ArrayOfTupleOfdateTimedateTime" nillable="true" type="tns:ArrayOfTupleOfdateTimedateTime" />
+  <xs:complexType name="TupleOfdateTimedateTime">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="dateTime" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="dateTime" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
     <xs:sequence>
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="lstError" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element name="m_Item1" type="xs:dateTime" />
+      <xs:element name="m_Item2" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="LstError" nillable="true" type="tns:LstError" />
-  <xs:complexType name="DSUserSessionInfo">
+  <xs:element name="TupleOfdateTimedateTime" nillable="true" type="tns:TupleOfdateTimedateTime" />
+  <xs:complexType name="ArrayOfTupleOfdateTimeanyType">
     <xs:sequence>
-      <xs:element minOccurs="0" name="UserId" type="xs:int" />
-      <xs:element minOccurs="0" name="UserIpAddress" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="UserMacAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TupleOfdateTimeanyType" nillable="true" type="tns:TupleOfdateTimeanyType" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="DSUserSessionInfo" nillable="true" type="tns:DSUserSessionInfo" />
+  <xs:element name="ArrayOfTupleOfdateTimeanyType" nillable="true" type="tns:ArrayOfTupleOfdateTimeanyType" />
+  <xs:complexType name="TupleOfdateTimeanyType">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="TupleOf{0}{1}{#}" Namespace="http://schemas.datacontract.org/2004/07/System" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="dateTime" Namespace="http://www.w3.org/2001/XMLSchema" />
+          <GenericParameter Name="anyType" Namespace="http://www.w3.org/2001/XMLSchema" />
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="m_Item1" type="xs:dateTime" />
+      <xs:element name="m_Item2" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TupleOfdateTimeanyType" nillable="true" type="tns:TupleOfdateTimeanyType" />
+  <xs:complexType name="ArrayOfArrayOfTupleOfdateTimeanyType">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfTupleOfdateTimeanyType" nillable="true" type="tns:ArrayOfTupleOfdateTimeanyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfArrayOfTupleOfdateTimeanyType" nillable="true" type="tns:ArrayOfArrayOfTupleOfdateTimeanyType" />
+  <xs:complexType name="MarshalByRefObject">
+    <xs:sequence>
+      <xs:element name="__identity" nillable="true" type="xs:anyType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MarshalByRefObject" nillable="true" type="tns:MarshalByRefObject" />
 </xs:schema>

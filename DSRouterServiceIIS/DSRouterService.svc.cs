@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
@@ -104,6 +105,18 @@ namespace DSRouterServiceIIS
 
             DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Share");
             DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES = "/Share/";
+
+            try
+            {
+                if (Directory.Exists(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES))
+                    Directory.Delete(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES);
+
+                Directory.CreateDirectory(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("Исключение при удалении или создании папки share : " + ex.Message);
+            }
         }
 
         public DSRouterService()
@@ -308,7 +321,7 @@ namespace DSRouterServiceIIS
                 TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1385, string.Format("{0} : Получен запрос на команду от HMI-клиента для {1}.", DateTime.Now.ToString(), dsdevTagGUID));
 
                 IWcfDataServer iwds = dWCFClientsList[ds].wcfDataServer;
-                rez = iwds.RunCMD(ds, dev, tagguid, pq);
+                iwds.RunCMD(ds, dev, tagguid, pq);
             }
             catch (Exception ex)
             {
@@ -888,7 +901,7 @@ namespace DSRouterServiceIIS
                 {
                     IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
 
-                    DSUser[] users;
+                    List<DSUser> users;
                     lock (dataServerProxy)
                     {
                         users = dataServerProxy.GetUsersList();
@@ -928,7 +941,7 @@ namespace DSRouterServiceIIS
                 {
                     IWcfDataServer dataServerProxy = dWCFClientsList[0].wcfDataServer;
 
-                    DSUserGroup[] userGroups;
+                    List<DSUserGroup> userGroups;
                     lock (dataServerProxy)
                     {
                         userGroups = dataServerProxy.GetUserGroupsList();
@@ -1060,12 +1073,12 @@ namespace DSRouterServiceIIS
 
                     try
                     {
-                        UInt32[] requestDevicesListForDs = null;
+                        List<UInt32> requestDevicesListForDs = null;
 
                         if (needTerminalEvents && requestDevicesList != null && dsDeviceListDictionary.ContainsKey(dsGuid))
-                            requestDevicesListForDs = dsDeviceListDictionary[dsGuid].ToArray();
+                            requestDevicesListForDs = dsDeviceListDictionary[dsGuid];
 
-                        DSEventValue[] eventsFromDs;
+                        List<DSEventValue> eventsFromDs;
                         lock (dsProxy)
                         {
                             eventsFromDs = dsProxy.GetEvents(dateTimeFrom, dateTimeTo, needSystemEvents, needUserEvents, needTerminalEvents, requestDevicesListForDs);
@@ -1123,16 +1136,52 @@ namespace DSRouterServiceIIS
 
                     #region Разбор полученных данных
 
+                    if (dsOscillogram == null)
+                        return null;
+
                     return DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + OscConverter.SaveOscillogrammToFile(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, dsOscillogram);
 
                     #endregion
                 }
-                else
-                    throw new ArgumentException();
             }
             catch (Exception ex)
             {
                 Log.WriteErrorMessage("DSRouterService.GetOscillogramAsUrlByID() : Исключение : " + ex.Message);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить zip архив с осциллограммами как кортеж массива байтов и имени архива
+        /// </summary>
+        Tuple<byte[], string> IDSRouter.GetOscillogramAsByteArray(UInt16 dsGuid, Int32 eventDataID)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    IWcfDataServer dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    DSOscillogram dsOscillogram;
+                    lock (dsProxy)
+                    {
+                        dsOscillogram = dsProxy.GetOscillogramByID(eventDataID);
+                    }
+
+                    #region Разбор полученных данных
+
+                    if (dsOscillogram == null)
+                        return null;
+
+                    return OscConverter.GetOscillogramData(dsOscillogram);
+
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetOscillogramAsByteArray() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -1309,7 +1358,7 @@ namespace DSRouterServiceIIS
 
                 try
                 {
-                    DSEventValue[] result = null;
+                    List<DSEventValue> result = null;
                     lock (dsProxy)
                     {
                         result = dsProxy.GetNotReceiptedEvents();
@@ -1389,7 +1438,7 @@ namespace DSRouterServiceIIS
                     {
                         lock (dsProxy)
                         {
-                            dsProxy.ReceiptEvents(eventsByDs[dsGuid].ToArray(), _authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
+                            dsProxy.ReceiptEvents(eventsByDs[dsGuid], _authResult.DSAuthResults[dsGuid].User.UserID, receiptComment, CreateDsUserSessionInfo(dsGuid));
                         }
                     }
                     catch (Exception ex)
@@ -1419,7 +1468,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Получение значений для указанных тегов из конкретного архивного набора уставок
         /// </summary>
-        Dictionary<string, DSRouterTagValue> IDSRouter.GetValuesFromSettingsSet(int settingsSetID, List<string> tagsList)
+        Dictionary<String, DSRouterTagValue> IDSRouter.GetValuesFromSettingsSet(UInt16 dsGuid, Int32 settingsSetID)
         {
             throw new NotImplementedException();
         }
@@ -1435,15 +1484,105 @@ namespace DSRouterServiceIIS
         #endregion
 
         #region Комманды
-
+        private object lockObjectForCommands = new object();
         /// <summary>
-        /// Запрос на запуск команды на устройстве
+        /// состояние текуцей команды
         /// </summary>
-        void IDSRouter.CommandRun(ushort dsGuid, uint devGuid, string commandID, object[] parameters)
+        EnumerationCommandStates CurrentCMDState = EnumerationCommandStates.undefined;
+        private UInt16 DS4CurrtntCMD = 0;
+        /// <summary>
+        /// /// Запрос на запуск команды на устройстве
+        /// </summary>
+        /// <param name="ACommandID">ds.dev.cmdid</param>
+        /// <param name="AParameters">массив параметров</param>
+        /// <returns>false - если роутер уже выполняет другую команду</returns>
+        public void CommandRun(string ACommandID, object[] AParameters)
         {
-            throw new NotImplementedException();
+            try
+            {
+                CurrentCMDState = EnumerationCommandStates.sentFromClientToRouter;
+
+                string[] arrcmdid = ACommandID.Split(new char[] { '.' });
+                DS4CurrtntCMD = UInt16.Parse(arrcmdid[0]);
+                uint dev = UInt32.Parse(arrcmdid[1]);
+                uint tagguid = UInt32.Parse(arrcmdid[2]);
+
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Error, 1385, string.Format("{0} : Получен запрос на команду от HMI-клиента для {1}.", DateTime.Now.ToString(), ACommandID));
+
+                IWcfDataServer iwds = dWCFClientsList[DS4CurrtntCMD].wcfDataServer;
+                //bool rez = iwds.RunCMD(DS4CurrtntCMD, dev, tagguid, null /*byte[] pq*/);   // нужно поправить контракт на DS на массив объектов
+                iwds.BeginCommandRun(ACommandID, null, GetCMDStateCallback, iwds);
+
+                CurrentCMDState = EnumerationCommandStates.sentFromRouterToDataServer;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.CommandRun() : Исключение : " + ex.Message);
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+            }
+        }
+        /// <summary>
+        /// асинхронная функция для
+        /// инициирования запроса состояния выполнения команды 
+        /// с клиента
+        /// </summary>
+        /// <param name="result"></param>
+        void GetCMDStateCallback(IAsyncResult result)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+            }
         }
 
+        /// <summary>
+        /// возврат клиенту статуса 
+        /// выполнения команды        
+        /// </summary>
+        /// <param name="ACommandID"></param>
+        /// <returns></returns>
+        public EnumerationCommandStates CommandStateCheck(string ACommandID)
+        {
+            try
+            {
+                lock (lockObjectForCommands)
+                {
+                    IWcfDataServer iwds = dWCFClientsList[DS4CurrtntCMD].wcfDataServer;
+
+                    DSServiceReference.EnumerationCommandStates ecs = iwds.CommandStateCheck();
+
+                    CurrentCMDState = (EnumerationCommandStates)ecs;
+                }
+            }
+            catch (Exception ex)
+            {
+                TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+
+                CurrentCMDState = EnumerationCommandStates.cmdNotSend_DSR_2_DS;
+            }
+            return CurrentCMDState;
+        }
+        ///// <summary>
+        ///// асинхронная функция для
+        ///// инициирования запроса состояния выполнения команды 
+        ///// с клиента
+        ///// </summary>
+        ///// <param name="result"></param>
+        //void GetCMDStateCheck(IAsyncResult result)
+        //{
+        //    try
+        //    {
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(ex);
+        //    }
+        //}
         #endregion
 
         #region Работа с документами
@@ -1466,7 +1605,7 @@ namespace DSRouterServiceIIS
 
                 try
                 {
-                    DSDocumentDataValue[] dsDocuments;
+                    List<DSDocumentDataValue> dsDocuments;
                     lock (dsProxy)
                     {
                         dsDocuments = dsProxy.GetDocumentsList(devGuid);
@@ -1765,6 +1904,169 @@ namespace DSRouterServiceIIS
 
         #endregion
 
+        #region Тренды
+
+        /// <summary>
+        /// Получить список тегов, у которых включена запись значений
+        /// </summary>
+        public List<string> GetTagsListWithEnabledTrendSave()
+        {
+            var result = new List<string>();
+
+            foreach (var dsService in dWCFClientsList.Values)
+            {
+                var dsProxy = dsService.wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        var r = dsProxy.GetTagsListWithEnabledTrendSave();
+
+                        result.AddRange(from s in r select String.Format("{0}.{1}", dsService.dsUID, s));
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить доступные диапозоны значений тренда
+        /// </summary>
+        public List<Tuple<DateTime, DateTime>> GetTrendDateTimeRanges(ushort dsGuid, uint devGuid, uint tagGuid)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagTrendDateTimeRanges(devGuid, tagGuid).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить тренд единым списком
+        /// </summary>
+        public List<Tuple<DateTime, object>> GetTagTrend(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagTrend(devGuid, tagGuid, startDateTime, endDateTime).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить список обособленных трендов
+        /// </summary>
+        public List<List<Tuple<DateTime, object>>> GetTagTrendsList(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        return dsProxy.GetTagTrendsList(devGuid, tagGuid, startDateTime, endDateTime);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Получить настройки режима работы записи тренда
+        /// </summary>
+        public DSRouterTrendSettings GetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        var result = dsProxy.GetTrendSettings(devGuid, tagGuid);
+
+                        if (result != null)
+                            return new DSRouterTrendSettings(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Установить настройки режима работы записи тренда
+        /// </summary>
+        public void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings)
+        {
+            try
+            {
+                if (dWCFClientsList.ContainsKey(dsGuid))
+                {
+                    var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                    lock (dsProxy)
+                    {
+                        var dsTrendSettings = new DSTrendSettings
+                        {
+                            Enable = trendSettings.Enable,
+                            Sample = trendSettings.Sample,
+                            AbsoluteError = trendSettings.AbsoluteError,
+                            RelativeError = trendSettings.RelativeError,
+                            MaxCacheMinutes = trendSettings.MaxCacheMinutes,
+                            MaxCacheValuesCount = trendSettings.MaxCacheValuesCount
+                        };
+
+                        dsProxy.SetTrendSettings(devGuid, tagGuid, dsTrendSettings);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Private - методы
@@ -1842,9 +2144,10 @@ namespace DSRouterServiceIIS
                 EventDataID = -1,
                 EventID = -1,
                 EventTime = DateTime.Now,
-                EventSourceName = "Сервер данных",
+                EventSourceName = "DSRouter",
                 EventText = eventText,
-                EventSourceComment = "DSRouter"
+                EventSourceComment = "DSRouter",
+                EventDataType = DSRouterEventDataType.None
             };
         }
 
@@ -1971,16 +2274,16 @@ namespace DSRouterServiceIIS
             try
             {
                 // уберем факт выдачи команды
-                if (/*kvp.Value.*/IsCMDActive)
-                {
-                    currClient.NotifyCMDExecuted(cmdarray);
+                //if (/*kvp.Value.*/IsCMDActive)
+                //{
+                //    currClient.NotifyCMDExecuted(cmdarray);
 
-                    IsCMDActive = false;
+                //    IsCMDActive = false;
 
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2416, string.Format("{0} : {1} : {2} : Результат команды ретранслирован от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
-                }
-                else
-                    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2419, string.Format("{0} : {1} : {2} : Ошибка ретрансляции команды от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
+                //    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2416, string.Format("{0} : {1} : {2} : Результат команды ретранслирован от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
+                //}
+                //else
+                //    TraceSourceLib.TraceSourceDiagMes.WriteDiagnosticMSG(TraceEventType.Critical, 2419, string.Format("{0} : {1} : {2} : Ошибка ретрансляции команды от DataServer клиенту.", DateTime.Now.ToString(), @"X:\Projects\00_DataServer_ps_304\DSRouterService\DSRouterService\DSRouterService.svc.cs", "cbh_OnCMDExecuted()"));
             }
             catch (Exception ex)
             {

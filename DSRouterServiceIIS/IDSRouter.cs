@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -291,6 +292,12 @@ namespace DSRouterServiceIIS
         string GetOscillogramAsUrlByID(UInt16 dsGuid, Int32 eventDataID);
 
         /// <summary>
+        /// Получить zip архив с осциллограммами как кортеж массива байтов и имени архива
+        /// </summary>
+        [OperationContract]
+        Tuple<byte [], string> GetOscillogramAsByteArray(UInt16 dsGuid, Int32 eventDataID);
+
+        /// <summary>
         /// Получить архивную информацию (аварии, уставки и т.д.) как словарь значений
         /// </summary>
         [OperationContract]
@@ -367,7 +374,7 @@ namespace DSRouterServiceIIS
         /// Получение значений для указанных тегов из конкретного архивного набора уставок
         /// </summary>
         [OperationContract]
-        Dictionary<String, DSRouterTagValue> GetValuesFromSettingsSet(Int32 settingsSetID, List<string> tagsList);
+        Dictionary<String, DSRouterTagValue> GetValuesFromSettingsSet(UInt16 dsGuid, Int32 settingsSetID);
 
         /// <summary>
         /// Запись набора уставкок в устройство
@@ -378,13 +385,22 @@ namespace DSRouterServiceIIS
         #endregion
 
         #region Комманды
-
+        /// <summary>
         /// <summary>
         /// Запрос на запуск команды на устройстве
         /// </summary>
+        /// <param name="ACommandID">ds.dev.cmdid</param>
+        /// <param name="AParameters">массив параметров</param>
+        /// <returns>false - если роутер уже выполняет другую команду</returns>
         [OperationContract]
-        void CommandRun(UInt16 dsGuid, UInt32 devGuid, string commandID, Object[] parameters);
-
+        void CommandRun(string ACommandID, object[] AParameters);
+        /// <summary>
+        /// проверка статуса выполнения команды
+        /// </summary>
+        /// <param name="ACommandID"></param>
+        /// <returns></returns>
+        [OperationContract]
+        EnumerationCommandStates CommandStateCheck(string ACommandID);
         #endregion
 
         #region Работа с документами
@@ -501,6 +517,46 @@ namespace DSRouterServiceIIS
         #endregion
 
         #endregion
+
+        #region Тренды
+
+        /// <summary>
+        /// Получить список тегов, у которых включена запись значений
+        /// </summary>
+        [OperationContract]
+        List<string> GetTagsListWithEnabledTrendSave();
+
+        /// <summary>
+        /// Получить доступные диапазоны значений тренда
+        /// </summary>
+        [OperationContract]
+        List<Tuple<DateTime, DateTime>> GetTrendDateTimeRanges(ushort dsGuid, uint devGuid, uint tagGuid);
+
+        /// <summary>
+        /// Получить тренд единым списком
+        /// </summary>
+        [OperationContract]
+        List<Tuple<DateTime, object>> GetTagTrend(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime);
+
+        /// <summary>
+        /// Получить список обособленных трендов
+        /// </summary>
+        [OperationContract]
+        List<List<Tuple<DateTime, object>>> GetTagTrendsList(ushort dsGuid, uint devGuid, uint tagGuid, DateTime startDateTime, DateTime endDateTime);
+
+        /// <summary>
+        /// Получить настройки режима работы записи тренда
+        /// </summary>
+        [OperationContract]
+        DSRouterTrendSettings GetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid);
+
+        /// <summary>
+        /// Установить настройки режима работы записи тренда
+        /// </summary>
+        [OperationContract]
+        void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings);
+
+        #endregion
     }
 
     #region DataContracts
@@ -557,6 +613,22 @@ namespace DSRouterServiceIIS
     #region События
 
     /// <summary>
+    /// Тип данных, которые могут быть привязаны к событию
+    /// </summary>
+    [DataContract]
+    public enum DSRouterEventDataType
+    {
+        [EnumMember]
+        None = 0,
+        [EnumMember]
+        Ustavki = 1,
+        [EnumMember]
+        Alarm = 2,
+        [EnumMember]
+        Oscillogram = 3
+    }
+
+    /// <summary>
     /// Класс, описывающий событие
     /// </summary>
     [DataContract]
@@ -609,6 +681,12 @@ namespace DSRouterServiceIIS
         /// </summary>
         [DataMember]
         public Int32 EventDataID { get; set; }
+
+        /// <summary>
+        /// Тип данных, привязанных к событию
+        /// </summary>
+        [DataMember]
+        public DSRouterEventDataType EventDataType { get; set; }
 
         /// <summary>
         /// Нужно ли квитирование событие
@@ -665,6 +743,15 @@ namespace DSRouterServiceIIS
             ReceiptMessage = dsEventValue.ReceiptMessage;
             ReceiptUser = dsEventValue.ReceiptUser;
             ReceiptTime = dsEventValue.ReceiptTime;
+
+            if (dsEventValue.EventDataType == DSEventDataType.None)
+                EventDataType = DSRouterEventDataType.None;
+            else if (dsEventValue.EventDataType == DSEventDataType.Alarm)
+                EventDataType = DSRouterEventDataType.Alarm;
+            else if (dsEventValue.EventDataType == DSEventDataType.Ustavki)
+                EventDataType = DSRouterEventDataType.Ustavki;
+            else
+                EventDataType = DSRouterEventDataType.Oscillogram;
         }
     }
     #endregion
@@ -925,6 +1012,104 @@ namespace DSRouterServiceIIS
         }
     }
 
+    #endregion
+
+    #region Тренды
+
+    [DataContract]
+    public class DSRouterTrendSettings
+    {
+        /// <summary>
+        /// Включена ли запись тренда
+        /// </summary>
+        [DataMember]
+        public bool Enable { get; set; }
+
+        /// <summary>
+        /// Интервал записи значений. 0 - запись по факту изменения
+        /// </summary>
+        [DataMember]
+        public uint Sample { get; set; }
+
+        /// <summary>
+        /// Относительная погрешность изменения.
+        /// Допустимый диапозон значений (0,1]
+        /// </summary>
+        [DataMember]
+        public float? RelativeError { get; set; }
+
+        /// <summary>
+        /// Абсолютная погрешность изменения.
+        /// </summary>
+        [DataMember]
+        public float? AbsoluteError { get; set; }
+
+        /// <summary>
+        /// Максимальное число значений, которое будет кешироваться до записи в БД
+        /// </summary>
+        [DataMember]
+        public uint MaxCacheValuesCount { get; set; }
+
+        /// <summary>
+        /// Максимальное число минут для хранения закешированных данных
+        /// </summary>
+        [DataMember]
+        public uint MaxCacheMinutes { get; set; }
+
+        public DSRouterTrendSettings(DSTrendSettings dsTrendSettings)
+        {
+            Enable = dsTrendSettings.Enable;
+            Sample = dsTrendSettings.Sample;
+            AbsoluteError = dsTrendSettings.AbsoluteError;
+            RelativeError = dsTrendSettings.RelativeError;
+            MaxCacheMinutes = dsTrendSettings.MaxCacheMinutes;
+            MaxCacheValuesCount = dsTrendSettings.MaxCacheValuesCount;
+        }
+    }
+
+    #endregion
+
+    #region Команды
+    [DataContract]
+    public enum EnumerationCommandStates
+    {
+        [EnumMember]
+        [Description("Команда неопределена")]
+        undefined = 0,
+        [EnumMember]
+        [Description("Команда послана с клиента на DSR")]
+        sentFromClientToRouter = 1,
+        [EnumMember]
+        [Description("Команда послана с DSR на DS")]
+        sentFromRouterToDataServer = 2,
+        [EnumMember]
+        [Description("Команда послана с DS на ECU")]
+        sentFromDataServerToFC = 3,
+        [EnumMember]
+        [Description("Команда послана с ECU на устройство")]
+        sentFromFCToDevice = 4,
+        [EnumMember]
+        [Description("Команда выполнена")]
+        complete = 5,
+        [EnumMember]
+        [Description("В процессе обработки уже есть активная команда")]
+        cmdactive = 6,
+        [EnumMember]
+        [Description("команда была снята на DataServer по таймауту")]
+        cmdCancelAtDataServerByTimer = 7,
+        [EnumMember]
+        [Description("команда не была принята DS (возможно он занят другой командой)")]
+        cmdDiscardByDataServer = 8,
+        [EnumMember]
+        [Description("команда не была выполнена ECU/RTU")]
+        cmdDiscardEcuRtu = 9,
+        [EnumMember]
+        [Description("Неизвестная команда")]
+        cmdUnknown = 10,
+        [EnumMember]
+        [Description("DSR не может отправить команду DS (возможно нет связи)")]
+        cmdNotSend_DSR_2_DS = 11
+    }
     #endregion
 
     #endregion

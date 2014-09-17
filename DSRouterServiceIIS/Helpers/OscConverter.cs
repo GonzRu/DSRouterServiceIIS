@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using DSRouterServiceIIS.DSServiceReference;
+using Ionic.Zip;
 
 namespace DSRouterServiceIIS.Helpers
 {
@@ -26,8 +26,6 @@ namespace DSRouterServiceIIS.Helpers
         /// </summary>
         private const string OSC_FILE_NAME_WITH_PARTS = "{0}____{1}____{2}_part-{3}{4}";
 
-        private const string DARE_TOSTRING_TEMPLATE = "";
-
         #endregion
 
         #region Public - методы
@@ -37,7 +35,7 @@ namespace DSRouterServiceIIS.Helpers
         /// </summary>
         public static string SaveOscillogrammToFile(string pathToSave, DSOscillogram dsOscillogram)
         {
-            string oscDate = dsOscillogram.Date.ToString("yy-MM-dd");
+            string oscDate = dsOscillogram.Date.ToString("yy-MM-dd hh-mm-ss");
 
             // Создаем временную директорию
             string pathToTempDirectory = GetTemporaryDirectory();
@@ -74,11 +72,34 @@ namespace DSRouterServiceIIS.Helpers
             if (File.Exists(pathToResultZipFile))
                 File.Delete(pathToResultZipFile);
 
-            ZipFile.CreateFromDirectory(pathToTempDirectory, pathToResultZipFile, CompressionLevel.Optimal, false, System.Text.Encoding.GetEncoding("cp866"));
+            //ZipFile.CreateFromDirectory(pathToTempDirectory, pathToResultZipFile, CompressionLevel.Optimal, false, System.Text.Encoding.GetEncoding("cp866"));
+
+            using (ZipFile zipFile = new ZipFile(System.Text.Encoding.GetEncoding("cp866")))
+            {
+                zipFile.AddDirectory(pathToTempDirectory);
+                zipFile.Save(pathToResultZipFile);
+            }
 
             Directory.Delete(pathToTempDirectory, true);
 
             return resultZipFileName;
+        }
+
+        /// <summary>
+        /// Сохраняет осциллограмму на диск, архивирует её и возвращает содержимое архива с его именем
+        /// </summary>
+        public static Tuple<byte[], string> GetOscillogramData(DSOscillogram dsOscillogram)
+        {
+            var tempPath = Path.GetTempPath();
+            var oscZipName = SaveOscillogrammToFile(tempPath, dsOscillogram);
+
+            var stream = File.Open(Path.Combine(tempPath, oscZipName), FileMode.Open);
+            byte[] data = new byte[stream.Length];
+
+            stream.Read(data, 0, data.Length);
+            stream.Close();
+
+            return new Tuple<byte[], string>(data, oscZipName);
         }
 
         #endregion
@@ -112,6 +133,8 @@ namespace DSRouterServiceIIS.Helpers
                     return ".dfr";
                 case DSEventDataType.OscillogramBresler:
                     return ".zbrs";
+                case DSEventDataType.OscillogramComtrade:
+                    return ".zosc";
             }
 
             throw new Exception("Для данного типа формат не предусмотрен");
