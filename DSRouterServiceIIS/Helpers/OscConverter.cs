@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using DSRouterServiceIIS.DSServiceReference;
+using Ionic.Zip;
 
 namespace DSRouterServiceIIS.Helpers
 {
@@ -72,7 +72,13 @@ namespace DSRouterServiceIIS.Helpers
             if (File.Exists(pathToResultZipFile))
                 File.Delete(pathToResultZipFile);
 
-            ZipFile.CreateFromDirectory(pathToTempDirectory, pathToResultZipFile, CompressionLevel.Optimal, false, System.Text.Encoding.GetEncoding("cp866"));
+            //ZipFile.CreateFromDirectory(pathToTempDirectory, pathToResultZipFile, CompressionLevel.Optimal, false, System.Text.Encoding.GetEncoding("cp866"));
+
+            using (ZipFile zipFile = new ZipFile(System.Text.Encoding.GetEncoding("cp866")))
+            {
+                zipFile.AddDirectory(pathToTempDirectory);
+                zipFile.Save(pathToResultZipFile);
+            }
 
             Directory.Delete(pathToTempDirectory, true);
 
