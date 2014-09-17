@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DLL\Ionic.Zip.dll" />
+    <Content Include="DLL\System.ServiceModel.PollingDuplex.dll" />
+    <Content Include="DLL\TraceSourceLib.dll" />
     <Content Include="DSRouterService.svc" />
     <Content Include="Service References\DSServiceReference\DSRouterServiceIIS.DSServiceReference.DSDataFile.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
