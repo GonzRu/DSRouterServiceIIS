@@ -557,6 +557,34 @@ namespace DSRouterServiceIIS
         void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings);
 
         #endregion
+
+        #region Отчеты
+
+        /// <summary>
+        /// Получить список доступных отчетов
+        /// </summary>
+        /// <returns></returns>
+        List<DSRouterReportDescription> GetReportsDescriptions();
+
+            /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        [OperationContract]
+        string GetDailyReport(DSRouterDailyReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        [OperationContract]
+        string GetEventsReport(DSRouterEventsReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        [OperationContract]
+        string GetTagsReport(DSRouterTagsReportSettings reportSettings);
+
+        #endregion
     }
 
     #region DataContracts
