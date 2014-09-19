@@ -2067,6 +2067,75 @@ namespace DSRouterServiceIIS
 
         #endregion
 
+        #region Отчеты
+
+        /// <summary>
+        /// Получить список доступных отчетов
+        /// </summary>
+        /// <returns></returns>
+        public List<DSRouterReportDescription> GetReportsDescriptions()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        public string GetDailyReport(DSRouterDailyReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetDailyReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        public string GetEventsReport(DSRouterEventsReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetEventsReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        public string GetTagsReport(DSRouterTagsReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetTagsReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+
+
+        #endregion
+
         #endregion
 
         #region Private - методы
