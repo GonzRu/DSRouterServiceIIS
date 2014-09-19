@@ -1245,10 +1245,10 @@ namespace DSRouterServiceIIS
         public DateTime EndDateTime { get; set; }
 
         /// <summary>
-        /// Частота вывода значений в отчете
+        /// Интервал вывода значений в отчете в сек.
         /// </summary>
         [DataMember]
-        public uint Sample { get; set; }
+        public uint Interval { get; set; }
     }
 
     #endregion
