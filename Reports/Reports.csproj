@@ -41,6 +41,28 @@
   <ItemGroup>
     <Compile Include="Report.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportsDataSource.cs">
+      <DependentUpon>ReportsDataSource.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ReportsDataSource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportsDataSource.xsd</DependentUpon>
+    </Compile>
+  <ItemGroup>
+    <None Include="ReportsDataSource.xsc">
+      <DependentUpon>ReportsDataSource.xsd</DependentUpon>
+    </None>
+    <None Include="ReportsDataSource.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReportsDataSource.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ReportsDataSource.xss">
+      <DependentUpon>ReportsDataSource.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
