@@ -1,5 +1,9 @@
+﻿using System.Data;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using System;
 using System.IO;
+using Reports.ReportsTemplates;
 
 namespace Reports
 {
@@ -18,6 +22,12 @@ namespace Reports
         /// </summary>
         protected object _dataSource = null;
 
+        /// <summary>
+        /// Имя шаблона
+        /// </summary>
+        protected string _reportTemplateName = String.Empty;
+
+        #endregion
 
         #region Constructor
 
@@ -47,6 +57,10 @@ namespace Reports
         /// </summary>
         public byte[] GetReportFileContent(string reportFileName, string reportFileExtension)
         {
+            var path = Path.GetTempPath();
+
+            SaveReportFile(path, reportFileName, reportFileExtension);
+
             return null;
         }
 
@@ -58,6 +72,17 @@ namespace Reports
         /// <param name="reportFileExtension">Расширение отчета</param>
         public void SaveReportFile(string path, string reportFileName, string reportFileExtension)
         {
+            CheckDataSource();
+
+            var pathToFile = Path.Combine(path, reportFileName + "." + reportFileExtension);
+
+            ReportDocument report = new ReportDocument();
+            string pathToReportTemplate = Path.Combine(PATH_TO_REPORTS_TEMPLATES, _reportTemplateName + ".rpt");
+            report.Load(pathToReportTemplate);
+
+            report.SetDataSource(_dataSource as DataSet);
+
+            report.ExportToDisk(GetExportFormatType(reportFileExtension), pathToFile);
         }
 
         #endregion
