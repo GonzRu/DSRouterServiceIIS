@@ -2125,38 +2125,12 @@ namespace DSRouterServiceIIS
 
             try
             {
-                #region Получение данных
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
 
-                var dsGuid = reportSettings.DsGuid;
-                var deviceGuid = reportSettings.DeviceGuid;
-
-                var events = (this as IDSRouter).GetEvents(reportSettings.StartDateTime, reportSettings.EndDateTime,
-                    false, false, true, new List<Tuple<ushort, uint>> {new Tuple<ushort, uint>(dsGuid, deviceGuid)});
-
-                if (events == null)
+                if (SaveEventsReport(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, reportName, reportSettings) == null)
                     return null;
 
-                #endregion
-
-                #region Подготовка данных
-
-                var dataSource = FillDataSet(events, null, null);
-
-                #endregion
-
-                #region Формирование отчета
-
-                string reportTemplateName = String.IsNullOrWhiteSpace(reportSettings.ReportTamplateName) ? "EventsReport" : reportSettings.ReportTamplateName;
-
-                var report = new Report(reportTemplateName);
-                report.SetDataSource(dataSource);
-
-                report.SaveReportFile(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, "Отчет", reportSettings.ReportExtension.ToString());
-
-                var reportFileName = "Отчет." + reportSettings.ReportExtension.ToString();
-                result = DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + reportFileName;
-
-                #endregion
+                result = DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + reportName + reportSettings.ReportExtension;
             }
             catch (Exception ex)
             {
@@ -2407,8 +2381,48 @@ namespace DSRouterServiceIIS
 
         #region Вспомогательные методы для подготовки отчетов
 
+        #region EventsReport
 
-        
+        private string SaveEventsReport(string pathToSave, string reportName, DSRouterEventsReportSettings reportSettings)
+        {
+            string result = null;
+
+            #region Получение данных
+
+            var dsGuid = reportSettings.DsGuid;
+            var deviceGuid = reportSettings.DeviceGuid;
+
+            var events = (this as IDSRouter).GetEvents(reportSettings.StartDateTime, reportSettings.EndDateTime,
+                false, false, true, new List<Tuple<ushort, uint>> { new Tuple<ushort, uint>(dsGuid, deviceGuid) });
+
+            if (events == null)
+                return null;
+
+            #endregion
+
+            #region Подготовка данных
+
+            var dataSource = FillDataSet(events, null, null);
+
+            #endregion
+
+            #region Формирование отчета
+
+            string reportTemplateName = String.IsNullOrWhiteSpace(reportSettings.ReportTamplateName) ? "EventsReport" : reportSettings.ReportTamplateName;
+
+            var report = new Report(reportTemplateName);
+            report.SetDataSource(dataSource);
+
+            report.SaveReportFile(pathToSave, reportName, reportSettings.ReportExtension.ToString());
+
+            result = Path.Combine(pathToSave, reportName + "." + reportSettings.ReportExtension.ToString());
+
+            #endregion
+
+            return result;
+        }
+
+        #endregion
 
         #region Заполнение DataSet
 
