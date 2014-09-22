@@ -2319,9 +2319,63 @@ namespace DSRouterServiceIIS
 
         #endregion
 
-        #region Вспомогательные методы для работы с DS
+        #region Вспомогательные методы для подготовки отчетов
+
 
         
+
+        #region Заполнение DataSet
+
+        /// <summary>
+        /// Создает и заполняет DataSet
+        /// </summary>
+        private DataSet FillDataSet(List<DSRouterEventValue> events,
+            Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> trends,
+            Dictionary<DateTime, Tuple<object, object, object, object>> trendsWithFixStep)
+        {
+            var dataSet = new ReportsDataSource();
+
+            if (events != null)
+            {
+                var eventsTable = dataSet.Tables["Events"];
+
+                foreach (var dsRouterEvent in events)
+                {
+                    eventsTable.Rows.Add(dsRouterEvent.EventTime, dsRouterEvent.EventText);
+                }
+            }
+
+            if (trends != null)
+            {
+                var tagsDescriptionTable = dataSet.Tables["TagsDescription"];
+                var trendsValuesTable = dataSet.Tables["TrendsValues"];
+
+                foreach (var trend in trends)
+                {
+                    var row = tagsDescriptionTable.Rows.Add(trend.Key.Item1, trend.Key.Item2, trend.Key.Item3, trend.Key.Item4);
+                    var tagId = (int)row[4];
+
+                    foreach (var trendValue in trend.Value)
+                    {
+                        trendsValuesTable.Rows.Add(tagId, trendValue.Item1, trendValue.Item2);
+                    }
+                }
+            }
+
+            if (trendsWithFixStep != null)
+            {
+                var fixTrendsValuesTable = dataSet.Tables["FixTrendsValues"];
+
+                foreach (var tuple in trendsWithFixStep)
+                {
+                    fixTrendsValuesTable.Rows.Add(tuple.Key, tuple.Value.Item1, tuple.Value.Item2, tuple.Value.Item3, tuple.Value.Item4);
+                }
+            }
+
+            return dataSet;
+        }
+
+        #endregion
 
         #endregion
 
