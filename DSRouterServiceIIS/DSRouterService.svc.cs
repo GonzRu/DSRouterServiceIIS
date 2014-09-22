@@ -2099,6 +2099,24 @@ namespace DSRouterServiceIIS
         }
 
         /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        public byte[] GetDailyReportAsByteArray(DSRouterDailyReportSettings reportSettings)
+        {
+            byte[] result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetDailyReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Получить отчет по событиям устройства
         /// </summary>
         public string GetEventsReport(DSRouterEventsReportSettings reportSettings)
@@ -2149,6 +2167,24 @@ namespace DSRouterServiceIIS
         }
 
         /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        public byte[] GetEventsReportAsByteArray(DSRouterEventsReportSettings reportSettings)
+        {
+            byte[] result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetEventsReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Получить отчет по значениям тегов
         /// </summary>
         public string GetTagsReport(DSRouterTagsReportSettings reportSettings)
@@ -2166,7 +2202,23 @@ namespace DSRouterServiceIIS
             return result;
         }
 
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        public byte[] GetTagsReportAsByteArray(DSRouterTagsReportSettings reportSettings)
+        {
+            byte[] result = null;
 
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetTagsReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
 
         #endregion
 

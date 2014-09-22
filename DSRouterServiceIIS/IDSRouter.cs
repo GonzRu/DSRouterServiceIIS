@@ -566,11 +566,17 @@ namespace DSRouterServiceIIS
         /// <returns></returns>
         List<DSRouterReportDescription> GetReportsDescriptions();
 
-            /// <summary>
+        /// <summary>
         /// Получить ежедневнвый отчет
         /// </summary>
         [OperationContract]
         string GetDailyReport(DSRouterDailyReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        [OperationContract]
+        byte[] GetDailyReportAsByteArray(DSRouterDailyReportSettings reportSettings);
 
         /// <summary>
         /// Получить отчет по событиям устройства
@@ -579,10 +585,22 @@ namespace DSRouterServiceIIS
         string GetEventsReport(DSRouterEventsReportSettings reportSettings);
 
         /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        [OperationContract]
+        byte[] GetEventsReportAsByteArray(DSRouterEventsReportSettings reportSettings);
+
+        /// <summary>
         /// Получить отчет по значениям тегов
         /// </summary>
         [OperationContract]
         string GetTagsReport(DSRouterTagsReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        [OperationContract]
+        byte[] GetTagsReportAsByteArray(DSRouterTagsReportSettings reportSettings);
 
         #endregion
     }
