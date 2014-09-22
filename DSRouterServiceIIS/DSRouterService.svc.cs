@@ -2149,6 +2149,20 @@ namespace DSRouterServiceIIS
 
             try
             {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                var pathToReport = SaveEventsReport(Path.GetTempPath(), reportName, reportSettings);
+                if (pathToReport == null)
+                    return null;
+
+                using (var stream = File.Open(pathToReport, FileMode.Open))
+                {
+                    result = new byte[stream.Length];
+
+                    stream.Read(result, 0, result.Length);
+                    stream.Close();    
+                }
+                
             }
             catch (Exception ex)
             {
