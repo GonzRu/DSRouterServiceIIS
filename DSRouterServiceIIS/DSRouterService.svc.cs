@@ -111,7 +111,7 @@ namespace DSRouterServiceIIS
             try
             {
                 if (Directory.Exists(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES))
-                    Directory.Delete(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES);
+                    Directory.Delete(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, true);
 
                 Directory.CreateDirectory(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES);
             }
