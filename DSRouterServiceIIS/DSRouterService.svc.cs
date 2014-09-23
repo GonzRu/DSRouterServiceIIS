@@ -2181,6 +2181,12 @@ namespace DSRouterServiceIIS
 
             try
             {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                if (SaveTagsReport(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, reportName, reportSettings) == null)
+                    return null;
+
+                result = DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + reportName + reportSettings.ReportExtension;
             }
             catch (Exception ex)
             {
@@ -2199,6 +2205,19 @@ namespace DSRouterServiceIIS
 
             try
             {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                var pathToReport = SaveTagsReport(Path.GetTempPath(), reportName, reportSettings);
+                if (pathToReport == null)
+                    return null;
+
+                using (var stream = File.Open(pathToReport, FileMode.Open))
+                {
+                    result = new byte[stream.Length];
+
+                    stream.Read(result, 0, result.Length);
+                    stream.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -2432,6 +2451,117 @@ namespace DSRouterServiceIIS
             result = Path.Combine(pathToSave, reportName + "." + reportSettings.ReportExtension.ToString());
 
             #endregion
+
+            return result;
+        }
+
+        #endregion
+
+        #region TagsReport
+
+        /// <summary>
+        /// Собирает данные и сохраняет отчет в указанное место
+        /// </summary>
+        private string SaveTagsReport(string pathToSave, string reportName, DSRouterTagsReportSettings reportSettings)
+        {
+            string result = null;
+
+            // Получаем тренды
+            var trends = GetTrends(reportSettings.Tags, reportSettings.StartDateTime, reportSettings.EndDateTime);
+            if (trends == null || trends.Count == 0)
+                return null;
+
+            // Если надо, то приводим тренды к единому шагу
+            Dictionary<DateTime, Tuple<object, object, object, object>> trendsWithFixStep = null;
+            if (reportSettings.Interval != 0)
+            {
+                trendsWithFixStep = GetTrendsWithFixStep(trends, reportSettings.Interval, reportSettings.StartDateTime, reportSettings.EndDateTime);
+            }
+
+            // Заполняем DataSet
+            var dataSource = FillDataSet(null, trends, trendsWithFixStep);
+
+            #region Формирование отчета
+
+            string reportTemplateName = String.IsNullOrWhiteSpace(reportSettings.ReportTamplateName) ? "TagsReport" : reportSettings.ReportTamplateName;
+
+            var report = new Report(reportTemplateName);
+            report.SetDataSource(dataSource);
+
+            report.SaveReportFile(pathToSave, reportName, reportSettings.ReportExtension.ToString());
+
+            result = Path.Combine(pathToSave, reportName + "." + reportSettings.ReportExtension.ToString());
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить тренды для указанных тегов в указанных диапазонах с дополнительной информацией,
+        /// такой как: dsGuid, devGuid, tagGuid, tagName
+        /// </summary>
+        private Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> GetTrends(List<string> tags, DateTime startDateTime, DateTime endDateTime)
+        {
+            var trends = new Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>>();
+
+            foreach (var tag in tags)
+            {
+                var c = tag.Split('.');
+
+                var dsGuid = UInt16.Parse(c[0]);
+                var deviceGuid = UInt32.Parse(c[1]);
+                var tagGuid = UInt32.Parse(c[2]);
+                var tagName = (this as IDSRouter).GetRTUTagName(dsGuid, deviceGuid, 0, tagGuid);
+
+                var trend = GetTagTrend(dsGuid, deviceGuid, tagGuid, startDateTime, endDateTime);
+                if (trend != null && trend.Count > 0)
+                    trends.Add(new Tuple<ushort, uint, uint, string>(dsGuid, deviceGuid, tagGuid, tagName), trend);
+            }
+
+            return trends;
+        }
+
+        private Dictionary<DateTime, Tuple<object, object, object, object>> GetTrendsWithFixStep(
+            Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> trends,
+            uint interval,
+            DateTime startDateTime,
+            DateTime endDateTime)
+        {
+            /*
+             * На данный момент считаем, что
+             * указанный шаг всегда больше чем шаг между реальными значениями.
+             * В качестве парвила формирования - берем последнее значение в интервале.
+             * Надо будет переделать.
+             */
+
+            var result = new Dictionary<DateTime, Tuple<object, object, object, object>>();
+            var values = new object[4];
+
+            var startInterval = startDateTime;
+            var endInterval = startDateTime.AddSeconds(interval);
+            while (endInterval < endDateTime)
+            {
+                int i = 0;
+                foreach (var trend in trends.Values)
+                {
+                    if (i >= 4)
+                        break;
+
+                    var valuesInInterval = trend.Where(tuple => tuple.Item1 > startInterval && tuple.Item1 <= endInterval).ToList();
+
+                    if (valuesInInterval.Count == 0)
+                        values[i] = null;
+                    else
+                        values[i] = valuesInInterval.Last().Item2;
+                    i++;
+                }
+
+                result.Add(endInterval, new Tuple<object, object, object, object>(values[0], values[1], values[2], values[3]));
+
+                startInterval = endInterval;
+                endInterval = endInterval.AddSeconds(interval);
+            }
 
             return result;
         }
