@@ -56,6 +56,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportsDataSource.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ReportsTemplates\Tags4Report.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tags4Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ReportsTemplates\TagsReport.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TagsReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <None Include="ReportsDataSource.xsc">
       <DependentUpon>ReportsDataSource.xsd</DependentUpon>
@@ -69,6 +82,18 @@
       <DependentUpon>ReportsDataSource.xsd</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReportsTemplates\Tags4Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Tags4Report.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportsTemplates\TagsReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TagsReport.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
