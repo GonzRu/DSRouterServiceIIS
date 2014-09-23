@@ -1928,8 +1928,9 @@ namespace DSRouterServiceIIS
                         result.AddRange(from s in r select String.Format("{0}.{1}", dsService.dsUID, s));
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Log.WriteErrorMessage("DSRouterService.GetTagsListWithEnabledTrendSave() : Исключение : " + ex.Message);
                 }
             }
 
@@ -1955,6 +1956,7 @@ namespace DSRouterServiceIIS
             }
             catch (Exception ex)
             {
+                Log.WriteErrorMessage("DSRouterService.GetTrendDateTimeRanges() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -1979,6 +1981,7 @@ namespace DSRouterServiceIIS
             }
             catch (Exception ex)
             {
+                Log.WriteErrorMessage("DSRouterService.GetTagTrend() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -2003,6 +2006,7 @@ namespace DSRouterServiceIIS
             }
             catch (Exception ex)
             {
+                Log.WriteErrorMessage("DSRouterService.GetTagTrendsList() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -2030,6 +2034,7 @@ namespace DSRouterServiceIIS
             }
             catch (Exception ex)
             {
+                Log.WriteErrorMessage("DSRouterService.GetTrendSettings() : Исключение : " + ex.Message);
             }
 
             return null;
@@ -2064,6 +2069,7 @@ namespace DSRouterServiceIIS
             }
             catch (Exception ex)
             {
+                Log.WriteErrorMessage("DSRouterService.SetTrendSettings() : Исключение : " + ex.Message);
             }
         }
 
