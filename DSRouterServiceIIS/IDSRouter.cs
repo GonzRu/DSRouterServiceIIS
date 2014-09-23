@@ -557,6 +557,52 @@ namespace DSRouterServiceIIS
         void SetTrendSettings(ushort dsGuid, uint devGuid, uint tagGuid, DSRouterTrendSettings trendSettings);
 
         #endregion
+
+        #region Отчеты
+
+        /// <summary>
+        /// Получить список доступных отчетов
+        /// </summary>
+        /// <returns></returns>
+        List<DSRouterReportDescription> GetReportsDescriptions();
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        [OperationContract]
+        string GetDailyReport(DSRouterDailyReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        [OperationContract]
+        byte[] GetDailyReportAsByteArray(DSRouterDailyReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        [OperationContract]
+        string GetEventsReport(DSRouterEventsReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        [OperationContract]
+        byte[] GetEventsReportAsByteArray(DSRouterEventsReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        [OperationContract]
+        string GetTagsReport(DSRouterTagsReportSettings reportSettings);
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        [OperationContract]
+        byte[] GetTagsReportAsByteArray(DSRouterTagsReportSettings reportSettings);
+
+        #endregion
     }
 
     #region DataContracts
@@ -1110,6 +1156,144 @@ namespace DSRouterServiceIIS
         [Description("DSR не может отправить команду DS (возможно нет связи)")]
         cmdNotSend_DSR_2_DS = 11
     }
+    #endregion
+
+    #region Отчеты
+
+    #region Классы для описания настроек отчета
+
+    [DataContract]
+    public enum DSRouterReportExtension
+    {
+        [EnumMember]
+        [Description("Формат Excel (xls)")]
+        xls,
+        [EnumMember]
+        [Description("Формат Excel (xlsx)")]
+        xlsx,
+        [EnumMember]
+        [Description("Формат Word (doc)")]
+        doc,
+        [EnumMember]
+        [Description("Формат Pdf")]
+        pdf
+    }
+
+    [DataContract]
+    public class DSRouterDailyReportSettings
+    {
+        /// <summary>
+        /// Формат отчета
+        /// </summary>
+        [DataMember]
+        public DSRouterReportExtension ReportExtension { get; set; }
+
+        /// <summary>
+        /// Имя шаблона отчета
+        /// </summary>
+        [DataMember]
+        public string ReportTamplateName { get; set; }
+    }
+
+    [DataContract]
+    public class DSRouterEventsReportSettings
+    {
+        /// <summary>
+        /// Формат отчета
+        /// </summary>
+        [DataMember]
+        public DSRouterReportExtension ReportExtension { get; set; }
+
+        /// <summary>
+        /// Имя шаблона отчета
+        /// </summary>
+        [DataMember]
+        public string ReportTamplateName { get; set; }
+
+        [DataMember]
+        public ushort DsGuid { get; set; }
+
+        [DataMember]
+        public uint DeviceGuid { get; set; }
+
+        /// <summary>
+        /// Начало отсчета для событий
+        /// </summary>
+        [DataMember]
+        public DateTime StartDateTime { get; set; }
+
+        /// <summary>
+        /// Конец отсчета для событий
+        /// </summary>
+        [DataMember]
+        public DateTime EndDateTime { get; set; }
+    }
+
+    [DataContract]
+    public class DSRouterTagsReportSettings
+    {
+        /// <summary>
+        /// Формат отчета
+        /// </summary>
+        [DataMember]
+        public DSRouterReportExtension ReportExtension { get; set; }
+
+        /// <summary>
+        /// Имя шаблона отчета
+        /// </summary>
+        [DataMember]
+        public string ReportTamplateName { get; set; }
+
+        /// <summary>
+        /// Список тегов, по которым необходимо получить отчёт
+        /// </summary>
+        [DataMember]
+        public List<string> Tags { get; set; }
+
+        /// <summary>
+        /// Начало отсчета для тегов
+        /// </summary>
+        [DataMember]
+        public DateTime StartDateTime { get; set; }
+
+        /// <summary>
+        /// Конец отсчета для тегов
+        /// </summary>
+        [DataMember]
+        public DateTime EndDateTime { get; set; }
+
+        /// <summary>
+        /// Интервал вывода значений в отчете в сек.
+        /// </summary>
+        [DataMember]
+        public uint Interval { get; set; }
+    }
+
+    #endregion
+
+    #region
+
+    /// <summary>
+    /// Класс, описывающий отчет
+    /// </summary>
+    [DataContract]
+    public class DSRouterReportDescription
+    {
+        /// <summary>
+        /// Имя шаблона файла
+        /// </summary>
+        public string ReportTemplateName { get; set; }
+
+        /// <summary>
+        /// Описание отчета
+        /// </summary>
+        public string ReportDescription { get; set; }
+
+        
+    }
+
+    #endregion
+
     #endregion
 
     #endregion

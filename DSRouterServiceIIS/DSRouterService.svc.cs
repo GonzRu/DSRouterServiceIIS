@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,6 +11,7 @@ using DSRouterServiceIIS.DataSources;
 using DSRouterServiceIIS.DSServiceReference;
 using DSRouterServiceIIS.Helpers;
 using HMI_MT_Settings;
+using Reports;
 
 namespace DSRouterServiceIIS
 {
@@ -2067,6 +2069,166 @@ namespace DSRouterServiceIIS
 
         #endregion
 
+        #region Отчеты
+
+        /// <summary>
+        /// Получить список доступных отчетов
+        /// </summary>
+        /// <returns></returns>
+        public List<DSRouterReportDescription> GetReportsDescriptions()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        public string GetDailyReport(DSRouterDailyReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetDailyReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить ежедневнвый отчет
+        /// </summary>
+        public byte[] GetDailyReportAsByteArray(DSRouterDailyReportSettings reportSettings)
+        {
+            byte[] result = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetDailyReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        public string GetEventsReport(DSRouterEventsReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                if (SaveEventsReport(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, reportName, reportSettings) == null)
+                    return null;
+
+                result = DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + reportName + reportSettings.ReportExtension;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetEventsReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по событиям устройства
+        /// </summary>
+        public byte[] GetEventsReportAsByteArray(DSRouterEventsReportSettings reportSettings)
+        {
+            byte[] result = null;
+
+            try
+            {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                var pathToReport = SaveEventsReport(Path.GetTempPath(), reportName, reportSettings);
+                if (pathToReport == null)
+                    return null;
+
+                using (var stream = File.Open(pathToReport, FileMode.Open))
+                {
+                    result = new byte[stream.Length];
+
+                    stream.Read(result, 0, result.Length);
+                    stream.Close();    
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetEventsReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        public string GetTagsReport(DSRouterTagsReportSettings reportSettings)
+        {
+            string result = null;
+
+            try
+            {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                if (SaveTagsReport(DEFAULT_PATH_TO_DIRECTORY_TO_SHARE_FILES, reportName, reportSettings) == null)
+                    return null;
+
+                result = DEFAULT_URL_TO_DIRECTORY_TO_SHARE_FILES + reportName + reportSettings.ReportExtension;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetTagsReport() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить отчет по значениям тегов
+        /// </summary>
+        public byte[] GetTagsReportAsByteArray(DSRouterTagsReportSettings reportSettings)
+        {
+            byte[] result = null;
+
+            try
+            {
+                string reportName = "Отчет " + DateTime.Now.ToShortDateString();
+
+                var pathToReport = SaveTagsReport(Path.GetTempPath(), reportName, reportSettings);
+                if (pathToReport == null)
+                    return null;
+
+                using (var stream = File.Open(pathToReport, FileMode.Open))
+                {
+                    result = new byte[stream.Length];
+
+                    stream.Read(result, 0, result.Length);
+                    stream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorMessage("DSRouterService.GetTagsReportAsByteArray() : Исключение : " + ex.Message);
+            }
+
+            return result;
+        }
+
+        #endregion
+
         #endregion
 
         #region Private - методы
@@ -2250,9 +2412,217 @@ namespace DSRouterServiceIIS
 
         #endregion
 
-        #region Вспомогательные методы для работы с DS
+        #region Вспомогательные методы для подготовки отчетов
 
-        
+        #region EventsReport
+
+        /// <summary>
+        /// Собирает данные и сохраняет отчет в указанное место
+        /// </summary>
+        private string SaveEventsReport(string pathToSave, string reportName, DSRouterEventsReportSettings reportSettings)
+        {
+            string result = null;
+
+            #region Получение данных
+
+            var dsGuid = reportSettings.DsGuid;
+            var deviceGuid = reportSettings.DeviceGuid;
+
+            var events = (this as IDSRouter).GetEvents(reportSettings.StartDateTime, reportSettings.EndDateTime,
+                false, false, true, new List<Tuple<ushort, uint>> { new Tuple<ushort, uint>(dsGuid, deviceGuid) });
+
+            if (events == null)
+                return null;
+
+            #endregion
+
+            #region Подготовка данных
+
+            var dataSource = FillDataSet(events, null, null);
+
+            #endregion
+
+            #region Формирование отчета
+
+            string reportTemplateName = String.IsNullOrWhiteSpace(reportSettings.ReportTamplateName) ? "EventsReport" : reportSettings.ReportTamplateName;
+
+            var report = new Report(reportTemplateName);
+            report.SetDataSource(dataSource);
+
+            report.SaveReportFile(pathToSave, reportName, reportSettings.ReportExtension.ToString());
+
+            result = Path.Combine(pathToSave, reportName + "." + reportSettings.ReportExtension.ToString());
+
+            #endregion
+
+            return result;
+        }
+
+        #endregion
+
+        #region TagsReport
+
+        /// <summary>
+        /// Собирает данные и сохраняет отчет в указанное место
+        /// </summary>
+        private string SaveTagsReport(string pathToSave, string reportName, DSRouterTagsReportSettings reportSettings)
+        {
+            string result = null;
+
+            // Получаем тренды
+            var trends = GetTrends(reportSettings.Tags, reportSettings.StartDateTime, reportSettings.EndDateTime);
+            if (trends == null || trends.Count == 0)
+                return null;
+
+            // Если надо, то приводим тренды к единому шагу
+            Dictionary<DateTime, Tuple<object, object, object, object>> trendsWithFixStep = null;
+            if (reportSettings.Interval != 0)
+            {
+                trendsWithFixStep = GetTrendsWithFixStep(trends, reportSettings.Interval, reportSettings.StartDateTime, reportSettings.EndDateTime);
+            }
+
+            // Заполняем DataSet
+            var dataSource = FillDataSet(null, trends, trendsWithFixStep);
+
+            #region Формирование отчета
+
+            string reportTemplateName = String.IsNullOrWhiteSpace(reportSettings.ReportTamplateName) ? "TagsReport" : reportSettings.ReportTamplateName;
+
+            var report = new Report(reportTemplateName);
+            report.SetDataSource(dataSource);
+
+            report.SaveReportFile(pathToSave, reportName, reportSettings.ReportExtension.ToString());
+
+            result = Path.Combine(pathToSave, reportName + "." + reportSettings.ReportExtension.ToString());
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// Получить тренды для указанных тегов в указанных диапазонах с дополнительной информацией,
+        /// такой как: dsGuid, devGuid, tagGuid, tagName
+        /// </summary>
+        private Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> GetTrends(List<string> tags, DateTime startDateTime, DateTime endDateTime)
+        {
+            var trends = new Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>>();
+
+            foreach (var tag in tags)
+            {
+                var c = tag.Split('.');
+
+                var dsGuid = UInt16.Parse(c[0]);
+                var deviceGuid = UInt32.Parse(c[1]);
+                var tagGuid = UInt32.Parse(c[2]);
+                var tagName = (this as IDSRouter).GetRTUTagName(dsGuid, deviceGuid, 0, tagGuid);
+
+                var trend = GetTagTrend(dsGuid, deviceGuid, tagGuid, startDateTime, endDateTime);
+                if (trend != null && trend.Count > 0)
+                    trends.Add(new Tuple<ushort, uint, uint, string>(dsGuid, deviceGuid, tagGuid, tagName), trend);
+            }
+
+            return trends;
+        }
+
+        private Dictionary<DateTime, Tuple<object, object, object, object>> GetTrendsWithFixStep(
+            Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> trends,
+            uint interval,
+            DateTime startDateTime,
+            DateTime endDateTime)
+        {
+            /*
+             * На данный момент считаем, что
+             * указанный шаг всегда больше чем шаг между реальными значениями.
+             * В качестве парвила формирования - берем последнее значение в интервале.
+             * Надо будет переделать.
+             */
+
+            var result = new Dictionary<DateTime, Tuple<object, object, object, object>>();
+            var values = new object[4];
+
+            var startInterval = startDateTime;
+            var endInterval = startDateTime.AddSeconds(interval);
+            while (endInterval < endDateTime)
+            {
+                int i = 0;
+                foreach (var trend in trends.Values)
+                {
+                    if (i >= 4)
+                        break;
+
+                    var valuesInInterval = trend.Where(tuple => tuple.Item1 > startInterval && tuple.Item1 <= endInterval).ToList();
+
+                    if (valuesInInterval.Count == 0)
+                        values[i] = null;
+                    else
+                        values[i] = valuesInInterval.Last().Item2;
+                    i++;
+                }
+
+                result.Add(endInterval, new Tuple<object, object, object, object>(values[0], values[1], values[2], values[3]));
+
+                startInterval = endInterval;
+                endInterval = endInterval.AddSeconds(interval);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region Заполнение DataSet
+
+        /// <summary>
+        /// Создает и заполняет DataSet
+        /// </summary>
+        private DataSet FillDataSet(List<DSRouterEventValue> events,
+            Dictionary<Tuple<UInt16, UInt32, UInt32, string>, List<Tuple<DateTime, object>>> trends,
+            Dictionary<DateTime, Tuple<object, object, object, object>> trendsWithFixStep)
+        {
+            var dataSet = new ReportsDataSource();
+
+            if (events != null)
+            {
+                var eventsTable = dataSet.Tables["Events"];
+
+                foreach (var dsRouterEvent in events)
+                {
+                    eventsTable.Rows.Add(dsRouterEvent.EventTime, dsRouterEvent.EventText);
+                }
+            }
+
+            if (trends != null)
+            {
+                var tagsDescriptionTable = dataSet.Tables["TagsDescription"];
+                var trendsValuesTable = dataSet.Tables["TrendsValues"];
+
+                foreach (var trend in trends)
+                {
+                    var row = tagsDescriptionTable.Rows.Add(trend.Key.Item1, trend.Key.Item2, trend.Key.Item3, trend.Key.Item4);
+                    var tagId = (int)row[4];
+
+                    foreach (var trendValue in trend.Value)
+                    {
+                        trendsValuesTable.Rows.Add(tagId, trendValue.Item1, trendValue.Item2);
+                    }
+                }
+            }
+
+            if (trendsWithFixStep != null)
+            {
+                var fixTrendsValuesTable = dataSet.Tables["FixTrendsValues"];
+
+                foreach (var tuple in trendsWithFixStep)
+                {
+                    fixTrendsValuesTable.Rows.Add(tuple.Key, tuple.Value.Item1, tuple.Value.Item2, tuple.Value.Item3, tuple.Value.Item4);
+                }
+            }
+
+            return dataSet;
+        }
+
+        #endregion
 
         #endregion
 

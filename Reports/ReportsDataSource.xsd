@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportsDataSource" targetNamespace="http://tempuri.org/ReportsDataSource.xsd" xmlns:mstns="http://tempuri.org/ReportsDataSource.xsd" xmlns="http://tempuri.org/ReportsDataSource.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportsDataSource" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportsDataSource" msprop:Generator_UserDSName="ReportsDataSource">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Events" msprop:Generator_TableClassName="EventsDataTable" msprop:Generator_TableVarName="tableEvents" msprop:Generator_RowChangedName="EventsRowChanged" msprop:Generator_TablePropName="Events" msprop:Generator_RowDeletingName="EventsRowDeleting" msprop:Generator_RowChangingName="EventsRowChanging" msprop:Generator_RowEvHandlerName="EventsRowChangeEventHandler" msprop:Generator_RowDeletedName="EventsRowDeleted" msprop:Generator_RowClassName="EventsRow" msprop:Generator_UserTableName="Events" msprop:Generator_RowEvArgName="EventsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EventTime" msprop:Generator_ColumnVarNameInTable="columnEventTime" msprop:Generator_ColumnPropNameInRow="EventTime" msprop:Generator_ColumnPropNameInTable="EventTimeColumn" msprop:Generator_UserColumnName="EventTime" type="xs:dateTime" />
+              <xs:element name="EventText" msprop:Generator_ColumnVarNameInTable="columnEventText" msprop:Generator_ColumnPropNameInRow="EventText" msprop:Generator_ColumnPropNameInTable="EventTextColumn" msprop:Generator_UserColumnName="EventText" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="FixTrendsValues" msprop:Generator_TableClassName="FixTrendsValuesDataTable" msprop:Generator_TableVarName="tableFixTrendsValues" msprop:Generator_RowChangedName="FixTrendsValuesRowChanged" msprop:Generator_TablePropName="FixTrendsValues" msprop:Generator_RowDeletingName="FixTrendsValuesRowDeleting" msprop:Generator_RowChangingName="FixTrendsValuesRowChanging" msprop:Generator_RowEvHandlerName="FixTrendsValuesRowChangeEventHandler" msprop:Generator_RowDeletedName="FixTrendsValuesRowDeleted" msprop:Generator_RowClassName="FixTrendsValuesRow" msprop:Generator_UserTableName="FixTrendsValues" msprop:Generator_RowEvArgName="FixTrendsValuesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Time" msprop:Generator_ColumnVarNameInTable="columnTime" msprop:Generator_ColumnPropNameInRow="Time" msprop:Generator_ColumnPropNameInTable="TimeColumn" msprop:Generator_UserColumnName="Time" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Tag1Value" msprop:Generator_ColumnVarNameInTable="columnTag1Value" msprop:Generator_ColumnPropNameInRow="Tag1Value" msprop:Generator_ColumnPropNameInTable="Tag1ValueColumn" msprop:Generator_UserColumnName="Tag1Value" type="xs:float" minOccurs="0" />
+              <xs:element name="Tag2Value" msprop:Generator_ColumnVarNameInTable="columnTag2Value" msprop:Generator_ColumnPropNameInRow="Tag2Value" msprop:Generator_ColumnPropNameInTable="Tag2ValueColumn" msprop:Generator_UserColumnName="Tag2Value" type="xs:float" minOccurs="0" />
+              <xs:element name="Tag3Value" msprop:Generator_ColumnVarNameInTable="columnTag3Value" msprop:Generator_ColumnPropNameInRow="Tag3Value" msprop:Generator_ColumnPropNameInTable="Tag3ValueColumn" msprop:Generator_UserColumnName="Tag3Value" type="xs:float" minOccurs="0" />
+              <xs:element name="Tag4Value" msprop:Generator_ColumnVarNameInTable="columnTag4Value" msprop:Generator_ColumnPropNameInRow="Tag4Value" msprop:Generator_ColumnPropNameInTable="Tag4ValueColumn" msprop:Generator_UserColumnName="Tag4Value" type="xs:float" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TagsDescription" msprop:Generator_TableClassName="TagsDescriptionDataTable" msprop:Generator_TableVarName="tableTagsDescription" msprop:Generator_TablePropName="TagsDescription" msprop:Generator_RowDeletingName="TagsDescriptionRowDeleting" msprop:Generator_RowChangingName="TagsDescriptionRowChanging" msprop:Generator_RowEvHandlerName="TagsDescriptionRowChangeEventHandler" msprop:Generator_RowDeletedName="TagsDescriptionRowDeleted" msprop:Generator_UserTableName="TagsDescription" msprop:Generator_RowChangedName="TagsDescriptionRowChanged" msprop:Generator_RowEvArgName="TagsDescriptionRowChangeEvent" msprop:Generator_RowClassName="TagsDescriptionRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DsGuid" msprop:Generator_ColumnVarNameInTable="columnDsGuid" msprop:Generator_ColumnPropNameInRow="DsGuid" msprop:Generator_ColumnPropNameInTable="DsGuidColumn" msprop:Generator_UserColumnName="DsGuid" type="xs:unsignedShort" minOccurs="0" />
+              <xs:element name="DevGuid" msprop:Generator_ColumnVarNameInTable="columnDevGuid" msprop:Generator_ColumnPropNameInRow="DevGuid" msprop:Generator_ColumnPropNameInTable="DevGuidColumn" msprop:Generator_UserColumnName="DevGuid" type="xs:int" minOccurs="0" />
+              <xs:element name="TagGuid" msprop:Generator_ColumnVarNameInTable="columnTagGuid" msprop:Generator_ColumnPropNameInRow="TagGuid" msprop:Generator_ColumnPropNameInTable="TagGuidColumn" msprop:Generator_UserColumnName="TagGuid" type="xs:int" minOccurs="0" />
+              <xs:element name="TagName" msprop:Generator_ColumnVarNameInTable="columnTagName" msprop:Generator_ColumnPropNameInRow="TagName" msprop:Generator_ColumnPropNameInTable="TagNameColumn" msprop:Generator_UserColumnName="TagName" type="xs:string" minOccurs="0" />
+              <xs:element name="Id" msdata:AutoIncrement="true" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TrendsValues" msprop:Generator_TableClassName="TrendsValuesDataTable" msprop:Generator_TableVarName="tableTrendsValues" msprop:Generator_RowChangedName="TrendsValuesRowChanged" msprop:Generator_TablePropName="TrendsValues" msprop:Generator_RowDeletingName="TrendsValuesRowDeleting" msprop:Generator_RowChangingName="TrendsValuesRowChanging" msprop:Generator_RowEvHandlerName="TrendsValuesRowChangeEventHandler" msprop:Generator_RowDeletedName="TrendsValuesRowDeleted" msprop:Generator_RowClassName="TrendsValuesRow" msprop:Generator_UserTableName="TrendsValues" msprop:Generator_RowEvArgName="TrendsValuesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TagId" msprop:Generator_ColumnVarNameInTable="columnTagId" msprop:Generator_ColumnPropNameInRow="TagId" msprop:Generator_ColumnPropNameInTable="TagIdColumn" msprop:Generator_UserColumnName="TagId" type="xs:int" />
+              <xs:element name="Time" msprop:Generator_ColumnVarNameInTable="columnTime" msprop:Generator_ColumnPropNameInRow="Time" msprop:Generator_ColumnPropNameInTable="TimeColumn" msprop:Generator_UserColumnName="Time" type="xs:dateTime" />
+              <xs:element name="Value" msprop:Generator_ColumnVarNameInTable="columnValue" msprop:Generator_ColumnPropNameInRow="Value" msprop:Generator_ColumnPropNameInTable="ValueColumn" msprop:Generator_UserColumnName="Value" type="xs:float" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TagsDescription" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="TagDescribe_TrendsValues" msdata:parent="TagsDescription" msdata:child="TrendsValues" msdata:parentkey="Id" msdata:childkey="TagId" msprop:Generator_UserChildTable="TrendsValues" msprop:Generator_ChildPropName="GetTrendsValuesRows" msprop:Generator_UserRelationName="TagDescribe_TrendsValues" msprop:Generator_RelationVarName="relationTagDescribe_TrendsValues" msprop:Generator_UserParentTable="TagsDescription" msprop:Generator_ParentPropName="TagDescribeRow" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>
