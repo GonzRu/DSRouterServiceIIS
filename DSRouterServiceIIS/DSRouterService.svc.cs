@@ -2416,6 +2416,9 @@ namespace DSRouterServiceIIS
 
         #region EventsReport
 
+        /// <summary>
+        /// Собирает данные и сохраняет отчет в указанное место
+        /// </summary>
         private string SaveEventsReport(string pathToSave, string reportName, DSRouterEventsReportSettings reportSettings)
         {
             string result = null;
