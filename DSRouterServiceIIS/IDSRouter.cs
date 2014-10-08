@@ -851,6 +851,7 @@ namespace DSRouterServiceIIS
         /// <summary>
         /// Комментарий к пользователю
         /// </summary>
+		[DataMember]
         public string UserComment { get; set; }
 
         /// <summary>
