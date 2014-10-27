@@ -419,6 +419,12 @@ namespace DSRouterServiceIIS
         [OperationContract]
         string GetDocumentByID(UInt16 dsGuid, Int32 documentId);
 
+        /// <summary>
+        /// Получить документ
+        /// </summary>
+        [OperationContract]
+        Tuple<byte[], string> GetDocument(UInt16 dsGuid, Int32 documentId);
+
         #endregion
 
         #region Методы для загрузки документов

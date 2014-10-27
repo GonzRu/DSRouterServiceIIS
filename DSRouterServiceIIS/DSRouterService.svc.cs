@@ -1664,6 +1664,39 @@ namespace DSRouterServiceIIS
             return null;
         }
 
+        /// <summary>
+        /// Получить документ
+        /// </summary>
+        Tuple<byte[], string> IDSRouter.GetDocument(UInt16 dsGuid, Int32 documentId)
+        {
+            if (_authResult == null)
+                return null;
+
+            if (dWCFClientsList.ContainsKey(dsGuid))
+            {
+                var dsProxy = dWCFClientsList[dsGuid].wcfDataServer;
+
+                try
+                {
+                    lock (dsProxy)
+                    {
+                        var dsFile = dsProxy.GetDocumentByID(documentId);
+
+                        if (dsFile == null)
+                            return null;
+
+                        return new Tuple<byte[], string>(dsFile.Content, dsFile.FileName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteErrorMessage("DSRouterService.GetDocument() : Исключение : " + ex.Message);
+                }
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Методы для загрузки документов
