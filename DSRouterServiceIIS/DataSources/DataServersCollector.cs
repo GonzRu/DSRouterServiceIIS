@@ -208,7 +208,10 @@ namespace DSRouterServiceIIS.DataSources
             {
                 var c = tagIdAsStr.Split('.');
 
-                UInt16 dsGuid = UInt16.Parse(c[0]);
+                UInt16 dsGuid;
+                if (!UInt16.TryParse(c[0], out dsGuid))
+                    continue;
+
                 if (!result.ContainsKey(dsGuid))
                     result.Add(dsGuid, new List<string>());
 
